@@ -13,7 +13,7 @@ namespace InvoiceApp
             Services = StartupOrchestrator.Configure();
             this.DispatcherUnhandledException += (s, args) =>
             {
-                MessageBox.Show(args.Exception.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Váratlan hiba: {args.Exception.Message}", "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
                 args.Handled = true;
             };
         }

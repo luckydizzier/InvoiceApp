@@ -5,9 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InvoiceApp" xmlns:viewModels="clr-namespace:InvoiceApp.ViewModels"
         mc:Ignorable="d"
-        Title="MainWindow" Height="Auto" Width="Auto">
+        Title="MainWindow" Height="Auto" Width="Auto"
+        KeyDown="OnKeyDown">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
         <ListBox ItemsSource="{Binding Invoices}" />
+        <StatusBar Grid.Row="1">
+            <TextBlock Text="{Binding StatusMessage}" />
+        </StatusBar>
 
     </Grid>
 </Window>
