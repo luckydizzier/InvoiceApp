@@ -12,7 +12,16 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <ListBox ItemsSource="{Binding Invoices}" />
+        <ListView ItemsSource="{Binding Invoices}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="ID" DisplayMemberBinding="{Binding Id}" />
+                    <GridViewColumn Header="Számlaszám" DisplayMemberBinding="{Binding Number}" />
+                    <GridViewColumn Header="Kiállító" DisplayMemberBinding="{Binding Issuer}" />
+                    <GridViewColumn Header="Dátum" DisplayMemberBinding="{Binding Date, StringFormat=d}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
         <StatusBar Grid.Row="1">
             <TextBlock Text="{Binding StatusMessage}" />
         </StatusBar>
