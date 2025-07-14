@@ -1,4 +1,5 @@
 using System;
+
 using System.IO;
 using System.Linq;
 using System.Windows;
@@ -8,6 +9,7 @@ using InvoiceApp.Repositories;
 using InvoiceApp.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
@@ -29,6 +31,7 @@ namespace InvoiceApp
             var services = new ServiceCollection();
             services.AddSingleton(new InvoiceContext(connection));
             services.AddSingleton<IInvoiceRepository, EfInvoiceRepository>();
+
             services.AddSingleton<IInvoiceService, InvoiceService>();
             services.AddSingleton<ViewModels.InvoiceViewModel>();
 
@@ -65,6 +68,7 @@ namespace InvoiceApp
                     ctx.SaveChanges();
                 }
             }
+         return services.BuildServiceProvider();
         }
     }
 }
