@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Windows;
+using System.Threading.Tasks;
 using InvoiceApp.Data;
 using InvoiceApp.Models;
 using InvoiceApp.Repositories;
@@ -31,7 +32,9 @@ namespace InvoiceApp
             var services = new ServiceCollection();
             services.AddDbContextFactory<InvoiceContext>(o => o.UseSqlite(connection));
             services.AddSingleton<IInvoiceRepository, EfInvoiceRepository>();
+            services.AddSingleton<IChangeLogRepository, EfChangeLogRepository>();
 
+            services.AddSingleton<IChangeLogService, ChangeLogService>();
             services.AddSingleton<IInvoiceService, InvoiceService>();
             services.AddSingleton<ViewModels.InvoiceViewModel>();
 
@@ -41,7 +44,7 @@ namespace InvoiceApp
                 .CreateLogger();
 
             var provider = services.BuildServiceProvider();
-            InitializeDatabase(provider);
+            InitializeDatabase(provider).GetAwaiter().GetResult();
             return provider;
         }
 
@@ -54,7 +57,7 @@ namespace InvoiceApp
             }
         }
 
-        private static void InitializeDatabase(IServiceProvider provider)
+        private static async Task InitializeDatabase(IServiceProvider provider)
         {
             using var scope = provider.CreateScope();
             var factory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<InvoiceContext>>();
@@ -76,8 +79,17 @@ namespace InvoiceApp
                     var result = MessageBox.Show("Telepíti a mintaadatokat?", "Telepítés", MessageBoxButton.YesNo, MessageBoxImage.Question);
                     if (result == MessageBoxResult.Yes)
                     {
-                        ctx.Invoices.Add(new Invoice { Number = "INV-001", Date = DateTime.Today, Amount = 100 });
-                        ctx.SaveChanges();
+                        var service = scope.ServiceProvider.GetRequiredService<IInvoiceService>();
+                        for (int i = 1; i <= 17; i++)
+                        {
+                            await service.SaveAsync(new Invoice
+                            {
+                                Number = $"INV-{i:000}",
+                                Issuer = "Minta Kft.",
+                                Date = DateTime.Today.AddDays(-i),
+                                Amount = 100 + i
+                            });
+                        }
                     }
                 }
             }

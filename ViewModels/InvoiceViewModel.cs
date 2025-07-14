@@ -8,6 +8,7 @@ namespace InvoiceApp.ViewModels
     public class InvoiceViewModel : ViewModelBase
     {
         private readonly IInvoiceService _service;
+        private readonly IChangeLogService _logService;
         private ObservableCollection<Invoice> _invoices = new();
         private string _statusMessage = string.Empty;
 
@@ -31,9 +32,10 @@ namespace InvoiceApp.ViewModels
             }
         }
 
-        public InvoiceViewModel(IInvoiceService service)
+        public InvoiceViewModel(IInvoiceService service, IChangeLogService logService)
         {
             _service = service;
+            _logService = logService;
         }
 
         public async Task LoadAsync()
@@ -41,7 +43,16 @@ namespace InvoiceApp.ViewModels
             StatusMessage = "Betöltés...";
             var items = await _service.GetAllAsync();
             Invoices = new ObservableCollection<Invoice>(items);
-            StatusMessage = Invoices.Count == 0 ? "Üres lista." : $"{Invoices.Count} számla betöltve.";
+
+            var log = await _logService.GetLatestAsync();
+            if (log != null)
+            {
+                StatusMessage = $"Utolsó esemény: {log.Operation} ({log.DateCreated:g})";
+            }
+            else
+            {
+                StatusMessage = Invoices.Count == 0 ? "Üres lista." : $"{Invoices.Count} számla betöltve.";
+            }
         }
     }
 }
