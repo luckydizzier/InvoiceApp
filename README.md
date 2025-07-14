@@ -1,12 +1,12 @@
 # InvoiceApp
 
-This project demonstrates a simple WPF application following an MRS (Model–Repository–Service) and MVVM (View–ViewModel–Model) architecture.
+A small WPF application demonstrating an MRS (Model–Repository–Service) and MVVM architecture.
 
 ## Structure
 - **Models** – POCO classes inheriting from `Base`.
-- **Repositories** – data access abstractions (here a mock repository).
-- **Services** – business logic using repositories.
-- **ViewModels** – UI logic implementing `INotifyPropertyChanged`.
-- **Views** – XAML files containing only UI elements.
+- **Repositories** – data access abstractions (mock or EF Core).
+- **Services** – business logic built on repositories.
+- **ViewModels** – UI state and commands.
+- **Views** – XAML-only UI files.
 
-`StartupOrchestrator` configures dependency injection and Serilog logging.
+`StartupOrchestrator` configures dependency injection and Serilog logging. It also ensures a local SQLite database is present. Missing configuration or database files are created automatically. On first launch, users can choose to populate the database with sample data.
