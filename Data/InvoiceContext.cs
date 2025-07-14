@@ -8,16 +8,9 @@ namespace InvoiceApp.Data
         public DbSet<Invoice> Invoices => Set<Invoice>();
         public DbSet<ChangeLog> ChangeLogs => Set<ChangeLog>();
 
-        private readonly string _connection;
-
-        public InvoiceContext(string connection)
+        public InvoiceContext(DbContextOptions<InvoiceContext> options)
+            : base(options)
         {
-            _connection = connection;
-        }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlite(_connection);
         }
     }
 }

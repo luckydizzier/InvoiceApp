@@ -59,16 +59,31 @@ namespace InvoiceApp
             using var scope = provider.CreateScope();
             var factory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<InvoiceContext>>();
             using var ctx = factory.CreateDbContext();
-            ctx.Database.Migrate();
 
-            if (!ctx.Invoices.Any())
+            if (ctx.Database.GetMigrations().Any())
             {
-                var result = MessageBox.Show("Telepíti a mintaadatokat?", "Telepítés", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                if (result == MessageBoxResult.Yes)
+                ctx.Database.Migrate();
+            }
+            else
+            {
+                ctx.Database.EnsureCreated();
+            }
+
+            try
+            {
+                if (!ctx.Invoices.Any())
                 {
-                    ctx.Invoices.Add(new Invoice { Number = "INV-001", Date = DateTime.Today, Amount = 100 });
-                    ctx.SaveChanges();
+                    var result = MessageBox.Show("Telepíti a mintaadatokat?", "Telepítés", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        ctx.Invoices.Add(new Invoice { Number = "INV-001", Date = DateTime.Today, Amount = 100 });
+                        ctx.SaveChanges();
+                    }
                 }
+            }
+            catch (Microsoft.Data.Sqlite.SqliteException ex)
+            {
+                Log.Error(ex, "Failed to query Invoices table");
             }
         }
     }
