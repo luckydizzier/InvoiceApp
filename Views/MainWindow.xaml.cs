@@ -2,7 +2,6 @@ using System.Windows;
 using InvoiceApp.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 
-
 namespace InvoiceApp.Views
 {
     /// <summary>
@@ -16,7 +15,6 @@ namespace InvoiceApp.Views
         {
             InitializeComponent();
             _viewModel = ((App)Application.Current).Services.GetRequiredService<InvoiceViewModel>();
-
             DataContext = _viewModel;
             Loaded += async (_, __) => await _viewModel.LoadAsync();
         }
