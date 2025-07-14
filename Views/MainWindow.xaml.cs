@@ -18,5 +18,18 @@ namespace InvoiceApp.Views
             DataContext = _viewModel;
             Loaded += async (_, __) => await _viewModel.LoadAsync();
         }
+
+        private void OnKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == System.Windows.Input.Key.Escape)
+            {
+                var result = MessageBox.Show("Biztosan kilép?", "Kilépés", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (result == MessageBoxResult.Yes)
+                {
+                    Close();
+                }
+                e.Handled = true;
+            }
+        }
     }
 }

@@ -20,6 +20,8 @@ namespace InvoiceApp.Services
 
         public async Task SaveAsync(Invoice invoice)
         {
+            if (invoice == null) throw new ArgumentNullException(nameof(invoice));
+
             if (invoice.Id == 0)
             {
                 await _repository.AddAsync(invoice);

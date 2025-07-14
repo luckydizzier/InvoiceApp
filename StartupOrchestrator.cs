@@ -61,35 +61,7 @@ namespace InvoiceApp
 
             if (!ctx.Invoices.Any())
             {
-                var result = MessageBox.Show("Install sample data?", "Setup", MessageBoxButton.YesNo);
-                if (result == MessageBoxResult.Yes)
-                {
-                    ctx.Invoices.Add(new Invoice { Number = "INV-001", Date = DateTime.Today, Amount = 100 });
-                    ctx.SaveChanges();
-                }
-            }
-            var provider = services.BuildServiceProvider();
-            InitializeDatabase(provider);
-            return provider;
-        }
-
-        private static void EnsureConfig()
-        {
-            var configPath = Path.Combine(AppContext.BaseDirectory, "appsettings.json");
-            if (!File.Exists(configPath))
-            {
-                File.WriteAllText(configPath, "{\n  \"ConnectionString\": \"Data Source=invoice.db\"\n}");
-            }
-        }
-
-        private static void InitializeDatabase(IServiceProvider provider)
-        {
-            var ctx = provider.GetRequiredService<InvoiceContext>();
-            ctx.Database.Migrate();
-
-            if (!ctx.Invoices.Any())
-            {
-                var result = MessageBox.Show("Install sample data?", "Setup", MessageBoxButton.YesNo);
+                var result = MessageBox.Show("Telepíti a mintaadatokat?", "Telepítés", MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (result == MessageBoxResult.Yes)
                 {
                     ctx.Invoices.Add(new Invoice { Number = "INV-001", Date = DateTime.Today, Amount = 100 });
