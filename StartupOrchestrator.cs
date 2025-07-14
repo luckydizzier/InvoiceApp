@@ -29,7 +29,7 @@ namespace InvoiceApp
             var connection = config["ConnectionString"] ?? $"Data Source={Path.Combine(AppContext.BaseDirectory, "invoice.db")}";
 
             var services = new ServiceCollection();
-            services.AddSingleton(new InvoiceContext(connection));
+            services.AddDbContextFactory<InvoiceContext>(o => o.UseSqlite(connection));
             services.AddSingleton<IInvoiceRepository, EfInvoiceRepository>();
 
             services.AddSingleton<IInvoiceService, InvoiceService>();
@@ -56,7 +56,9 @@ namespace InvoiceApp
 
         private static void InitializeDatabase(IServiceProvider provider)
         {
-            var ctx = provider.GetRequiredService<InvoiceContext>();
+            using var scope = provider.CreateScope();
+            var factory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<InvoiceContext>>();
+            using var ctx = factory.CreateDbContext();
             ctx.Database.Migrate();
 
             if (!ctx.Invoices.Any())

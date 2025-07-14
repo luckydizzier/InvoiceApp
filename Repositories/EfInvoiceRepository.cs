@@ -8,18 +8,19 @@ namespace InvoiceApp.Repositories
 {
     public class EfInvoiceRepository : IInvoiceRepository
     {
-        private readonly InvoiceContext _context;
+        private readonly IDbContextFactory<InvoiceContext> _contextFactory;
 
-        public EfInvoiceRepository(InvoiceContext context)
+        public EfInvoiceRepository(IDbContextFactory<InvoiceContext> contextFactory)
         {
-            _context = context;
+            _contextFactory = contextFactory;
         }
 
         public async Task<IEnumerable<Invoice>> GetAllAsync()
         {
             try
             {
-                return await _context.Invoices.ToListAsync();
+                using var ctx = _contextFactory.CreateDbContext();
+                return await ctx.Invoices.ToListAsync();
             }
             catch (DbUpdateException ex)
             {
@@ -28,27 +29,34 @@ namespace InvoiceApp.Repositories
             }
         }
 
-        public Task<Invoice?> GetByIdAsync(int id) => _context.Invoices.FindAsync(id).AsTask();
+        public Task<Invoice?> GetByIdAsync(int id)
+        {
+            using var ctx = _contextFactory.CreateDbContext();
+            return ctx.Invoices.FindAsync(id).AsTask();
+        }
 
         public async Task AddAsync(Invoice invoice)
         {
-            await _context.Invoices.AddAsync(invoice);
-            await _context.SaveChangesAsync();
+            using var ctx = _contextFactory.CreateDbContext();
+            await ctx.Invoices.AddAsync(invoice);
+            await ctx.SaveChangesAsync();
         }
 
         public async Task UpdateAsync(Invoice invoice)
         {
-            _context.Invoices.Update(invoice);
-            await _context.SaveChangesAsync();
+            using var ctx = _contextFactory.CreateDbContext();
+            ctx.Invoices.Update(invoice);
+            await ctx.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(int id)
         {
-            var entity = await _context.Invoices.FindAsync(id);
+            using var ctx = _contextFactory.CreateDbContext();
+            var entity = await ctx.Invoices.FindAsync(id);
             if (entity != null)
             {
-                _context.Invoices.Remove(entity);
-                await _context.SaveChangesAsync();
+                ctx.Invoices.Remove(entity);
+                await ctx.SaveChangesAsync();
             }
         }
     }
