@@ -9,6 +9,7 @@
         KeyDown="OnKeyDown">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
@@ -17,13 +18,23 @@
             <ColumnDefinition Width="3*" />
         </Grid.ColumnDefinitions>
 
+        <Menu Grid.Row="0">
+            <MenuItem Header="_Windows">
+                <MenuItem Header="_Payment Methods" Click="OpenPaymentMethods" />
+                <MenuItem Header="_Suppliers" Click="OpenSuppliers" />
+                <MenuItem Header="_Product Groups" Click="OpenProductGroups" />
+                <MenuItem Header="_Tax Rates" Click="OpenTaxRates" />
+            </MenuItem>
+        </Menu>
+
         <!-- Invoice list -->
         <ListView x:Name="InvoicesList"
                   ItemsSource="{Binding Invoices}"
-                  SelectedItem="{Binding SelectedInvoice}" />
+                  SelectedItem="{Binding SelectedInvoice}"
+                  Grid.Row="1" />
 
         <!-- Items of selected invoice -->
-        <DockPanel Grid.Column="1">
+        <DockPanel Grid.Column="1" Grid.Row="1">
             <DataGrid x:Name="ItemsGrid"
                       ItemsSource="{Binding Items}"
                       AutoGenerateColumns="False"
@@ -72,7 +83,7 @@
             </StackPanel>
         </DockPanel>
 
-        <StatusBar Grid.Row="1" Grid.ColumnSpan="2">
+        <StatusBar Grid.Row="2" Grid.ColumnSpan="2">
             <TextBlock Text="{Binding StatusMessage}" />
         </StatusBar>
     </Grid>

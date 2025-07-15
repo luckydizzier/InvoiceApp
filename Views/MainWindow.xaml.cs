@@ -38,6 +38,30 @@ namespace InvoiceApp.Views
             }
         }
 
+        private void OpenPaymentMethods(object sender, RoutedEventArgs e)
+        {
+            var win = new PaymentMethodView();
+            win.ShowDialog();
+        }
+
+        private void OpenSuppliers(object sender, RoutedEventArgs e)
+        {
+            var win = new SupplierView();
+            win.ShowDialog();
+        }
+
+        private void OpenProductGroups(object sender, RoutedEventArgs e)
+        {
+            var win = new ProductGroupView();
+            win.ShowDialog();
+        }
+
+        private void OpenTaxRates(object sender, RoutedEventArgs e)
+        {
+            var win = new TaxRateView();
+            win.ShowDialog();
+        }
+
         private void OnKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
             if (e.Key == System.Windows.Input.Key.Escape)
