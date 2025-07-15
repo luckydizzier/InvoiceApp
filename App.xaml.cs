@@ -17,5 +17,11 @@ namespace InvoiceApp
                 args.Handled = true;
             };
         }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            base.OnExit(e);
+            Serilog.Log.CloseAndFlush();
+        }
     }
 }
