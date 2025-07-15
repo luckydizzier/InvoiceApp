@@ -1,6 +1,5 @@
 using System.Windows;
 using InvoiceApp.ViewModels;
-using InvoiceApp.Models;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace InvoiceApp.Views
@@ -32,7 +31,7 @@ namespace InvoiceApp.Views
 
         private void DeleteItemClicked(object sender, RoutedEventArgs e)
         {
-            if (ItemsGrid.SelectedItem is InvoiceItem item)
+            if (ItemsGrid.SelectedItem is InvoiceItemViewModel item)
             {
                 _viewModel.RemoveItemCommand.Execute(item);
             }
