@@ -52,7 +52,10 @@ namespace InvoiceApp
             services.AddSingleton<IUnitService, UnitService>();
             services.AddSingleton<IProductGroupService, ProductGroupService>();
             services.AddSingleton<ITaxRateService, TaxRateService>();
+
             services.AddSingleton<ViewModels.InvoiceViewModel>();
+            services.AddSingleton<ViewModels.ProductViewModel>();
+            services.AddSingleton<ViewModels.UnitViewModel>();
 
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
