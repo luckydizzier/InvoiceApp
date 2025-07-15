@@ -13,10 +13,16 @@ namespace InvoiceApp.ViewModels
         private readonly IInvoiceService _service;
         private readonly IInvoiceItemService _itemService;
         private readonly IProductService _productService;
+        private readonly ITaxRateService _taxRateService;
+        private readonly ISupplierService _supplierService;
+        private readonly IPaymentMethodService _paymentService;
         private readonly IChangeLogService _logService;
         private ObservableCollection<Invoice> _invoices = new();
         private ObservableCollection<InvoiceItemViewModel> _items = new();
         private ObservableCollection<Product> _products = new();
+        private ObservableCollection<TaxRate> _taxRates = new();
+        private ObservableCollection<Supplier> _suppliers = new();
+        private ObservableCollection<PaymentMethod> _paymentMethods = new();
         private Invoice? _selectedInvoice;
         private string _statusMessage = string.Empty;
 
@@ -50,6 +56,8 @@ namespace InvoiceApp.ViewModels
                     ? new ObservableCollection<InvoiceItemViewModel>(
                         value.Items.Select(i => new InvoiceItemViewModel(i)))
                     : new ObservableCollection<InvoiceItemViewModel>();
+                SelectedSupplier = value?.Supplier;
+                SelectedPaymentMethod = value?.PaymentMethod;
                 OnPropertyChanged();
             }
         }
@@ -74,6 +82,52 @@ namespace InvoiceApp.ViewModels
             }
         }
 
+        public ObservableCollection<TaxRate> TaxRates
+        {
+            get => _taxRates;
+            set { _taxRates = value; OnPropertyChanged(); }
+        }
+
+        public ObservableCollection<Supplier> Suppliers
+        {
+            get => _suppliers;
+            set { _suppliers = value; OnPropertyChanged(); }
+        }
+
+        public ObservableCollection<PaymentMethod> PaymentMethods
+        {
+            get => _paymentMethods;
+            set { _paymentMethods = value; OnPropertyChanged(); }
+        }
+
+        public Supplier? SelectedSupplier
+        {
+            get => SelectedInvoice?.Supplier;
+            set
+            {
+                if (SelectedInvoice != null && SelectedInvoice.Supplier != value)
+                {
+                    SelectedInvoice.Supplier = value;
+                    SelectedInvoice.SupplierId = value?.Id ?? 0;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public PaymentMethod? SelectedPaymentMethod
+        {
+            get => SelectedInvoice?.PaymentMethod;
+            set
+            {
+                if (SelectedInvoice != null && SelectedInvoice.PaymentMethod != value)
+                {
+                    SelectedInvoice.PaymentMethod = value;
+                    SelectedInvoice.PaymentMethodId = value?.Id ?? 0;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public ICommand AddItemCommand { get; }
         public ICommand RemoveItemCommand { get; }
         public ICommand SaveCommand { get; }
@@ -81,11 +135,17 @@ namespace InvoiceApp.ViewModels
         public InvoiceViewModel(IInvoiceService service,
             IInvoiceItemService itemService,
             IProductService productService,
+            ITaxRateService taxRateService,
+            ISupplierService supplierService,
+            IPaymentMethodService paymentService,
             IChangeLogService logService)
         {
             _service = service;
             _itemService = itemService;
             _productService = productService;
+            _taxRateService = taxRateService;
+            _supplierService = supplierService;
+            _paymentService = paymentService;
             _logService = logService;
 
             AddItemCommand = new RelayCommand(_ => AddItem());
@@ -108,6 +168,15 @@ namespace InvoiceApp.ViewModels
             var prods = await _productService.GetAllAsync();
             Products = new ObservableCollection<Product>(prods);
 
+            var rates = await _taxRateService.GetAllAsync();
+            TaxRates = new ObservableCollection<TaxRate>(rates);
+
+            var sups = await _supplierService.GetAllAsync();
+            Suppliers = new ObservableCollection<Supplier>(sups);
+
+            var pays = await _paymentService.GetAllAsync();
+            PaymentMethods = new ObservableCollection<PaymentMethod>(pays);
+
             var log = await _logService.GetLatestAsync();
             if (log != null)
             {
@@ -123,12 +192,15 @@ namespace InvoiceApp.ViewModels
         {
             if (SelectedInvoice == null) return;
             var firstProduct = Products.FirstOrDefault();
+            var firstRate = TaxRates.FirstOrDefault();
             var newItem = new InvoiceItem
             {
                 InvoiceId = SelectedInvoice.Id,
                 Quantity = 1,
                 Product = firstProduct,
-                ProductId = firstProduct?.Id ?? 0
+                ProductId = firstProduct?.Id ?? 0,
+                TaxRate = firstRate,
+                TaxRateId = firstRate?.Id ?? 0
             };
             Items.Add(new InvoiceItemViewModel(newItem));
         }

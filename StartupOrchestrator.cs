@@ -108,7 +108,28 @@ namespace InvoiceApp
                         var unitRepo = scope.ServiceProvider.GetRequiredService<IUnitRepository>();
                         var groupRepo = scope.ServiceProvider.GetRequiredService<IProductGroupRepository>();
                         var taxRepo = scope.ServiceProvider.GetRequiredService<ITaxRateRepository>();
+                        var supplierService = scope.ServiceProvider.GetRequiredService<ISupplierService>();
+                        var paymentService = scope.ServiceProvider.GetRequiredService<IPaymentMethodService>();
                         var logService = scope.ServiceProvider.GetRequiredService<IChangeLogService>();
+
+                        var supplier = new Supplier
+                        {
+                            Name = "Minta beszállító",
+                            Active = true,
+                            DateCreated = DateTime.Now,
+                            DateUpdated = DateTime.Now
+                        };
+                        await supplierService.SaveAsync(supplier);
+
+                        var payment = new PaymentMethod
+                        {
+                            Name = "Átutalás",
+                            DueInDays = 8,
+                            Active = true,
+                            DateCreated = DateTime.Now,
+                            DateUpdated = DateTime.Now
+                        };
+                        await paymentService.SaveAsync(payment);
 
                         var createdInvoices = new List<Invoice>();
                         for (int i = 1; i <= 17; i++)
@@ -118,7 +139,11 @@ namespace InvoiceApp
                                 Number = $"INV-{i:000}",
                                 Issuer = "Minta Kft.",
                                 Date = DateTime.Today.AddDays(-i),
-                                Amount = 100 + i
+                                Amount = 100 + i,
+                                SupplierId = supplier.Id,
+                                Supplier = supplier,
+                                PaymentMethodId = payment.Id,
+                                PaymentMethod = payment
                             };
 
                             await invoiceService.SaveAsync(inv);

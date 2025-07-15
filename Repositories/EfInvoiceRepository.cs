@@ -21,6 +21,8 @@ namespace InvoiceApp.Repositories
             {
                 using var ctx = _contextFactory.CreateDbContext();
                 var invoices = await ctx.Invoices
+                    .Include(i => i.Supplier)
+                    .Include(i => i.PaymentMethod)
                     .Include(i => i.Items)
                         .ThenInclude(it => it.Product)
                             .ThenInclude(p => p.Unit)
@@ -48,6 +50,8 @@ namespace InvoiceApp.Repositories
         {
             using var ctx = _contextFactory.CreateDbContext();
             var invoice = await ctx.Invoices
+                .Include(i => i.Supplier)
+                .Include(i => i.PaymentMethod)
                 .Include(i => i.Items)
                     .ThenInclude(it => it.Product)
                         .ThenInclude(p => p.Unit)
