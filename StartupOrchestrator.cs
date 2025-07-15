@@ -77,8 +77,7 @@ namespace InvoiceApp
             services.AddSingleton<ViewModels.TaxRateViewModel>();
 
             Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Debug()
-                .WriteTo.File("logs/log.txt")
+                .ReadFrom.Configuration(config)
                 .CreateLogger();
 
             var provider = services.BuildServiceProvider();
@@ -91,7 +90,26 @@ namespace InvoiceApp
             var configPath = Path.Combine(AppContext.BaseDirectory, "appsettings.json");
             if (!File.Exists(configPath))
             {
-                File.WriteAllText(configPath, "{\n  \"ConnectionString\": \"Data Source=invoice.db\"\n}");
+                var defaultConfig = @"{
+  \"ConnectionString\": \"Data Source=invoice.db\",
+  \"Serilog\": {
+    \"MinimumLevel\": \"Debug\",
+    \"WriteTo\": [
+      {
+        \"Name\": \"File\",
+        \"Args\": {
+          \"path\": \"logs/log-.json\",
+          \"rollingInterval\": \"Day\",
+          \"formatter\": \"Serilog.Formatting.Json.JsonFormatter, Serilog\",
+          \"fileSizeLimitBytes\": 5242880,
+          \"rollOnFileSizeLimit\": true,
+          \"retainedFileCountLimit\": 5
+        }
+      }
+    ]
+  }
+}";
+                File.WriteAllText(configPath, defaultConfig);
             }
         }
 
