@@ -3,49 +3,66 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:InvoiceApp" xmlns:viewModels="clr-namespace:InvoiceApp.ViewModels"
+        xmlns:local="clr-namespace:InvoiceApp" 
+        xmlns:viewModels="clr-namespace:InvoiceApp.ViewModels"
         mc:Ignorable="d"
-        Title="MainWindow" Height="Auto" Width="Auto"
+        Title="Számlakezelő" Height="600" Width="1000"
         KeyDown="OnKeyDown">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <!-- Menü -->
             <RowDefinition Height="*" />
+            <!-- Tartalom -->
             <RowDefinition Height="Auto" />
+            <!-- Státuszsor -->
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*" />
-            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="220" />
+            <!-- Számlalista -->
+            <ColumnDefinition Width="*" />
+            <!-- Számlatartalom -->
         </Grid.ColumnDefinitions>
 
-        <Menu Grid.Row="0">
-            <MenuItem Header="_Windows">
-                <MenuItem Header="_Payment Methods" Click="OpenPaymentMethods" />
-                <MenuItem Header="_Suppliers" Click="OpenSuppliers" />
-                <MenuItem Header="_Product Groups" Click="OpenProductGroups" />
-                <MenuItem Header="_Tax Rates" Click="OpenTaxRates" />
+        <!-- Menü -->
+        <Menu Grid.Row="0" Grid.ColumnSpan="2">
+            <MenuItem Header="_Ablakok">
+                <MenuItem Header="_Fizetési módok" Click="OpenPaymentMethods" />
+                <MenuItem Header="_Szállítók" Click="OpenSuppliers" />
+                <MenuItem Header="_Termékcsoportok" Click="OpenProductGroups" />
+                <MenuItem Header="_Áfakulcsok" Click="OpenTaxRates" />
             </MenuItem>
         </Menu>
 
-        <!-- Invoice list -->
+        <!-- Számlák listája -->
         <ListView x:Name="InvoicesList"
                   ItemsSource="{Binding Invoices}"
                   SelectedItem="{Binding SelectedInvoice}"
-                  Grid.Row="1" />
+                  Grid.Row="1" Grid.Column="0"
+                  DisplayMemberPath="Id"
+                  Margin="4"/>
 
-        <!-- Items of selected invoice -->
-        <DockPanel Grid.Column="1" Grid.Row="1">
+        <!-- Kiválasztott számla tételei -->
+        <Grid Grid.Row="1" Grid.Column="1" Margin="4">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <!-- DataGrid -->
+                <RowDefinition Height="Auto"/>
+                <!-- Gombok -->
+            </Grid.RowDefinitions>
+
             <DataGrid x:Name="ItemsGrid"
+                      Grid.Row="0"
                       ItemsSource="{Binding Items}"
                       AutoGenerateColumns="False"
                       CanUserAddRows="False"
                       RowDetailsVisibilityMode="VisibleWhenSelected"
-                      Margin="5">
+                      Margin="0,0,0,4">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Leírás" Binding="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Width="*" />
-                    <DataGridTextColumn Header="Mennyiség" Binding="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
-                    <DataGridTextColumn Header="Egységár" Binding="{Binding UnitPrice, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
-                    <DataGridTemplateColumn Header="Termék" Width="*">
+                    <DataGridTextColumn Header="Leírás" Binding="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Width="2*"/>
+                    <DataGridTextColumn Header="Mennyiség" Binding="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}" Width="Auto"/>
+                    <DataGridTextColumn Header="Egységár" Binding="{Binding UnitPrice, UpdateSourceTrigger=PropertyChanged}" Width="Auto"/>
+                    <DataGridTemplateColumn Header="Termék" Width="2*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Item.Product.Name}" />
@@ -55,11 +72,12 @@
                             <DataTemplate>
                                 <ComboBox ItemsSource="{Binding DataContext.Products, RelativeSource={RelativeSource AncestorType=Window}}"
                                           SelectedItem="{Binding Item.Product, UpdateSourceTrigger=PropertyChanged}"
-                                          DisplayMemberPath="Name" />
+                                          DisplayMemberPath="Name"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellEditingTemplate>
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
+
                 <DataGrid.RowDetailsTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Vertical" Margin="5">
@@ -77,12 +95,15 @@
                     </DataTemplate>
                 </DataGrid.RowDetailsTemplate>
             </DataGrid>
-            <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
-                <Button x:Name="AddItemButton" Content="Add" Click="AddItemClicked" Margin="4" />
-                <Button x:Name="DeleteItemButton" Content="Delete" Click="DeleteItemClicked" Margin="4" />
-            </StackPanel>
-        </DockPanel>
 
+            <!-- Gombok -->
+            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="➕ Tétel hozzáadása" Click="AddItemClicked" Margin="4" Padding="8,4"/>
+                <Button Content="🗑️ Tétel törlése" Click="DeleteItemClicked" Margin="4" Padding="8,4"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- Státuszsor -->
         <StatusBar Grid.Row="2" Grid.ColumnSpan="2">
             <TextBlock Text="{Binding StatusMessage}" />
         </StatusBar>
