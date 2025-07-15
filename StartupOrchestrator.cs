@@ -91,19 +91,19 @@ namespace InvoiceApp
             if (!File.Exists(configPath))
             {
                 var defaultConfig = @"{
-  \"ConnectionString\": \"Data Source=invoice.db\",
-  \"Serilog\": {
-    \"MinimumLevel\": \"Debug\",
-    \"WriteTo\": [
+  ""ConnectionString"": ""Data Source=invoice.db"",
+  ""Serilog"": {
+    ""MinimumLevel"": ""Debug"",
+    ""WriteTo"": [
       {
-        \"Name\": \"File\",
-        \"Args\": {
-          \"path\": \"logs/log-.json\",
-          \"rollingInterval\": \"Day\",
-          \"formatter\": \"Serilog.Formatting.Json.JsonFormatter, Serilog\",
-          \"fileSizeLimitBytes\": 5242880,
-          \"rollOnFileSizeLimit\": true,
-          \"retainedFileCountLimit\": 5
+        ""Name"": ""File"",
+        ""Args"": {
+          ""path"": ""logs/log-.json"",
+          ""rollingInterval"": ""Day"",
+          ""formatter"": ""Serilog.Formatting.Json.JsonFormatter, Serilog"",
+          ""fileSizeLimitBytes"": 5242880,
+          ""rollOnFileSizeLimit"": true,
+          ""retainedFileCountLimit"": 5
         }
       }
     ]
