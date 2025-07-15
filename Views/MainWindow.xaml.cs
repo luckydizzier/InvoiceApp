@@ -1,5 +1,6 @@
 using System.Windows;
 using InvoiceApp.ViewModels;
+using InvoiceApp.Models;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace InvoiceApp.Views
@@ -16,7 +17,25 @@ namespace InvoiceApp.Views
             InitializeComponent();
             _viewModel = ((App)Application.Current).Services.GetRequiredService<InvoiceViewModel>();
             DataContext = _viewModel;
-            Loaded += async (_, __) => await _viewModel.LoadAsync();
+            Loaded += OnLoaded;
+        }
+
+        private async void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            await _viewModel.LoadAsync();
+        }
+
+        private void AddItemClicked(object sender, RoutedEventArgs e)
+        {
+            _viewModel.AddItemCommand.Execute(null);
+        }
+
+        private void DeleteItemClicked(object sender, RoutedEventArgs e)
+        {
+            if (ItemsGrid.SelectedItem is InvoiceItem item)
+            {
+                _viewModel.RemoveItemCommand.Execute(item);
+            }
         }
 
         private void OnKeyDown(object sender, System.Windows.Input.KeyEventArgs e)

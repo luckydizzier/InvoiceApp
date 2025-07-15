@@ -9,22 +9,40 @@
         KeyDown="OnKeyDown">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <ListView ItemsSource="{Binding Invoices}">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="ID" DisplayMemberBinding="{Binding Id}" />
-                    <GridViewColumn Header="Számlaszám" DisplayMemberBinding="{Binding Number}" />
-                    <GridViewColumn Header="Kiállító" DisplayMemberBinding="{Binding Issuer}" />
-                    <GridViewColumn Header="Dátum" DisplayMemberBinding="{Binding Date, StringFormat=d}" />
-                </GridView>
-            </ListView.View>
-        </ListView>
-        <StatusBar Grid.Row="1">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="3*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Invoice list -->
+        <ListView x:Name="InvoicesList"
+                  ItemsSource="{Binding Invoices}"
+                  SelectedItem="{Binding SelectedInvoice}" />
+
+        <!-- Items of selected invoice -->
+        <DockPanel Grid.Column="1">
+            <DataGrid x:Name="ItemsGrid"
+                      ItemsSource="{Binding Items}"
+                      AutoGenerateColumns="False"
+                      CanUserAddRows="False"
+                      Margin="5">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Leírás" Binding="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Width="*" />
+                    <DataGridTextColumn Header="Mennyiség" Binding="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
+                    <DataGridTextColumn Header="Egységár" Binding="{Binding UnitPrice, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
+                </DataGrid.Columns>
+            </DataGrid>
+            <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
+                <Button x:Name="AddItemButton" Content="Add" Click="AddItemClicked" Margin="4" />
+                <Button x:Name="DeleteItemButton" Content="Delete" Click="DeleteItemClicked" Margin="4" />
+            </StackPanel>
+        </DockPanel>
+
+        <StatusBar Grid.Row="1" Grid.ColumnSpan="2">
             <TextBlock Text="{Binding StatusMessage}" />
         </StatusBar>
-
     </Grid>
 </Window>
