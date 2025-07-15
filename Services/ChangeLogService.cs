@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using InvoiceApp.Models;
 using InvoiceApp.Repositories;
+using Serilog;
 
 namespace InvoiceApp.Services
 {
@@ -13,8 +14,16 @@ namespace InvoiceApp.Services
             _repository = repository;
         }
 
-        public Task AddAsync(ChangeLog log) => _repository.AddAsync(log);
+        public Task AddAsync(ChangeLog log)
+        {
+            Log.Debug("ChangeLogService.AddAsync called for {Entity}", log.Entity);
+            return _repository.AddAsync(log);
+        }
 
-        public Task<ChangeLog?> GetLatestAsync() => _repository.GetLatestAsync();
+        public Task<ChangeLog?> GetLatestAsync()
+        {
+            Log.Debug("ChangeLogService.GetLatestAsync called");
+            return _repository.GetLatestAsync();
+        }
     }
 }

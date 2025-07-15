@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using InvoiceApp.Models;
 using InvoiceApp.Data;
+using Serilog;
 
 namespace InvoiceApp.Repositories
 {
@@ -29,26 +30,32 @@ namespace InvoiceApp.Repositories
 
         public async Task AddAsync(TaxRate rate)
         {
+            Log.Debug("EfTaxRateRepository.AddAsync called for {Id}", rate.Id);
             using var ctx = _contextFactory.CreateDbContext();
             await ctx.TaxRates.AddAsync(rate);
             await ctx.SaveChangesAsync();
+            Log.Information("TaxRate {Id} inserted", rate.Id);
         }
 
         public async Task UpdateAsync(TaxRate rate)
         {
+            Log.Debug("EfTaxRateRepository.UpdateAsync called for {Id}", rate.Id);
             using var ctx = _contextFactory.CreateDbContext();
             ctx.TaxRates.Update(rate);
             await ctx.SaveChangesAsync();
+            Log.Information("TaxRate {Id} updated", rate.Id);
         }
 
         public async Task DeleteAsync(int id)
         {
+            Log.Debug("EfTaxRateRepository.DeleteAsync called for {Id}", id);
             using var ctx = _contextFactory.CreateDbContext();
             var entity = await ctx.TaxRates.FindAsync(id);
             if (entity != null)
             {
                 ctx.TaxRates.Remove(entity);
                 await ctx.SaveChangesAsync();
+                Log.Information("TaxRate {Id} deleted", id);
             }
         }
     }

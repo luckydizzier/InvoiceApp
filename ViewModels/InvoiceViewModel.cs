@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using InvoiceApp.Models;
 using InvoiceApp.Services;
+using Serilog;
 
 namespace InvoiceApp.ViewModels
 {
@@ -163,6 +164,7 @@ namespace InvoiceApp.ViewModels
 
         public async Task LoadAsync()
         {
+            Log.Debug("InvoiceViewModel.LoadAsync called");
             StatusMessage = "Betöltés...";
             var items = await _service.GetAllAsync();
             Invoices = new ObservableCollection<Invoice>(items);
@@ -192,6 +194,7 @@ namespace InvoiceApp.ViewModels
 
         private void AddItem()
         {
+            Log.Debug("InvoiceViewModel.AddItem called");
             if (SelectedInvoice == null) return;
             var firstProduct = Products.FirstOrDefault();
             var firstRate = TaxRates.FirstOrDefault();
@@ -209,11 +212,13 @@ namespace InvoiceApp.ViewModels
 
         private void RemoveItem(InvoiceItemViewModel item)
         {
+            Log.Debug("InvoiceViewModel.RemoveItem called for {Product}", item.Item.Product?.Name);
             Items.Remove(item);
         }
 
         private async void SuggestNextNumberAsync()
         {
+            Log.Debug("InvoiceViewModel.SuggestNextNumberAsync called");
             if (SelectedInvoice == null || SelectedInvoice.Id != 0 || SelectedInvoice.SupplierId == 0)
             {
                 return;
@@ -224,6 +229,7 @@ namespace InvoiceApp.ViewModels
             {
                 SelectedInvoice.Number = IncrementNumber(latest.Number);
                 OnPropertyChanged(nameof(SelectedInvoice));
+                Log.Information("Suggested invoice number {Number}", SelectedInvoice.Number);
             }
         }
 
@@ -248,6 +254,7 @@ namespace InvoiceApp.ViewModels
 
         private async Task SaveAsync()
         {
+            Log.Debug("InvoiceViewModel.SaveAsync called");
             if (SelectedInvoice == null) return;
 
             SelectedInvoice.Items = Items.Select(vm => vm.Item).ToList();
@@ -264,6 +271,7 @@ namespace InvoiceApp.ViewModels
             }
 
             StatusMessage = $"Számla mentve. ({DateTime.Now:g})";
+            Log.Information("Invoice {Id} saved", SelectedInvoice.Id);
         }
     }
 }

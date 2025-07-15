@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using InvoiceApp.Models;
 using InvoiceApp.Repositories;
 using System.Text.Json;
+using Serilog;
 
 namespace InvoiceApp.Services
 {
@@ -17,16 +18,28 @@ namespace InvoiceApp.Services
             _logService = logService;
         }
 
-        public Task<IEnumerable<Invoice>> GetAllAsync() => _repository.GetAllAsync();
+        public Task<IEnumerable<Invoice>> GetAllAsync()
+        {
+            Log.Debug("InvoiceService.GetAllAsync called");
+            return _repository.GetAllAsync();
+        }
 
-        public Task<Invoice?> GetByIdAsync(int id) => _repository.GetByIdAsync(id);
+        public Task<Invoice?> GetByIdAsync(int id)
+        {
+            Log.Debug("InvoiceService.GetByIdAsync called with {Id}", id);
+            return _repository.GetByIdAsync(id);
+        }
 
-        public Task<Invoice?> GetLatestForSupplierAsync(int supplierId) =>
-            _repository.GetLatestForSupplierAsync(supplierId);
+        public Task<Invoice?> GetLatestForSupplierAsync(int supplierId)
+        {
+            Log.Debug("InvoiceService.GetLatestForSupplierAsync called with {SupplierId}", supplierId);
+            return _repository.GetLatestForSupplierAsync(supplierId);
+        }
 
         public async Task SaveAsync(Invoice invoice)
         {
             if (invoice == null) throw new ArgumentNullException(nameof(invoice));
+            Log.Debug("InvoiceService.SaveAsync called for {Id}", invoice.Id);
 
             if (invoice.Id == 0)
             {
@@ -43,6 +56,7 @@ namespace InvoiceApp.Services
                     DateUpdated = DateTime.Now,
                     Active = true
                 });
+                Log.Information("Invoice {Id} created", invoice.Id);
             }
             else
             {
@@ -57,11 +71,13 @@ namespace InvoiceApp.Services
                     DateUpdated = DateTime.Now,
                     Active = true
                 });
+                Log.Information("Invoice {Id} updated", invoice.Id);
             }
         }
 
         public async Task DeleteAsync(int id)
         {
+            Log.Debug("InvoiceService.DeleteAsync called for {Id}", id);
             await _repository.DeleteAsync(id);
             await _logService.AddAsync(new ChangeLog
             {
@@ -72,6 +88,7 @@ namespace InvoiceApp.Services
                 DateUpdated = DateTime.Now,
                 Active = true
             });
+            Log.Information("Invoice {Id} deleted", id);
         }
     }
 }
