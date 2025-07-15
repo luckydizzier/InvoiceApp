@@ -45,16 +45,18 @@
         <!-- Kiválasztott számla tételei -->
         <Grid Grid.Row="1" Grid.Column="1" Margin="4">
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <!-- Fejléc -->
                 <RowDefinition Height="*"/>
                 <!-- DataGrid -->
                 <RowDefinition Height="Auto"/>
-                <!-- Fejléc -->
-                <RowDefinition Height="Auto"/>
                 <!-- Gombok -->
+                <RowDefinition Height="Auto"/>
+                <!-- Összegzés -->
             </Grid.RowDefinitions>
 
             <DataGrid x:Name="ItemsGrid"
-                      Grid.Row="0"
+                      Grid.Row="1"
                       ItemsSource="{Binding Items}"
                       AutoGenerateColumns="False"
                       CanUserAddRows="False"
@@ -112,7 +114,11 @@
                 </DataGrid.RowDetailsTemplate>
             </DataGrid>
 
-            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,4">
+            <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,4">
+                <TextBlock Text="Számlaszám" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                <TextBox Text="{Binding SelectedInvoice.Number}" Width="80" Margin="0,0,10,0"/>
+                <TextBlock Text="Dátum" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                <DatePicker SelectedDate="{Binding SelectedInvoice.Date}" Width="120" Margin="0,0,10,0"/>
                 <TextBlock Text="Szállító" VerticalAlignment="Center" Margin="0,0,4,0"/>
                 <ComboBox ItemsSource="{Binding Suppliers}"
                           SelectedItem="{Binding SelectedSupplier}"
@@ -127,6 +133,51 @@
             <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Content="➕ Tétel hozzáadása" Click="AddItemClicked" Margin="4" Padding="8,4"/>
                 <Button Content="🗑️ Tétel törlése" Click="DeleteItemClicked" Margin="4" Padding="8,4"/>
+            </StackPanel>
+
+            <!-- Összegző panel -->
+            <StackPanel Grid.Row="3" Orientation="Vertical" Margin="0,4,0,0">
+                <Separator/>
+                <Grid Margin="0,4,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="VAT Breakdown by Rate" Margin="0,0,0,4"/>
+                        <DataGrid ItemsSource="{Binding VatBreakdown}" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" Margin="0,0,8,0">
+                            <DataGrid.Resources>
+                                <Style x:Key="RightAlignedCellStyle" TargetType="TextBlock">
+                                    <Setter Property="TextAlignment" Value="Right"/>
+                                </Style>
+                            </DataGrid.Resources>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="VAT %" Binding="{Binding Rate}" Width="Auto"/>
+                                <DataGridTextColumn Header="Net Amount" Binding="{Binding Net}" Width="*" ElementStyle="{StaticResource RightAlignedCellStyle}"/>
+                                <DataGridTextColumn Header="VAT Amount" Binding="{Binding Vat}" Width="*" ElementStyle="{StaticResource RightAlignedCellStyle}"/>
+                                <DataGridTextColumn Header="Gross Amount" Binding="{Binding Gross}" Width="*" ElementStyle="{StaticResource RightAlignedCellStyle}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                    <Grid Grid.Column="1" Margin="8,0,0,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Total Net:"/>
+                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding TotalNet}" HorizontalAlignment="Right"/>
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="Total VAT:"/>
+                        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding TotalVat}" HorizontalAlignment="Right"/>
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="Total Gross:"/>
+                        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding TotalGross}" HorizontalAlignment="Right"/>
+                    </Grid>
+                </Grid>
+                <TextBlock Text="{Binding InWords}" HorizontalAlignment="Right" Margin="0,4,0,0"/>
             </StackPanel>
         </Grid>
 
