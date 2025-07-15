@@ -33,6 +33,13 @@ namespace InvoiceApp
             services.AddDbContextFactory<InvoiceContext>(o => o.UseSqlite(connection));
             services.AddSingleton<IInvoiceRepository, EfInvoiceRepository>();
             services.AddSingleton<IChangeLogRepository, EfChangeLogRepository>();
+            services.AddSingleton<IInvoiceItemRepository, EfInvoiceItemRepository>();
+            services.AddSingleton<IProductRepository, EfProductRepository>();
+            services.AddSingleton<IPaymentMethodRepository, EfPaymentMethodRepository>();
+            services.AddSingleton<ISupplierRepository, EfSupplierRepository>();
+            services.AddSingleton<IUnitRepository, EfUnitRepository>();
+            services.AddSingleton<IProductGroupRepository, EfProductGroupRepository>();
+            services.AddSingleton<ITaxRateRepository, EfTaxRateRepository>();
 
             services.AddSingleton<IChangeLogService, ChangeLogService>();
             services.AddSingleton<IInvoiceService, InvoiceService>();
