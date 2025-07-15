@@ -20,10 +20,22 @@ namespace InvoiceApp.Repositories
             try
             {
                 using var ctx = _contextFactory.CreateDbContext();
-                return await ctx.Invoices
+                var invoices = await ctx.Invoices
                     .Include(i => i.Items)
-                    .ThenInclude(it => it.Product)
+                        .ThenInclude(it => it.Product)
+                            .ThenInclude(p => p.Unit)
+                    .Include(i => i.Items)
+                        .ThenInclude(it => it.Product)
+                            .ThenInclude(p => p.ProductGroup)
+                    .Include(i => i.Items)
+                        .ThenInclude(it => it.Product)
+                            .ThenInclude(p => p.TaxRate)
+                    .Include(i => i.Items)
+                        .ThenInclude(it => it.TaxRate)
                     .ToListAsync();
+
+                Serilog.Log.Debug("Loaded {Count} invoices with navigation properties", invoices.Count);
+                return invoices;
             }
             catch (DbUpdateException ex)
             {
@@ -32,13 +44,36 @@ namespace InvoiceApp.Repositories
             }
         }
 
-        public Task<Invoice?> GetByIdAsync(int id)
+        public async Task<Invoice?> GetByIdAsync(int id)
         {
             using var ctx = _contextFactory.CreateDbContext();
-            return ctx.Invoices
+            var invoice = await ctx.Invoices
                 .Include(i => i.Items)
-                .ThenInclude(it => it.Product)
+                    .ThenInclude(it => it.Product)
+                        .ThenInclude(p => p.Unit)
+                .Include(i => i.Items)
+                    .ThenInclude(it => it.Product)
+                        .ThenInclude(p => p.ProductGroup)
+                .Include(i => i.Items)
+                    .ThenInclude(it => it.Product)
+                        .ThenInclude(p => p.TaxRate)
+                .Include(i => i.Items)
+                    .ThenInclude(it => it.TaxRate)
                 .FirstOrDefaultAsync(i => i.Id == id);
+
+            if (invoice != null)
+            {
+                Serilog.Log.Debug(
+                    "Loaded invoice {Id} with {Items} items and navigation properties",
+                    invoice.Id,
+                    invoice.Items?.Count ?? 0);
+            }
+            else
+            {
+                Serilog.Log.Debug("Invoice {Id} not found", id);
+            }
+
+            return invoice;
         }
 
         public async Task AddAsync(Invoice invoice)
