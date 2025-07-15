@@ -1,8 +1,10 @@
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using InvoiceApp.Models;
 using InvoiceApp.Services;
+using InvoiceApp;
 
 namespace InvoiceApp.ViewModels
 {
@@ -21,12 +23,18 @@ namespace InvoiceApp.ViewModels
         public Product? SelectedProduct
         {
             get => _selectedProduct;
-            set { _selectedProduct = value; OnPropertyChanged(); }
+            set
+            {
+                _selectedProduct = value;
+                OnPropertyChanged();
+                DeleteCommand.RaiseCanExecuteChanged();
+                SaveCommand.RaiseCanExecuteChanged();
+            }
         }
 
-        public ICommand AddCommand { get; }
-        public ICommand DeleteCommand { get; }
-        public ICommand SaveCommand { get; }
+        public RelayCommand AddCommand { get; }
+        public RelayCommand DeleteCommand { get; }
+        public RelayCommand SaveCommand { get; }
 
         public ProductViewModel(IProductService service)
         {
@@ -34,12 +42,17 @@ namespace InvoiceApp.ViewModels
             AddCommand = new RelayCommand(_ => AddProduct());
             DeleteCommand = new RelayCommand(async obj =>
             {
-                if (obj is Product product)
+                if (obj is Product product && DialogHelper.ConfirmDeletion("terméket"))
                 {
                     await DeleteProductAsync(product);
+                    DialogHelper.ShowInfo("Törlés sikeres.");
                 }
-            });
-            SaveCommand = new RelayCommand(async _ => await SaveSelectedAsync());
+            }, _ => SelectedProduct != null);
+            SaveCommand = new RelayCommand(async _ =>
+            {
+                await SaveSelectedAsync();
+                DialogHelper.ShowInfo("Mentés kész.");
+            }, _ => SelectedProduct != null && !string.IsNullOrWhiteSpace(SelectedProduct?.Name));
         }
 
         public async Task LoadAsync()

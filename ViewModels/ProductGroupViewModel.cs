@@ -1,8 +1,10 @@
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using InvoiceApp.Models;
 using InvoiceApp.Services;
+using InvoiceApp;
 
 namespace InvoiceApp.ViewModels
 {
@@ -21,12 +23,18 @@ namespace InvoiceApp.ViewModels
         public ProductGroup? SelectedGroup
         {
             get => _selectedGroup;
-            set { _selectedGroup = value; OnPropertyChanged(); }
+            set
+            {
+                _selectedGroup = value;
+                OnPropertyChanged();
+                DeleteCommand.RaiseCanExecuteChanged();
+                SaveCommand.RaiseCanExecuteChanged();
+            }
         }
 
-        public ICommand AddCommand { get; }
-        public ICommand DeleteCommand { get; }
-        public ICommand SaveCommand { get; }
+        public RelayCommand AddCommand { get; }
+        public RelayCommand DeleteCommand { get; }
+        public RelayCommand SaveCommand { get; }
 
         public ProductGroupViewModel(IProductGroupService service)
         {
@@ -34,12 +42,17 @@ namespace InvoiceApp.ViewModels
             AddCommand = new RelayCommand(_ => AddGroup());
             DeleteCommand = new RelayCommand(async obj =>
             {
-                if (obj is ProductGroup group)
+                if (obj is ProductGroup group && DialogHelper.ConfirmDeletion("termékcsoportot"))
                 {
                     await DeleteGroupAsync(group);
+                    DialogHelper.ShowInfo("Törlés sikeres.");
                 }
-            });
-            SaveCommand = new RelayCommand(async _ => await SaveSelectedAsync());
+            }, _ => SelectedGroup != null);
+            SaveCommand = new RelayCommand(async _ =>
+            {
+                await SaveSelectedAsync();
+                DialogHelper.ShowInfo("Mentés kész.");
+            }, _ => SelectedGroup != null && !string.IsNullOrWhiteSpace(SelectedGroup?.Name));
         }
 
         public async Task LoadAsync()

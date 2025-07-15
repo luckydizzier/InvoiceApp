@@ -1,8 +1,10 @@
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using InvoiceApp.Models;
 using InvoiceApp.Services;
+using InvoiceApp;
 
 namespace InvoiceApp.ViewModels
 {
@@ -21,12 +23,18 @@ namespace InvoiceApp.ViewModels
         public Supplier? SelectedSupplier
         {
             get => _selectedSupplier;
-            set { _selectedSupplier = value; OnPropertyChanged(); }
+            set
+            {
+                _selectedSupplier = value;
+                OnPropertyChanged();
+                DeleteCommand.RaiseCanExecuteChanged();
+                SaveCommand.RaiseCanExecuteChanged();
+            }
         }
 
-        public ICommand AddCommand { get; }
-        public ICommand DeleteCommand { get; }
-        public ICommand SaveCommand { get; }
+        public RelayCommand AddCommand { get; }
+        public RelayCommand DeleteCommand { get; }
+        public RelayCommand SaveCommand { get; }
 
         public SupplierViewModel(ISupplierService service)
         {
@@ -34,12 +42,17 @@ namespace InvoiceApp.ViewModels
             AddCommand = new RelayCommand(_ => AddSupplier());
             DeleteCommand = new RelayCommand(async obj =>
             {
-                if (obj is Supplier supplier)
+                if (obj is Supplier supplier && DialogHelper.ConfirmDeletion("szállítót"))
                 {
                     await DeleteSupplierAsync(supplier);
+                    DialogHelper.ShowInfo("Törlés sikeres.");
                 }
-            });
-            SaveCommand = new RelayCommand(async _ => await SaveSelectedAsync());
+            }, _ => SelectedSupplier != null);
+            SaveCommand = new RelayCommand(async _ =>
+            {
+                await SaveSelectedAsync();
+                DialogHelper.ShowInfo("Mentés kész.");
+            }, _ => SelectedSupplier != null && !string.IsNullOrWhiteSpace(SelectedSupplier?.Name));
         }
 
         public async Task LoadAsync()

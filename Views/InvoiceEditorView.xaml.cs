@@ -1,6 +1,8 @@
 using System.Windows;
 using InvoiceApp.ViewModels;
+using InvoiceApp;
 using Microsoft.Extensions.DependencyInjection;
+using System.Windows.Input;
 
 namespace InvoiceApp.Views
 {
@@ -24,7 +26,21 @@ namespace InvoiceApp.Views
         {
             if (ItemsGrid.SelectedItem is InvoiceItemViewModel item)
             {
-                _viewModel.RemoveItemCommand.Execute(item);
+                if (DialogHelper.ConfirmDeletion("tételt"))
+                {
+                    _viewModel.RemoveItemCommand.Execute(item);
+                    DialogHelper.ShowInfo("Tétel törölve.");
+                }
+            }
+        }
+
+        protected override void OnKeyDown(System.Windows.Input.KeyEventArgs e)
+        {
+            base.OnKeyDown(e);
+            if (e.Key == System.Windows.Input.Key.Escape)
+            {
+                Close();
+                e.Handled = true;
             }
         }
     }
