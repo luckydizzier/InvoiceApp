@@ -47,6 +47,11 @@ namespace InvoiceApp
             services.AddSingleton<IInvoiceService, InvoiceService>();
             services.AddSingleton<IInvoiceItemService, InvoiceItemService>();
             services.AddSingleton<IProductService, ProductService>();
+            services.AddSingleton<IPaymentMethodService, PaymentMethodService>();
+            services.AddSingleton<ISupplierService, SupplierService>();
+            services.AddSingleton<IUnitService, UnitService>();
+            services.AddSingleton<IProductGroupService, ProductGroupService>();
+            services.AddSingleton<ITaxRateService, TaxRateService>();
             services.AddSingleton<ViewModels.InvoiceViewModel>();
 
             Log.Logger = new LoggerConfiguration()
