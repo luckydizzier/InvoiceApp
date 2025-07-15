@@ -61,16 +61,64 @@ namespace InvoiceApp.Views
             win.ShowDialog();
         }
 
-        private void OnKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        private InvoiceEditorView? _editorWindow;
+
+        protected override void OnKeyDown(System.Windows.Input.KeyEventArgs e)
         {
-            if (e.Key == System.Windows.Input.Key.Escape)
+            base.OnKeyDown(e);
+
+            switch (e.Key)
             {
-                var result = MessageBox.Show("Biztosan kilép?", "Kilépés", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                if (result == MessageBoxResult.Yes)
-                {
-                    Close();
-                }
-                e.Handled = true;
+                case System.Windows.Input.Key.Up:
+                    if (InvoicesList.SelectedIndex > 0)
+                    {
+                        InvoicesList.SelectedIndex--;
+                        InvoicesList.ScrollIntoView(InvoicesList.SelectedItem);
+                    }
+                    e.Handled = true;
+                    break;
+                case System.Windows.Input.Key.Down:
+                    if (InvoicesList.SelectedIndex < InvoicesList.Items.Count - 1)
+                    {
+                        InvoicesList.SelectedIndex++;
+                        InvoicesList.ScrollIntoView(InvoicesList.SelectedItem);
+                    }
+                    e.Handled = true;
+                    break;
+                case System.Windows.Input.Key.Enter:
+                    if (InvoicesList.SelectedItem != null)
+                    {
+                        _editorWindow?.Close();
+                        _editorWindow = new InvoiceEditorView { Owner = this, DataContext = _viewModel };
+                        _editorWindow.Show();
+                    }
+                    e.Handled = true;
+                    break;
+                case System.Windows.Input.Key.Escape:
+                    if (_editorWindow != null)
+                    {
+                        _editorWindow.Close();
+                        _editorWindow = null;
+                    }
+                    else
+                    {
+                        InvoicesList.Focus();
+                    }
+                    e.Handled = true;
+                    break;
+                case System.Windows.Input.Key.Delete:
+                    if (InvoicesList.SelectedItem is InvoiceApp.Models.Invoice invoice)
+                    {
+                        var result = MessageBox.Show("Biztosan törli a számlát?", "Törlés", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                        if (result == MessageBoxResult.Yes)
+                        {
+                            var service = ((App)Application.Current).Services.GetRequiredService<InvoiceApp.Services.IInvoiceService>();
+                            service.DeleteAsync(invoice.Id).GetAwaiter().GetResult();
+                            _viewModel.Invoices.Remove(invoice);
+                        }
+                        e.Handled = true;
+                    }
+                    break;
             }
         }
     }
