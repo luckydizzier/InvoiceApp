@@ -255,6 +255,8 @@ namespace InvoiceApp.ViewModels
             {
                 InvoiceId = SelectedInvoice.Id,
                 Quantity = 1,
+                Deposit = 0,
+                Return = 0,
                 Product = firstProduct,
                 ProductId = firstProduct?.Id ?? 0,
                 TaxRate = firstRate,
@@ -360,11 +362,16 @@ namespace InvoiceApp.ViewModels
         {
             var breakdown = Items
                 .GroupBy(i => i.TaxRate?.Percentage ?? 0)
-                .Select(g => new VatBreakdownEntry
+                .Select(g =>
                 {
-                    Rate = g.Key,
-                    Net = g.Sum(x => x.Quantity * x.UnitPrice),
-                    Vat = g.Sum(x => x.Quantity * x.UnitPrice * (x.TaxRate?.Percentage ?? 0) / 100m)
+                    var net = g.Sum(x => x.Quantity * x.UnitPrice + x.Deposit - x.Return);
+                    var vat = net * g.Key / 100m;
+                    return new VatBreakdownEntry
+                    {
+                        Rate = g.Key,
+                        Net = net,
+                        Vat = vat
+                    };
                 });
 
             VatBreakdown = new ObservableCollection<VatBreakdownEntry>(breakdown);

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using InvoiceApp.Models;
 using InvoiceApp.Repositories;
@@ -42,11 +43,12 @@ namespace InvoiceApp.Services
                 item.DateUpdated = item.DateCreated;
                 item.Active = true;
                 await _repository.AddAsync(item);
+                var options = new JsonSerializerOptions { ReferenceHandler = ReferenceHandler.Preserve };
                 await _logService.AddAsync(new ChangeLog
                 {
                     Entity = nameof(InvoiceItem),
                     Operation = "Add",
-                    Data = JsonSerializer.Serialize(item),
+                    Data = JsonSerializer.Serialize(item, options),
                     DateCreated = DateTime.Now,
                     DateUpdated = DateTime.Now,
                     Active = true
@@ -57,11 +59,12 @@ namespace InvoiceApp.Services
             {
                 item.DateUpdated = DateTime.Now;
                 await _repository.UpdateAsync(item);
+                var options = new JsonSerializerOptions { ReferenceHandler = ReferenceHandler.Preserve };
                 await _logService.AddAsync(new ChangeLog
                 {
                     Entity = nameof(InvoiceItem),
                     Operation = "Update",
-                    Data = JsonSerializer.Serialize(item),
+                    Data = JsonSerializer.Serialize(item, options),
                     DateCreated = DateTime.Now,
                     DateUpdated = DateTime.Now,
                     Active = true
