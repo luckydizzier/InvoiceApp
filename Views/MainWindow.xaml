@@ -17,9 +17,15 @@
             <RowDefinition Height="Auto" />
             <!-- Státuszsor -->
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="220" />
+            <!-- Számlalista -->
+            <ColumnDefinition Width="*" />
+            <!-- Számlatartalom -->
+        </Grid.ColumnDefinitions>
 
         <!-- Menü -->
-        <Menu Grid.Row="0">
+        <Menu Grid.Row="0" Grid.ColumnSpan="2">
             <MenuItem Header="_Ablakok">
                 <MenuItem Header="_Fizetési módok" Click="OpenPaymentMethods" />
                 <MenuItem Header="_Szállítók" Click="OpenSuppliers" />
@@ -28,30 +34,26 @@
             </MenuItem>
         </Menu>
 
-        <!-- Fő tartalom -->
-        <TabControl x:Name="MainTabs" Grid.Row="1">
-            <TabItem Header="Lista">
-                <!-- Számlák listája -->
-                <ListView x:Name="InvoicesList"
-                          ItemsSource="{Binding Invoices}"
-                          SelectedItem="{Binding SelectedInvoice}"
-                          DisplayMemberPath="Id"
-                          Margin="4"
-                          SelectionChanged="InvoicesList_SelectionChanged"/>
-            </TabItem>
-            <TabItem Header="Szerkesztés">
-                <!-- Kiválasztott számla tételei -->
-                <Grid Margin="4">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <!-- Fejléc -->
-                        <RowDefinition Height="*"/>
-                        <!-- DataGrid -->
-                        <RowDefinition Height="Auto"/>
-                        <!-- Gombok -->
-                        <RowDefinition Height="Auto"/>
-                        <!-- Összegzés -->
-                    </Grid.RowDefinitions>
+        <!-- Számlák listája -->
+        <ListView x:Name="InvoicesList"
+                  ItemsSource="{Binding Invoices}"
+                  SelectedItem="{Binding SelectedInvoice}"
+                  Grid.Row="1" Grid.Column="0"
+                  DisplayMemberPath="Id"
+                  Margin="4"/>
+
+        <!-- Kiválasztott számla tételei -->
+        <Grid Grid.Row="1" Grid.Column="1" Margin="4">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <!-- Fejléc -->
+                <RowDefinition Height="*"/>
+                <!-- DataGrid -->
+                <RowDefinition Height="Auto"/>
+                <!-- Gombok -->
+                <RowDefinition Height="Auto"/>
+                <!-- Összegzés -->
+            </Grid.RowDefinitions>
 
             <DataGrid x:Name="ItemsGrid"
                       Grid.Row="1"
@@ -177,12 +179,10 @@
                 </Grid>
                 <TextBlock Text="{Binding InWords}" HorizontalAlignment="Right" Margin="0,4,0,0"/>
             </StackPanel>
-                </Grid>
-            </TabItem>
-        </TabControl>
+        </Grid>
 
         <!-- Státuszsor -->
-        <StatusBar Grid.Row="2">
+        <StatusBar Grid.Row="2" Grid.ColumnSpan="2">
             <TextBlock Text="{Binding StatusMessage}" />
         </StatusBar>
     </Grid>

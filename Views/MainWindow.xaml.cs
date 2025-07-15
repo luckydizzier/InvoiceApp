@@ -66,14 +66,6 @@ namespace InvoiceApp.Views
             win.ShowDialog();
         }
 
-        private void InvoicesList_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-            if (InvoicesList.SelectedItem != null)
-            {
-                MainTabs.SelectedIndex = 1;
-            }
-        }
-
 
         protected override void OnKeyDown(System.Windows.Input.KeyEventArgs e)
         {
