@@ -1,8 +1,10 @@
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using InvoiceApp.Models;
 using InvoiceApp.Services;
+using InvoiceApp;
 
 namespace InvoiceApp.ViewModels
 {
@@ -21,12 +23,18 @@ namespace InvoiceApp.ViewModels
         public PaymentMethod? SelectedMethod
         {
             get => _selectedMethod;
-            set { _selectedMethod = value; OnPropertyChanged(); }
+            set
+            {
+                _selectedMethod = value;
+                OnPropertyChanged();
+                DeleteCommand.RaiseCanExecuteChanged();
+                SaveCommand.RaiseCanExecuteChanged();
+            }
         }
 
-        public ICommand AddCommand { get; }
-        public ICommand DeleteCommand { get; }
-        public ICommand SaveCommand { get; }
+        public RelayCommand AddCommand { get; }
+        public RelayCommand DeleteCommand { get; }
+        public RelayCommand SaveCommand { get; }
 
         public PaymentMethodViewModel(IPaymentMethodService service)
         {
@@ -34,12 +42,17 @@ namespace InvoiceApp.ViewModels
             AddCommand = new RelayCommand(_ => AddMethod());
             DeleteCommand = new RelayCommand(async obj =>
             {
-                if (obj is PaymentMethod method)
+                if (obj is PaymentMethod method && DialogHelper.ConfirmDeletion("fizetési módot"))
                 {
                     await DeleteMethodAsync(method);
+                    DialogHelper.ShowInfo("Törlés sikeres.");
                 }
-            });
-            SaveCommand = new RelayCommand(async _ => await SaveSelectedAsync());
+            }, _ => SelectedMethod != null);
+            SaveCommand = new RelayCommand(async _ =>
+            {
+                await SaveSelectedAsync();
+                DialogHelper.ShowInfo("Mentés kész.");
+            }, _ => SelectedMethod != null && !string.IsNullOrWhiteSpace(SelectedMethod?.Name));
         }
 
         public async Task LoadAsync()

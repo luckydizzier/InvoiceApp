@@ -1,8 +1,10 @@
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using InvoiceApp.Models;
 using InvoiceApp.Services;
+using InvoiceApp;
 
 namespace InvoiceApp.ViewModels
 {
@@ -21,12 +23,18 @@ namespace InvoiceApp.ViewModels
         public Unit? SelectedUnit
         {
             get => _selectedUnit;
-            set { _selectedUnit = value; OnPropertyChanged(); }
+            set
+            {
+                _selectedUnit = value;
+                OnPropertyChanged();
+                DeleteCommand.RaiseCanExecuteChanged();
+                SaveCommand.RaiseCanExecuteChanged();
+            }
         }
 
-        public ICommand AddCommand { get; }
-        public ICommand DeleteCommand { get; }
-        public ICommand SaveCommand { get; }
+        public RelayCommand AddCommand { get; }
+        public RelayCommand DeleteCommand { get; }
+        public RelayCommand SaveCommand { get; }
 
         public UnitViewModel(IUnitService service)
         {
@@ -34,12 +42,17 @@ namespace InvoiceApp.ViewModels
             AddCommand = new RelayCommand(_ => AddUnit());
             DeleteCommand = new RelayCommand(async obj =>
             {
-                if (obj is Unit unit)
+                if (obj is Unit unit && DialogHelper.ConfirmDeletion("mértékegységet"))
                 {
                     await DeleteUnitAsync(unit);
+                    DialogHelper.ShowInfo("Törlés sikeres.");
                 }
-            });
-            SaveCommand = new RelayCommand(async _ => await SaveSelectedAsync());
+            }, _ => SelectedUnit != null);
+            SaveCommand = new RelayCommand(async _ =>
+            {
+                await SaveSelectedAsync();
+                DialogHelper.ShowInfo("Mentés kész.");
+            }, _ => SelectedUnit != null && !string.IsNullOrWhiteSpace(SelectedUnit?.Name));
         }
 
         public async Task LoadAsync()

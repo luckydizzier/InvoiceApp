@@ -1,8 +1,10 @@
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using InvoiceApp.Models;
 using InvoiceApp.Services;
+using InvoiceApp;
 
 namespace InvoiceApp.ViewModels
 {
@@ -21,12 +23,18 @@ namespace InvoiceApp.ViewModels
         public TaxRate? SelectedRate
         {
             get => _selectedRate;
-            set { _selectedRate = value; OnPropertyChanged(); }
+            set
+            {
+                _selectedRate = value;
+                OnPropertyChanged();
+                DeleteCommand.RaiseCanExecuteChanged();
+                SaveCommand.RaiseCanExecuteChanged();
+            }
         }
 
-        public ICommand AddCommand { get; }
-        public ICommand DeleteCommand { get; }
-        public ICommand SaveCommand { get; }
+        public RelayCommand AddCommand { get; }
+        public RelayCommand DeleteCommand { get; }
+        public RelayCommand SaveCommand { get; }
 
         public TaxRateViewModel(ITaxRateService service)
         {
@@ -34,12 +42,17 @@ namespace InvoiceApp.ViewModels
             AddCommand = new RelayCommand(_ => AddRate());
             DeleteCommand = new RelayCommand(async obj =>
             {
-                if (obj is TaxRate rate)
+                if (obj is TaxRate rate && DialogHelper.ConfirmDeletion("áfakulcsot"))
                 {
                     await DeleteRateAsync(rate);
+                    DialogHelper.ShowInfo("Törlés sikeres.");
                 }
-            });
-            SaveCommand = new RelayCommand(async _ => await SaveSelectedAsync());
+            }, _ => SelectedRate != null);
+            SaveCommand = new RelayCommand(async _ =>
+            {
+                await SaveSelectedAsync();
+                DialogHelper.ShowInfo("Mentés kész.");
+            }, _ => SelectedRate != null && !string.IsNullOrWhiteSpace(SelectedRate?.Name));
         }
 
         public async Task LoadAsync()
