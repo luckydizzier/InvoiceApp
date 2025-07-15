@@ -40,8 +40,7 @@ namespace InvoiceApp.Repositories
                 .Include(i => i.Product)
                     .ThenInclude(p => p.TaxRate)
                 .Include(i => i.TaxRate)
-                .FirstOrDefaultAsync(i => i.Id == id)
-                .AsTask();
+                .FirstOrDefaultAsync(i => i.Id == id);
         }
 
         public async Task AddAsync(InvoiceItem item)
