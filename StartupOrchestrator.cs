@@ -43,6 +43,8 @@ namespace InvoiceApp
 
             services.AddSingleton<IChangeLogService, ChangeLogService>();
             services.AddSingleton<IInvoiceService, InvoiceService>();
+            services.AddSingleton<IInvoiceItemService, InvoiceItemService>();
+            services.AddSingleton<IProductService, ProductService>();
             services.AddSingleton<ViewModels.InvoiceViewModel>();
 
             Log.Logger = new LoggerConfiguration()
