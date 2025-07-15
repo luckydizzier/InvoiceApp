@@ -20,7 +20,9 @@ namespace InvoiceApp.Repositories
             try
             {
                 using var ctx = _contextFactory.CreateDbContext();
-                return await ctx.Invoices.ToListAsync();
+                return await ctx.Invoices
+                    .Include(i => i.Items)
+                    .ToListAsync();
             }
             catch (DbUpdateException ex)
             {
@@ -32,7 +34,9 @@ namespace InvoiceApp.Repositories
         public Task<Invoice?> GetByIdAsync(int id)
         {
             using var ctx = _contextFactory.CreateDbContext();
-            return ctx.Invoices.FindAsync(id).AsTask();
+            return ctx.Invoices
+                .Include(i => i.Items)
+                .FirstOrDefaultAsync(i => i.Id == id);
         }
 
         public async Task AddAsync(Invoice invoice)
