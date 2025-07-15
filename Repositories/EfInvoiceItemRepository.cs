@@ -47,6 +47,14 @@ namespace InvoiceApp.Repositories
         public async Task AddAsync(InvoiceItem item)
         {
             using var ctx = _contextFactory.CreateDbContext();
+            if (item.Product != null)
+            {
+                ctx.Attach(item.Product);
+            }
+            if (item.TaxRate != null)
+            {
+                ctx.Attach(item.TaxRate);
+            }
             await ctx.InvoiceItems.AddAsync(item);
             await ctx.SaveChangesAsync();
         }
@@ -54,6 +62,14 @@ namespace InvoiceApp.Repositories
         public async Task UpdateAsync(InvoiceItem item)
         {
             using var ctx = _contextFactory.CreateDbContext();
+            if (item.Product != null)
+            {
+                ctx.Attach(item.Product);
+            }
+            if (item.TaxRate != null)
+            {
+                ctx.Attach(item.TaxRate);
+            }
             ctx.InvoiceItems.Update(item);
             await ctx.SaveChangesAsync();
         }
