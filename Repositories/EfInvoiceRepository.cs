@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using InvoiceApp.Models;
 using InvoiceApp.Data;
@@ -78,6 +79,15 @@ namespace InvoiceApp.Repositories
             }
 
             return invoice;
+        }
+
+        public async Task<Invoice?> GetLatestForSupplierAsync(int supplierId)
+        {
+            using var ctx = _contextFactory.CreateDbContext();
+            return await ctx.Invoices
+                .Where(i => i.SupplierId == supplierId)
+                .OrderByDescending(i => i.Number)
+                .FirstOrDefaultAsync();
         }
 
         public async Task AddAsync(Invoice invoice)

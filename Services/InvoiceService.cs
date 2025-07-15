@@ -21,6 +21,9 @@ namespace InvoiceApp.Services
 
         public Task<Invoice?> GetByIdAsync(int id) => _repository.GetByIdAsync(id);
 
+        public Task<Invoice?> GetLatestForSupplierAsync(int supplierId) =>
+            _repository.GetLatestForSupplierAsync(supplierId);
+
         public async Task SaveAsync(Invoice invoice)
         {
             if (invoice == null) throw new ArgumentNullException(nameof(invoice));
