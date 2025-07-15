@@ -69,8 +69,25 @@ namespace InvoiceApp.ViewModels
             get => _items;
             set
             {
+                if (_items != null)
+                {
+                    foreach (var it in _items)
+                    {
+                        it.PropertyChanged -= Item_PropertyChanged;
+                    }
+                    _items.CollectionChanged -= Items_CollectionChanged;
+                }
+
                 _items = value;
+
+                foreach (var it in _items)
+                {
+                    it.PropertyChanged += Item_PropertyChanged;
+                }
+                _items.CollectionChanged += Items_CollectionChanged;
+
                 OnPropertyChanged();
+                UpdateTotals();
             }
         }
 
@@ -100,6 +117,42 @@ namespace InvoiceApp.ViewModels
         {
             get => _paymentMethods;
             set { _paymentMethods = value; OnPropertyChanged(); }
+        }
+
+        private ObservableCollection<VatBreakdownEntry> _vatBreakdown = new();
+        private decimal _totalNet;
+        private decimal _totalVat;
+        private decimal _totalGross;
+        private string _inWords = string.Empty;
+
+        public ObservableCollection<VatBreakdownEntry> VatBreakdown
+        {
+            get => _vatBreakdown;
+            set { _vatBreakdown = value; OnPropertyChanged(); }
+        }
+
+        public decimal TotalNet
+        {
+            get => _totalNet;
+            set { _totalNet = value; OnPropertyChanged(); }
+        }
+
+        public decimal TotalVat
+        {
+            get => _totalVat;
+            set { _totalVat = value; OnPropertyChanged(); }
+        }
+
+        public decimal TotalGross
+        {
+            get => _totalGross;
+            set { _totalGross = value; OnPropertyChanged(); }
+        }
+
+        public string InWords
+        {
+            get => _inWords;
+            set { _inWords = value; OnPropertyChanged(); }
         }
 
         public Supplier? SelectedSupplier
@@ -207,13 +260,18 @@ namespace InvoiceApp.ViewModels
                 TaxRate = firstRate,
                 TaxRateId = firstRate?.Id ?? 0
             };
-            Items.Add(new InvoiceItemViewModel(newItem));
+            var vm = new InvoiceItemViewModel(newItem);
+            vm.PropertyChanged += Item_PropertyChanged;
+            Items.Add(vm);
+            UpdateTotals();
         }
 
         private void RemoveItem(InvoiceItemViewModel item)
         {
             Log.Debug("InvoiceViewModel.RemoveItem called for {Product}", item.Item.Product?.Name);
+            item.PropertyChanged -= Item_PropertyChanged;
             Items.Remove(item);
+            UpdateTotals();
         }
 
         private async void SuggestNextNumberAsync()
@@ -272,6 +330,87 @@ namespace InvoiceApp.ViewModels
 
             StatusMessage = $"Számla mentve. ({DateTime.Now:g})";
             Log.Information("Invoice {Id} saved", SelectedInvoice.Id);
+        }
+
+        private void Items_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.NewItems != null)
+            {
+                foreach (InvoiceItemViewModel item in e.NewItems)
+                {
+                    item.PropertyChanged += Item_PropertyChanged;
+                }
+            }
+            if (e.OldItems != null)
+            {
+                foreach (InvoiceItemViewModel item in e.OldItems)
+                {
+                    item.PropertyChanged -= Item_PropertyChanged;
+                }
+            }
+            UpdateTotals();
+        }
+
+        private void Item_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            UpdateTotals();
+        }
+
+        private void UpdateTotals()
+        {
+            var breakdown = Items
+                .GroupBy(i => i.TaxRate?.Percentage ?? 0)
+                .Select(g => new VatBreakdownEntry
+                {
+                    Rate = g.Key,
+                    Net = g.Sum(x => x.Quantity * x.UnitPrice),
+                    Vat = g.Sum(x => x.Quantity * x.UnitPrice * (x.TaxRate?.Percentage ?? 0) / 100m)
+                });
+
+            VatBreakdown = new ObservableCollection<VatBreakdownEntry>(breakdown);
+            TotalNet = VatBreakdown.Sum(v => v.Net);
+            TotalVat = VatBreakdown.Sum(v => v.Vat);
+            TotalGross = TotalNet + TotalVat;
+            InWords = $"In Words: {NumberToWords((long)TotalGross)} Forint";
+        }
+
+        private static string NumberToWords(long number)
+        {
+            if (number == 0) return "zero";
+            if (number < 0) return "minus " + NumberToWords(Math.Abs(number));
+
+            string words = string.Empty;
+
+            if ((number / 1000) > 0)
+            {
+                words += NumberToWords(number / 1000) + " thousand ";
+                number %= 1000;
+            }
+
+            if ((number / 100) > 0)
+            {
+                words += NumberToWords(number / 100) + " hundred ";
+                number %= 100;
+            }
+
+            if (number > 0)
+            {
+                var unitsMap = new[] {"zero","one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen"};
+                var tensMap = new[] {"zero","ten","twenty","thirty","forty","fifty","sixty","seventy","eighty","ninety"};
+
+                if (number < 20)
+                {
+                    words += unitsMap[number];
+                }
+                else
+                {
+                    words += tensMap[number / 10];
+                    if ((number % 10) > 0)
+                        words += "-" + unitsMap[number % 10];
+                }
+            }
+
+            return words.Trim();
         }
     }
 }
