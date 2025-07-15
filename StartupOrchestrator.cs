@@ -6,6 +6,8 @@ using System.Windows;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Text.Json;
+using System.Data.Common;
+using Microsoft.Data.Sqlite;
 using InvoiceApp.Data;
 using InvoiceApp.Models;
 using InvoiceApp.Repositories;
@@ -20,6 +22,19 @@ namespace InvoiceApp
 {
     public static class StartupOrchestrator
     {
+        private static readonly string[] ExpectedTables = new[]
+        {
+            "Invoices",
+            "ChangeLogs",
+            "InvoiceItems",
+            "Products",
+            "Suppliers",
+            "PaymentMethods",
+            "Units",
+            "ProductGroups",
+            "TaxRates"
+        };
+
         public static IServiceProvider Configure()
         {
             EnsureConfig();
@@ -80,11 +95,94 @@ namespace InvoiceApp
             }
         }
 
+        private static void BackupDatabase(string dbPath)
+        {
+            if (!File.Exists(dbPath))
+                return;
+
+            var backupDir = Path.Combine(Path.GetDirectoryName(dbPath)!, "backups");
+            Directory.CreateDirectory(backupDir);
+            var backupFile = Path.Combine(backupDir, $"invoice_{DateTime.Now:yyyyMMddHHmmss}.db");
+            File.Copy(dbPath, backupFile, true);
+
+            var oldBackups = Directory.GetFiles(backupDir)
+                .OrderByDescending(f => f)
+                .Skip(5)
+                .ToList();
+            foreach (var old in oldBackups)
+            {
+                File.Delete(old);
+            }
+
+            Log.Information($"Database backup created: {backupFile}");
+        }
+
+        private static bool TableExists(DbConnection connection, string name)
+        {
+            using var cmd = connection.CreateCommand();
+            cmd.CommandText = "SELECT name FROM sqlite_master WHERE type='table' AND name=$name";
+            var param = cmd.CreateParameter();
+            param.ParameterName = "$name";
+            param.Value = name;
+            cmd.Parameters.Add(param);
+            return cmd.ExecuteScalar() != null;
+        }
+
+        private static bool IndexExists(DbConnection connection, string name)
+        {
+            using var cmd = connection.CreateCommand();
+            cmd.CommandText = "SELECT name FROM sqlite_master WHERE type='index' AND name=$name";
+            var param = cmd.CreateParameter();
+            param.ParameterName = "$name";
+            param.Value = name;
+            cmd.Parameters.Add(param);
+            return cmd.ExecuteScalar() != null;
+        }
+
+        private static void RepairTables(InvoiceContext ctx, string dbPath)
+        {
+            using var conn = ctx.Database.GetDbConnection();
+            conn.Open();
+
+            foreach (var table in ExpectedTables)
+            {
+                if (!TableExists(conn, table))
+                {
+                    Log.Warning($"Table {table} missing. Recreating via EF.");
+                    ctx.Database.EnsureCreated();
+                    Log.Information($"Table {table} ensured.");
+                }
+
+                var indexName = $"IX_{table}_Id";
+                if (!IndexExists(conn, indexName))
+                {
+                    using var cmd = conn.CreateCommand();
+                    cmd.CommandText = $"CREATE INDEX IF NOT EXISTS {indexName} ON {table}(Id);";
+                    cmd.ExecuteNonQuery();
+                    Log.Information($"Index {indexName} created.");
+                }
+            }
+
+            conn.Close();
+        }
+
         private static async Task InitializeDatabase(IServiceProvider provider)
         {
             using var scope = provider.CreateScope();
             var factory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<InvoiceContext>>();
             using var ctx = factory.CreateDbContext();
+
+            var builder = new SqliteConnectionStringBuilder(ctx.Database.GetDbConnection().ConnectionString);
+            var dbPath = Path.GetFullPath(builder.DataSource);
+
+            if (!File.Exists(dbPath))
+            {
+                Log.Warning($"Database file missing at {dbPath}. It will be created.");
+            }
+            else
+            {
+                BackupDatabase(dbPath);
+            }
 
             if (ctx.Database.GetMigrations().Any())
             {
@@ -94,6 +192,8 @@ namespace InvoiceApp
             {
                 ctx.Database.EnsureCreated();
             }
+
+            RepairTables(ctx, dbPath);
 
             try
             {
