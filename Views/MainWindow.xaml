@@ -116,16 +116,16 @@
 
             <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,4">
                 <TextBlock Text="Számlaszám" VerticalAlignment="Center" Margin="0,0,4,0"/>
-                <TextBox Text="{Binding SelectedInvoice.Number}" Width="80" Margin="0,0,10,0"/>
+                <TextBox Text="{Binding SelectedInvoice.Number, UpdateSourceTrigger=PropertyChanged}" Width="80" Margin="0,0,10,0"/>
                 <TextBlock Text="Dátum" VerticalAlignment="Center" Margin="0,0,4,0"/>
-                <DatePicker SelectedDate="{Binding SelectedInvoice.Date}" Width="120" Margin="0,0,10,0"/>
+                <DatePicker SelectedDate="{Binding SelectedInvoice.Date, UpdateSourceTrigger=PropertyChanged}" Width="120" Margin="0,0,10,0"/>
                 <TextBlock Text="Szállító" VerticalAlignment="Center" Margin="0,0,4,0"/>
                 <ComboBox ItemsSource="{Binding Suppliers}"
-                          SelectedItem="{Binding SelectedSupplier}"
+                          SelectedItem="{Binding SelectedSupplier, UpdateSourceTrigger=PropertyChanged}"
                           DisplayMemberPath="Name" Width="150" Margin="0,0,10,0"/>
                 <TextBlock Text="Fizetés" VerticalAlignment="Center" Margin="0,0,4,0"/>
                 <ComboBox ItemsSource="{Binding PaymentMethods}"
-                          SelectedItem="{Binding SelectedPaymentMethod}"
+                          SelectedItem="{Binding SelectedPaymentMethod, UpdateSourceTrigger=PropertyChanged}"
                           DisplayMemberPath="Name" Width="150"/>
             </StackPanel>
 
@@ -133,6 +133,7 @@
             <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Content="➕ Tétel hozzáadása" Click="AddItemClicked" Margin="4" Padding="8,4"/>
                 <Button Content="🗑️ Tétel törlése" Click="DeleteItemClicked" Margin="4" Padding="8,4"/>
+                <Button Content="💾 Mentés" Command="{Binding SaveCommand}" Margin="4" Padding="8,4"/>
             </StackPanel>
 
             <!-- Összegző panel -->
