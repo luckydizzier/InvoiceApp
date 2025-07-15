@@ -88,6 +88,8 @@ namespace InvoiceApp
         private static void EnsureConfig()
         {
             var configPath = Path.Combine(AppContext.BaseDirectory, "appsettings.json");
+            var logDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "InvoiceApp", "logs");
+            Directory.CreateDirectory(logDir);
             if (!File.Exists(configPath))
             {
                 var defaultConfig = @"{
@@ -98,7 +100,7 @@ namespace InvoiceApp
       {
         ""Name"": ""File"",
         ""Args"": {
-          ""path"": ""logs/log-.json"",
+          ""path"": ""%LOCALAPPDATA%\\InvoiceApp\\logs\\log-.json"",
           ""rollingInterval"": ""Day"",
           ""formatter"": ""Serilog.Formatting.Json.JsonFormatter, Serilog"",
           ""fileSizeLimitBytes"": 5242880,
