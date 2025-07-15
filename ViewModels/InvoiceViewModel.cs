@@ -15,7 +15,7 @@ namespace InvoiceApp.ViewModels
         private readonly IProductService _productService;
         private readonly IChangeLogService _logService;
         private ObservableCollection<Invoice> _invoices = new();
-        private ObservableCollection<InvoiceItem> _items = new();
+        private ObservableCollection<InvoiceItemViewModel> _items = new();
         private ObservableCollection<Product> _products = new();
         private Invoice? _selectedInvoice;
         private string _statusMessage = string.Empty;
@@ -46,12 +46,15 @@ namespace InvoiceApp.ViewModels
             set
             {
                 _selectedInvoice = value;
-                Items = value != null ? new ObservableCollection<InvoiceItem>(value.Items) : new ObservableCollection<InvoiceItem>();
+                Items = value != null
+                    ? new ObservableCollection<InvoiceItemViewModel>(
+                        value.Items.Select(i => new InvoiceItemViewModel(i)))
+                    : new ObservableCollection<InvoiceItemViewModel>();
                 OnPropertyChanged();
             }
         }
 
-        public ObservableCollection<InvoiceItem> Items
+        public ObservableCollection<InvoiceItemViewModel> Items
         {
             get => _items;
             set
@@ -88,7 +91,7 @@ namespace InvoiceApp.ViewModels
             AddItemCommand = new RelayCommand(_ => AddItem());
             RemoveItemCommand = new RelayCommand(obj =>
             {
-                if (obj is InvoiceItem item)
+                if (obj is InvoiceItemViewModel item)
                 {
                     RemoveItem(item);
                 }
@@ -127,10 +130,10 @@ namespace InvoiceApp.ViewModels
                 Product = firstProduct,
                 ProductId = firstProduct?.Id ?? 0
             };
-            Items.Add(newItem);
+            Items.Add(new InvoiceItemViewModel(newItem));
         }
 
-        private void RemoveItem(InvoiceItem item)
+        private void RemoveItem(InvoiceItemViewModel item)
         {
             Items.Remove(item);
         }
@@ -139,11 +142,12 @@ namespace InvoiceApp.ViewModels
         {
             if (SelectedInvoice == null) return;
 
-            SelectedInvoice.Items = new List<InvoiceItem>(Items);
+            SelectedInvoice.Items = Items.Select(vm => vm.Item).ToList();
             await _service.SaveAsync(SelectedInvoice);
 
-            foreach (var it in Items)
+            foreach (var vm in Items)
             {
+                var it = vm.Item;
                 if (it.Product != null)
                 {
                     await _productService.SaveAsync(it.Product);
