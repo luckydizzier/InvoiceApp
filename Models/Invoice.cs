@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace InvoiceApp.Models
 {
@@ -8,5 +9,6 @@ namespace InvoiceApp.Models
         public string Issuer { get; set; } = string.Empty;
         public DateTime Date { get; set; }
         public decimal Amount { get; set; }
+        public List<InvoiceItem> Items { get; set; } = new();
     }
 }
