@@ -1,5 +1,6 @@
 using System.Windows;
 using InvoiceApp.ViewModels;
+using InvoiceApp;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace InvoiceApp.Views
@@ -33,7 +34,11 @@ namespace InvoiceApp.Views
         {
             if (ItemsGrid.SelectedItem is InvoiceItemViewModel item)
             {
-                _viewModel.RemoveItemCommand.Execute(item);
+                if (DialogHelper.ConfirmDeletion("tételt"))
+                {
+                    _viewModel.RemoveItemCommand.Execute(item);
+                    DialogHelper.ShowInfo("Tétel törölve.");
+                }
             }
         }
 
@@ -61,7 +66,6 @@ namespace InvoiceApp.Views
             win.ShowDialog();
         }
 
-        private InvoiceEditorView? _editorWindow;
 
         protected override void OnKeyDown(System.Windows.Input.KeyEventArgs e)
         {
@@ -88,22 +92,12 @@ namespace InvoiceApp.Views
                 case System.Windows.Input.Key.Enter:
                     if (InvoicesList.SelectedItem != null)
                     {
-                        _editorWindow?.Close();
-                        _editorWindow = new InvoiceEditorView { Owner = this, DataContext = _viewModel };
-                        _editorWindow.Show();
+                        ItemsGrid.Focus();
                     }
                     e.Handled = true;
                     break;
                 case System.Windows.Input.Key.Escape:
-                    if (_editorWindow != null)
-                    {
-                        _editorWindow.Close();
-                        _editorWindow = null;
-                    }
-                    else
-                    {
-                        InvoicesList.Focus();
-                    }
+                    InvoicesList.Focus();
                     e.Handled = true;
                     break;
                 case System.Windows.Input.Key.Delete:
