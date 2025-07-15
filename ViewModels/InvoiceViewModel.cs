@@ -2,7 +2,6 @@ using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using System.Collections.Generic;
-using System.Linq;
 using InvoiceApp.Models;
 using InvoiceApp.Services;
 
@@ -12,11 +11,9 @@ namespace InvoiceApp.ViewModels
     {
         private readonly IInvoiceService _service;
         private readonly IInvoiceItemService _itemService;
-        private readonly IProductService _productService;
         private readonly IChangeLogService _logService;
         private ObservableCollection<Invoice> _invoices = new();
         private ObservableCollection<InvoiceItem> _items = new();
-        private ObservableCollection<Product> _products = new();
         private Invoice? _selectedInvoice;
         private string _statusMessage = string.Empty;
 
@@ -61,28 +58,14 @@ namespace InvoiceApp.ViewModels
             }
         }
 
-        public ObservableCollection<Product> Products
-        {
-            get => _products;
-            set
-            {
-                _products = value;
-                OnPropertyChanged();
-            }
-        }
-
         public ICommand AddItemCommand { get; }
         public ICommand RemoveItemCommand { get; }
         public ICommand SaveCommand { get; }
 
-        public InvoiceViewModel(IInvoiceService service,
-            IInvoiceItemService itemService,
-            IProductService productService,
-            IChangeLogService logService)
+        public InvoiceViewModel(IInvoiceService service, IInvoiceItemService itemService, IChangeLogService logService)
         {
             _service = service;
             _itemService = itemService;
-            _productService = productService;
             _logService = logService;
 
             AddItemCommand = new RelayCommand(_ => AddItem());
@@ -102,9 +85,6 @@ namespace InvoiceApp.ViewModels
             var items = await _service.GetAllAsync();
             Invoices = new ObservableCollection<Invoice>(items);
 
-            var prods = await _productService.GetAllAsync();
-            Products = new ObservableCollection<Product>(prods);
-
             var log = await _logService.GetLatestAsync();
             if (log != null)
             {
@@ -119,14 +99,7 @@ namespace InvoiceApp.ViewModels
         private void AddItem()
         {
             if (SelectedInvoice == null) return;
-            var firstProduct = Products.FirstOrDefault();
-            var newItem = new InvoiceItem
-            {
-                InvoiceId = SelectedInvoice.Id,
-                Quantity = 1,
-                Product = firstProduct,
-                ProductId = firstProduct?.Id ?? 0
-            };
+            var newItem = new InvoiceItem { InvoiceId = SelectedInvoice.Id, Quantity = 1 };
             Items.Add(newItem);
         }
 
@@ -144,10 +117,6 @@ namespace InvoiceApp.ViewModels
 
             foreach (var it in Items)
             {
-                if (it.Product != null)
-                {
-                    await _productService.SaveAsync(it.Product);
-                }
                 await _itemService.SaveAsync(it);
             }
 

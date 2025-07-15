@@ -22,7 +22,6 @@ namespace InvoiceApp.Repositories
                 using var ctx = _contextFactory.CreateDbContext();
                 return await ctx.Invoices
                     .Include(i => i.Items)
-                    .ThenInclude(it => it.Product)
                     .ToListAsync();
             }
             catch (DbUpdateException ex)
@@ -37,7 +36,6 @@ namespace InvoiceApp.Repositories
             using var ctx = _contextFactory.CreateDbContext();
             return ctx.Invoices
                 .Include(i => i.Items)
-                .ThenInclude(it => it.Product)
                 .FirstOrDefaultAsync(i => i.Id == id);
         }
 
