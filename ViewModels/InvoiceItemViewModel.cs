@@ -54,5 +54,20 @@ namespace InvoiceApp.ViewModels
             get => _item.TaxRateId;
             set { if (_item.TaxRateId != value) { _item.TaxRateId = value; OnPropertyChanged(); } }
         }
+
+        public TaxRate? TaxRate
+        {
+            get => _item.TaxRate;
+            set
+            {
+                if (_item.TaxRate != value)
+                {
+                    _item.TaxRate = value;
+                    _item.TaxRateId = value?.Id ?? 0;
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(TaxRateId));
+                }
+            }
+        }
     }
 }

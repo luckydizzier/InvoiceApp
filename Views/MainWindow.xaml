@@ -48,6 +48,8 @@
                 <RowDefinition Height="*"/>
                 <!-- DataGrid -->
                 <RowDefinition Height="Auto"/>
+                <!-- Fejléc -->
+                <RowDefinition Height="Auto"/>
                 <!-- Gombok -->
             </Grid.RowDefinitions>
 
@@ -76,6 +78,20 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellEditingTemplate>
                     </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="ÁFA" Width="Auto">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Item.TaxRate.Name}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                        <DataGridTemplateColumn.CellEditingTemplate>
+                            <DataTemplate>
+                                <ComboBox ItemsSource="{Binding DataContext.TaxRates, RelativeSource={RelativeSource AncestorType=Window}}"
+                                          SelectedItem="{Binding TaxRate, UpdateSourceTrigger=PropertyChanged}"
+                                          DisplayMemberPath="Name"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellEditingTemplate>
+                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
 
                 <DataGrid.RowDetailsTemplate>
@@ -96,8 +112,19 @@
                 </DataGrid.RowDetailsTemplate>
             </DataGrid>
 
+            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,4">
+                <TextBlock Text="Szállító" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                <ComboBox ItemsSource="{Binding Suppliers}"
+                          SelectedItem="{Binding SelectedSupplier}"
+                          DisplayMemberPath="Name" Width="150" Margin="0,0,10,0"/>
+                <TextBlock Text="Fizetés" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                <ComboBox ItemsSource="{Binding PaymentMethods}"
+                          SelectedItem="{Binding SelectedPaymentMethod}"
+                          DisplayMemberPath="Name" Width="150"/>
+            </StackPanel>
+
             <!-- Gombok -->
-            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Content="➕ Tétel hozzáadása" Click="AddItemClicked" Margin="4" Padding="8,4"/>
                 <Button Content="🗑️ Tétel törlése" Click="DeleteItemClicked" Margin="4" Padding="8,4"/>
             </StackPanel>
