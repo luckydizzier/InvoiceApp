@@ -4,6 +4,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using InvoiceApp.Models;
 using InvoiceApp.Repositories;
+using Serilog;
 
 namespace InvoiceApp.Services
 {
@@ -18,13 +19,22 @@ namespace InvoiceApp.Services
             _logService = logService;
         }
 
-        public Task<IEnumerable<ProductGroup>> GetAllAsync() => _repository.GetAllAsync();
+        public Task<IEnumerable<ProductGroup>> GetAllAsync()
+        {
+            Log.Debug("ProductGroupService.GetAllAsync called");
+            return _repository.GetAllAsync();
+        }
 
-        public Task<ProductGroup?> GetByIdAsync(int id) => _repository.GetByIdAsync(id);
+        public Task<ProductGroup?> GetByIdAsync(int id)
+        {
+            Log.Debug("ProductGroupService.GetByIdAsync called with {Id}", id);
+            return _repository.GetByIdAsync(id);
+        }
 
         public async Task SaveAsync(ProductGroup group)
         {
             if (group == null) throw new ArgumentNullException(nameof(group));
+            Log.Debug("ProductGroupService.SaveAsync called for {Id}", group.Id);
 
             if (group.Id == 0)
             {
@@ -41,6 +51,7 @@ namespace InvoiceApp.Services
                     DateUpdated = DateTime.Now,
                     Active = true
                 });
+                Log.Information("ProductGroup {Id} created", group.Id);
             }
             else
             {
@@ -55,11 +66,13 @@ namespace InvoiceApp.Services
                     DateUpdated = DateTime.Now,
                     Active = true
                 });
+                Log.Information("ProductGroup {Id} updated", group.Id);
             }
         }
 
         public async Task DeleteAsync(int id)
         {
+            Log.Debug("ProductGroupService.DeleteAsync called for {Id}", id);
             await _repository.DeleteAsync(id);
             await _logService.AddAsync(new ChangeLog
             {
@@ -70,6 +83,7 @@ namespace InvoiceApp.Services
                 DateUpdated = DateTime.Now,
                 Active = true
             });
+            Log.Information("ProductGroup {Id} deleted", id);
         }
     }
 }

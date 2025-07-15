@@ -4,6 +4,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using InvoiceApp.Models;
 using InvoiceApp.Repositories;
+using Serilog;
 
 namespace InvoiceApp.Services
 {
@@ -18,13 +19,22 @@ namespace InvoiceApp.Services
             _logService = logService;
         }
 
-        public Task<IEnumerable<InvoiceItem>> GetAllAsync() => _repository.GetAllAsync();
+        public Task<IEnumerable<InvoiceItem>> GetAllAsync()
+        {
+            Log.Debug("InvoiceItemService.GetAllAsync called");
+            return _repository.GetAllAsync();
+        }
 
-        public Task<InvoiceItem?> GetByIdAsync(int id) => _repository.GetByIdAsync(id);
+        public Task<InvoiceItem?> GetByIdAsync(int id)
+        {
+            Log.Debug("InvoiceItemService.GetByIdAsync called with {Id}", id);
+            return _repository.GetByIdAsync(id);
+        }
 
         public async Task SaveAsync(InvoiceItem item)
         {
             if (item == null) throw new ArgumentNullException(nameof(item));
+            Log.Debug("InvoiceItemService.SaveAsync called for {Id}", item.Id);
 
             if (item.Id == 0)
             {
@@ -41,6 +51,7 @@ namespace InvoiceApp.Services
                     DateUpdated = DateTime.Now,
                     Active = true
                 });
+                Log.Information("InvoiceItem {Id} created", item.Id);
             }
             else
             {
@@ -55,11 +66,13 @@ namespace InvoiceApp.Services
                     DateUpdated = DateTime.Now,
                     Active = true
                 });
+                Log.Information("InvoiceItem {Id} updated", item.Id);
             }
         }
 
         public async Task DeleteAsync(int id)
         {
+            Log.Debug("InvoiceItemService.DeleteAsync called for {Id}", id);
             await _repository.DeleteAsync(id);
             await _logService.AddAsync(new ChangeLog
             {
@@ -70,6 +83,7 @@ namespace InvoiceApp.Services
                 DateUpdated = DateTime.Now,
                 Active = true
             });
+            Log.Information("InvoiceItem {Id} deleted", id);
         }
     }
 }

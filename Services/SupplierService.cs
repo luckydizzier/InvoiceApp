@@ -4,6 +4,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using InvoiceApp.Models;
 using InvoiceApp.Repositories;
+using Serilog;
 
 namespace InvoiceApp.Services
 {
@@ -18,13 +19,22 @@ namespace InvoiceApp.Services
             _logService = logService;
         }
 
-        public Task<IEnumerable<Supplier>> GetAllAsync() => _repository.GetAllAsync();
+        public Task<IEnumerable<Supplier>> GetAllAsync()
+        {
+            Log.Debug("SupplierService.GetAllAsync called");
+            return _repository.GetAllAsync();
+        }
 
-        public Task<Supplier?> GetByIdAsync(int id) => _repository.GetByIdAsync(id);
+        public Task<Supplier?> GetByIdAsync(int id)
+        {
+            Log.Debug("SupplierService.GetByIdAsync called with {Id}", id);
+            return _repository.GetByIdAsync(id);
+        }
 
         public async Task SaveAsync(Supplier supplier)
         {
             if (supplier == null) throw new ArgumentNullException(nameof(supplier));
+            Log.Debug("SupplierService.SaveAsync called for {Id}", supplier.Id);
 
             if (supplier.Id == 0)
             {
@@ -41,6 +51,7 @@ namespace InvoiceApp.Services
                     DateUpdated = DateTime.Now,
                     Active = true
                 });
+                Log.Information("Supplier {Id} created", supplier.Id);
             }
             else
             {
@@ -55,11 +66,13 @@ namespace InvoiceApp.Services
                     DateUpdated = DateTime.Now,
                     Active = true
                 });
+                Log.Information("Supplier {Id} updated", supplier.Id);
             }
         }
 
         public async Task DeleteAsync(int id)
         {
+            Log.Debug("SupplierService.DeleteAsync called for {Id}", id);
             await _repository.DeleteAsync(id);
             await _logService.AddAsync(new ChangeLog
             {
@@ -70,6 +83,7 @@ namespace InvoiceApp.Services
                 DateUpdated = DateTime.Now,
                 Active = true
             });
+            Log.Information("Supplier {Id} deleted", id);
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using InvoiceApp.Models;
 using InvoiceApp.Data;
+using Serilog;
 
 namespace InvoiceApp.Repositories
 {
@@ -45,6 +46,7 @@ namespace InvoiceApp.Repositories
 
         public async Task AddAsync(InvoiceItem item)
         {
+            Log.Debug("EfInvoiceItemRepository.AddAsync called for {Id}", item.Id);
             using var ctx = _contextFactory.CreateDbContext();
             if (item.Product != null)
             {
@@ -56,10 +58,12 @@ namespace InvoiceApp.Repositories
             }
             await ctx.InvoiceItems.AddAsync(item);
             await ctx.SaveChangesAsync();
+            Log.Information("InvoiceItem {Id} inserted", item.Id);
         }
 
         public async Task UpdateAsync(InvoiceItem item)
         {
+            Log.Debug("EfInvoiceItemRepository.UpdateAsync called for {Id}", item.Id);
             using var ctx = _contextFactory.CreateDbContext();
             if (item.Product != null)
             {
@@ -71,16 +75,19 @@ namespace InvoiceApp.Repositories
             }
             ctx.InvoiceItems.Update(item);
             await ctx.SaveChangesAsync();
+            Log.Information("InvoiceItem {Id} updated", item.Id);
         }
 
         public async Task DeleteAsync(int id)
         {
+            Log.Debug("EfInvoiceItemRepository.DeleteAsync called for {Id}", id);
             using var ctx = _contextFactory.CreateDbContext();
             var entity = await ctx.InvoiceItems.FindAsync(id);
             if (entity != null)
             {
                 ctx.InvoiceItems.Remove(entity);
                 await ctx.SaveChangesAsync();
+                Log.Information("InvoiceItem {Id} deleted", id);
             }
         }
     }

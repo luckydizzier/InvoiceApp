@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using InvoiceApp.Models;
 using InvoiceApp.Data;
+using Serilog;
 
 namespace InvoiceApp.Repositories
 {
@@ -29,26 +30,32 @@ namespace InvoiceApp.Repositories
 
         public async Task AddAsync(ProductGroup group)
         {
+            Log.Debug("EfProductGroupRepository.AddAsync called for {Id}", group.Id);
             using var ctx = _contextFactory.CreateDbContext();
             await ctx.ProductGroups.AddAsync(group);
             await ctx.SaveChangesAsync();
+            Log.Information("ProductGroup {Id} inserted", group.Id);
         }
 
         public async Task UpdateAsync(ProductGroup group)
         {
+            Log.Debug("EfProductGroupRepository.UpdateAsync called for {Id}", group.Id);
             using var ctx = _contextFactory.CreateDbContext();
             ctx.ProductGroups.Update(group);
             await ctx.SaveChangesAsync();
+            Log.Information("ProductGroup {Id} updated", group.Id);
         }
 
         public async Task DeleteAsync(int id)
         {
+            Log.Debug("EfProductGroupRepository.DeleteAsync called for {Id}", id);
             using var ctx = _contextFactory.CreateDbContext();
             var entity = await ctx.ProductGroups.FindAsync(id);
             if (entity != null)
             {
                 ctx.ProductGroups.Remove(entity);
                 await ctx.SaveChangesAsync();
+                Log.Information("ProductGroup {Id} deleted", id);
             }
         }
     }

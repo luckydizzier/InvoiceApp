@@ -4,6 +4,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using InvoiceApp.Models;
 using InvoiceApp.Repositories;
+using Serilog;
 
 namespace InvoiceApp.Services
 {
@@ -18,13 +19,22 @@ namespace InvoiceApp.Services
             _logService = logService;
         }
 
-        public Task<IEnumerable<PaymentMethod>> GetAllAsync() => _repository.GetAllAsync();
+        public Task<IEnumerable<PaymentMethod>> GetAllAsync()
+        {
+            Log.Debug("PaymentMethodService.GetAllAsync called");
+            return _repository.GetAllAsync();
+        }
 
-        public Task<PaymentMethod?> GetByIdAsync(int id) => _repository.GetByIdAsync(id);
+        public Task<PaymentMethod?> GetByIdAsync(int id)
+        {
+            Log.Debug("PaymentMethodService.GetByIdAsync called with {Id}", id);
+            return _repository.GetByIdAsync(id);
+        }
 
         public async Task SaveAsync(PaymentMethod method)
         {
             if (method == null) throw new ArgumentNullException(nameof(method));
+            Log.Debug("PaymentMethodService.SaveAsync called for {Id}", method.Id);
 
             if (method.Id == 0)
             {
@@ -41,6 +51,7 @@ namespace InvoiceApp.Services
                     DateUpdated = DateTime.Now,
                     Active = true
                 });
+                Log.Information("PaymentMethod {Id} created", method.Id);
             }
             else
             {
@@ -55,11 +66,13 @@ namespace InvoiceApp.Services
                     DateUpdated = DateTime.Now,
                     Active = true
                 });
+                Log.Information("PaymentMethod {Id} updated", method.Id);
             }
         }
 
         public async Task DeleteAsync(int id)
         {
+            Log.Debug("PaymentMethodService.DeleteAsync called for {Id}", id);
             await _repository.DeleteAsync(id);
             await _logService.AddAsync(new ChangeLog
             {
@@ -70,6 +83,7 @@ namespace InvoiceApp.Services
                 DateUpdated = DateTime.Now,
                 Active = true
             });
+            Log.Information("PaymentMethod {Id} deleted", id);
         }
     }
 }

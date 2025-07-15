@@ -4,6 +4,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using InvoiceApp.Models;
 using InvoiceApp.Repositories;
+using Serilog;
 
 namespace InvoiceApp.Services
 {
@@ -18,13 +19,22 @@ namespace InvoiceApp.Services
             _logService = logService;
         }
 
-        public Task<IEnumerable<Unit>> GetAllAsync() => _repository.GetAllAsync();
+        public Task<IEnumerable<Unit>> GetAllAsync()
+        {
+            Log.Debug("UnitService.GetAllAsync called");
+            return _repository.GetAllAsync();
+        }
 
-        public Task<Unit?> GetByIdAsync(int id) => _repository.GetByIdAsync(id);
+        public Task<Unit?> GetByIdAsync(int id)
+        {
+            Log.Debug("UnitService.GetByIdAsync called with {Id}", id);
+            return _repository.GetByIdAsync(id);
+        }
 
         public async Task SaveAsync(Unit unit)
         {
             if (unit == null) throw new ArgumentNullException(nameof(unit));
+            Log.Debug("UnitService.SaveAsync called for {Id}", unit.Id);
 
             if (unit.Id == 0)
             {
@@ -41,6 +51,7 @@ namespace InvoiceApp.Services
                     DateUpdated = DateTime.Now,
                     Active = true
                 });
+                Log.Information("Unit {Id} created", unit.Id);
             }
             else
             {
@@ -55,11 +66,13 @@ namespace InvoiceApp.Services
                     DateUpdated = DateTime.Now,
                     Active = true
                 });
+                Log.Information("Unit {Id} updated", unit.Id);
             }
         }
 
         public async Task DeleteAsync(int id)
         {
+            Log.Debug("UnitService.DeleteAsync called for {Id}", id);
             await _repository.DeleteAsync(id);
             await _logService.AddAsync(new ChangeLog
             {
@@ -70,6 +83,7 @@ namespace InvoiceApp.Services
                 DateUpdated = DateTime.Now,
                 Active = true
             });
+            Log.Information("Unit {Id} deleted", id);
         }
     }
 }
