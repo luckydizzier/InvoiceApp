@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -110,6 +111,7 @@ namespace InvoiceApp.ViewModels
                     SelectedInvoice.Supplier = value;
                     SelectedInvoice.SupplierId = value?.Id ?? 0;
                     OnPropertyChanged();
+                    SuggestNextNumberAsync();
                 }
             }
         }
@@ -208,6 +210,40 @@ namespace InvoiceApp.ViewModels
         private void RemoveItem(InvoiceItemViewModel item)
         {
             Items.Remove(item);
+        }
+
+        private async void SuggestNextNumberAsync()
+        {
+            if (SelectedInvoice == null || SelectedInvoice.Id != 0 || SelectedInvoice.SupplierId == 0)
+            {
+                return;
+            }
+
+            var latest = await _service.GetLatestForSupplierAsync(SelectedInvoice.SupplierId);
+            if (latest != null)
+            {
+                SelectedInvoice.Number = IncrementNumber(latest.Number);
+                OnPropertyChanged(nameof(SelectedInvoice));
+            }
+        }
+
+        private static string IncrementNumber(string lastNumber)
+        {
+            if (string.IsNullOrWhiteSpace(lastNumber)) return "1";
+
+            var digits = new string(lastNumber.Reverse().TakeWhile(char.IsDigit).Reverse().ToArray());
+            if (digits.Length > 0 && int.TryParse(digits, out var n))
+            {
+                var prefix = lastNumber.Substring(0, lastNumber.Length - digits.Length);
+                return prefix + (n + 1).ToString($"D{digits.Length}");
+            }
+
+            if (int.TryParse(lastNumber, out var value))
+            {
+                return (value + 1).ToString();
+            }
+
+            return lastNumber;
         }
 
         private async Task SaveAsync()
