@@ -1,4 +1,5 @@
 using System.Windows;
+using InvoiceApp.Views;
 
 namespace InvoiceApp
 {
@@ -7,8 +8,13 @@ namespace InvoiceApp
         public static bool ConfirmDeletion(string itemName)
         {
             var message = $"Biztosan törli a(z) {itemName} elemet?";
-            var result = MessageBox.Show(message, "Megerősítés", MessageBoxButton.YesNo, MessageBoxImage.Question);
-            return result == MessageBoxResult.Yes;
+            return ShowConfirmation(message, "Megerősítés");
+        }
+
+        public static bool ShowConfirmation(string message, string title)
+        {
+            var dialog = new ConfirmDialog(message) { Title = title };
+            return dialog.ShowDialog() == true;
         }
 
         public static void ShowInfo(string message)
