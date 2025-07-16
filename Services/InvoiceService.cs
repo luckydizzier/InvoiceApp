@@ -37,6 +37,12 @@ namespace InvoiceApp.Services
             return _repository.GetLatestForSupplierAsync(supplierId);
         }
 
+        public Task<Invoice?> GetLatestAsync()
+        {
+            Log.Debug("InvoiceService.GetLatestAsync called");
+            return _repository.GetLatestAsync();
+        }
+
         public async Task SaveAsync(Invoice invoice)
         {
             if (invoice == null) throw new ArgumentNullException(nameof(invoice));

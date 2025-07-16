@@ -19,6 +19,7 @@ namespace InvoiceApp.ViewModels
         private readonly ISupplierService _supplierService;
         private readonly IPaymentMethodService _paymentService;
         private readonly IChangeLogService _logService;
+        private readonly SupplierViewModel _supplierViewModel;
         private ObservableCollection<Invoice> _invoices = new();
         private ObservableCollection<InvoiceItemViewModel> _items = new();
         private ObservableCollection<Product> _products = new();
@@ -27,6 +28,7 @@ namespace InvoiceApp.ViewModels
         private ObservableCollection<PaymentMethod> _paymentMethods = new();
         private Invoice? _selectedInvoice;
         private string _statusMessage = string.Empty;
+        private readonly System.Windows.Threading.DispatcherTimer _statusTimer;
 
         public ObservableCollection<Invoice> Invoices
         {
@@ -48,6 +50,13 @@ namespace InvoiceApp.ViewModels
             }
         }
 
+        private void ShowStatus(string message)
+        {
+            StatusMessage = message;
+            _statusTimer.Stop();
+            _statusTimer.Start();
+        }
+
         public Invoice? SelectedInvoice
         {
             get => _selectedInvoice;
@@ -61,6 +70,7 @@ namespace InvoiceApp.ViewModels
                 SelectedSupplier = value?.Supplier;
                 SelectedPaymentMethod = value?.PaymentMethod;
                 OnPropertyChanged();
+                ((RelayCommand)SaveCommand).RaiseCanExecuteChanged();
             }
         }
 
@@ -88,6 +98,7 @@ namespace InvoiceApp.ViewModels
 
                 OnPropertyChanged();
                 UpdateTotals();
+                ((RelayCommand)SaveCommand).RaiseCanExecuteChanged();
             }
         }
 
@@ -178,6 +189,7 @@ namespace InvoiceApp.ViewModels
                     SelectedInvoice.SupplierId = value?.Id ?? 0;
                     OnPropertyChanged();
                     SuggestNextNumberAsync();
+                    ((RelayCommand)SaveCommand).RaiseCanExecuteChanged();
                 }
             }
         }
@@ -192,6 +204,7 @@ namespace InvoiceApp.ViewModels
                     SelectedInvoice.PaymentMethod = value;
                     SelectedInvoice.PaymentMethodId = value?.Id ?? 0;
                     OnPropertyChanged();
+                    ((RelayCommand)SaveCommand).RaiseCanExecuteChanged();
                 }
             }
         }
@@ -213,6 +226,8 @@ namespace InvoiceApp.ViewModels
         public ICommand RemoveItemCommand { get; }
         public ICommand SaveItemCommand { get; }
         public ICommand SaveCommand { get; }
+        public ICommand NewInvoiceCommand { get; }
+        public ICommand AddSupplierCommand { get; }
 
         public InvoiceViewModel(IInvoiceService service,
             IInvoiceItemService itemService,
@@ -220,7 +235,8 @@ namespace InvoiceApp.ViewModels
             ITaxRateService taxRateService,
             ISupplierService supplierService,
             IPaymentMethodService paymentService,
-            IChangeLogService logService)
+            IChangeLogService logService,
+            SupplierViewModel supplierViewModel)
         {
             _service = service;
             _itemService = itemService;
@@ -229,6 +245,13 @@ namespace InvoiceApp.ViewModels
             _supplierService = supplierService;
             _paymentService = paymentService;
             _logService = logService;
+            _supplierViewModel = supplierViewModel;
+
+            _statusTimer = new System.Windows.Threading.DispatcherTimer
+            {
+                Interval = System.TimeSpan.FromSeconds(3)
+            };
+            _statusTimer.Tick += (s, e) => { StatusMessage = string.Empty; _statusTimer.Stop(); };
 
             AddItemCommand = new RelayCommand(_ => AddItem());
             RemoveItemCommand = new RelayCommand(obj =>
@@ -245,13 +268,15 @@ namespace InvoiceApp.ViewModels
                     await SaveItemAsync(item);
                 }
             }, obj => obj is InvoiceItemViewModel);
-            SaveCommand = new RelayCommand(async _ => await SaveAsync());
+            SaveCommand = new RelayCommand(async _ => await SaveAsync(), _ => Validate());
+            NewInvoiceCommand = new RelayCommand(_ => NewInvoice());
+            AddSupplierCommand = new RelayCommand(_ => AddSupplier());
         }
 
         public async Task LoadAsync()
         {
             Log.Debug("InvoiceViewModel.LoadAsync called");
-            StatusMessage = "Betöltés...";
+            ShowStatus("Betöltés...");
             var items = await _service.GetAllAsync();
             Invoices = new ObservableCollection<Invoice>(items);
 
@@ -270,11 +295,11 @@ namespace InvoiceApp.ViewModels
             var log = await _logService.GetLatestAsync();
             if (log != null)
             {
-                StatusMessage = $"Utolsó esemény: {log.Operation} ({log.DateCreated:g})";
+                ShowStatus($"Utolsó esemény: {log.Operation} ({log.DateCreated:g})");
             }
             else
             {
-                StatusMessage = Invoices.Count == 0 ? "Üres lista." : $"{Invoices.Count} számla betöltve.";
+                ShowStatus(Invoices.Count == 0 ? "Üres lista." : $"{Invoices.Count} számla betöltve.");
             }
         }
 
@@ -299,6 +324,7 @@ namespace InvoiceApp.ViewModels
             vm.PropertyChanged += Item_PropertyChanged;
             Items.Add(vm);
             UpdateTotals();
+            ((RelayCommand)SaveCommand).RaiseCanExecuteChanged();
         }
 
         private void RemoveItem(InvoiceItemViewModel item)
@@ -307,6 +333,15 @@ namespace InvoiceApp.ViewModels
             item.PropertyChanged -= Item_PropertyChanged;
             Items.Remove(item);
             UpdateTotals();
+            ((RelayCommand)SaveCommand).RaiseCanExecuteChanged();
+        }
+
+        private void AddSupplier()
+        {
+            var supplier = _supplierViewModel.AddSupplier();
+            Suppliers.Add(supplier);
+            SelectedSupplier = supplier;
+            ShowStatus("Új szállító hozzáadva");
         }
 
         private async Task SaveItemAsync(InvoiceItemViewModel item)
@@ -316,7 +351,7 @@ namespace InvoiceApp.ViewModels
                 await _productService.SaveAsync(item.Item.Product);
             }
             await _itemService.SaveAsync(item.Item);
-            StatusMessage = $"Tétel mentve. ({DateTime.Now:g})";
+            ShowStatus($"Tétel mentve. ({DateTime.Now:g})");
         }
 
         private async void SuggestNextNumberAsync()
@@ -355,12 +390,56 @@ namespace InvoiceApp.ViewModels
             return lastNumber;
         }
 
+        private async void NewInvoice()
+        {
+            var invoice = new Invoice
+            {
+                Date = DateTime.Today,
+                IsGross = false
+            };
+
+            var latest = await _service.GetLatestAsync();
+            if (latest != null)
+            {
+                invoice.Supplier = latest.Supplier;
+                invoice.SupplierId = latest.SupplierId;
+                invoice.Number = IncrementNumber(latest.Number);
+                invoice.PaymentMethod = latest.PaymentMethod;
+                invoice.PaymentMethodId = latest.PaymentMethodId;
+            }
+            else
+            {
+                invoice.Supplier = Suppliers.FirstOrDefault();
+                invoice.SupplierId = invoice.Supplier?.Id ?? 0;
+                invoice.PaymentMethod = PaymentMethods.FirstOrDefault();
+                invoice.PaymentMethodId = invoice.PaymentMethod?.Id ?? 0;
+            }
+
+            SelectedInvoice = invoice;
+            Items = new ObservableCollection<InvoiceItemViewModel>();
+            ShowStatus("Új számla szerkesztése");
+            ((RelayCommand)SaveCommand).RaiseCanExecuteChanged();
+        }
+
+        private bool Validate()
+        {
+            return SelectedInvoice?.IsValid() == true && Items.Count > 0;
+        }
+
         private async Task SaveAsync()
         {
             Log.Debug("InvoiceViewModel.SaveAsync called");
-            if (SelectedInvoice == null) return;
+            if (!Validate())
+            {
+                ShowStatus("Hibás adatok. Mentés megszakítva.");
+                return;
+            }
 
             SelectedInvoice.Items = Items.Select(vm => vm.Item).ToList();
+            if (SelectedSupplier != null)
+            {
+                await _supplierService.SaveAsync(SelectedSupplier);
+            }
             await _service.SaveAsync(SelectedInvoice);
 
             foreach (var vm in Items)
@@ -373,7 +452,7 @@ namespace InvoiceApp.ViewModels
                 await _itemService.SaveAsync(it);
             }
 
-            StatusMessage = $"Számla mentve. ({DateTime.Now:g})";
+            ShowStatus($"Számla mentve. ({DateTime.Now:g})");
             Log.Information("Invoice {Id} saved", SelectedInvoice.Id);
         }
 
@@ -394,11 +473,13 @@ namespace InvoiceApp.ViewModels
                 }
             }
             UpdateTotals();
+            ((RelayCommand)SaveCommand).RaiseCanExecuteChanged();
         }
 
         private void Item_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             UpdateTotals();
+            ((RelayCommand)SaveCommand).RaiseCanExecuteChanged();
         }
 
         private void UpdateTotals()
