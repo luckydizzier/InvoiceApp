@@ -29,6 +29,7 @@ namespace InvoiceApp.Views
         public ICommand OpenSuppliersCommand { get; }
         public ICommand OpenProductGroupsCommand { get; }
         public ICommand OpenTaxRatesCommand { get; }
+        public ICommand OpenProductsCommand { get; }
 
         public MainWindow()
         {
@@ -46,6 +47,7 @@ namespace InvoiceApp.Views
             OpenSuppliersCommand = new RelayCommand(_ => ShowSuppliers());
             OpenProductGroupsCommand = new RelayCommand(_ => ShowProductGroups());
             OpenTaxRatesCommand = new RelayCommand(_ => ShowTaxRates());
+            OpenProductsCommand = new RelayCommand(_ => ShowProducts());
             PreviewGotKeyboardFocus += (s, e) =>
             {
                 if (e.Source == InvoicesList)
@@ -114,6 +116,17 @@ namespace InvoiceApp.Views
         }
 
         private void OpenTaxRates(object? sender, RoutedEventArgs? e) => ShowTaxRates();
+
+        private void ShowProducts()
+        {
+            var win = new ProductView
+            {
+                Owner = this
+            };
+            win.ShowDialog();
+        }
+
+        private void OpenProducts(object? sender, RoutedEventArgs? e) => ShowProducts();
 
         private void NavigateUp()
         {
