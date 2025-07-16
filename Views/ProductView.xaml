@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="clr-namespace:InvoiceApp.ViewModels"
         mc:Ignorable="d"
-        Title="Products" MinHeight="300" MinWidth="500">
+        Title="Products" MinHeight="300" MinWidth="500"
+        WindowStartupLocation="CenterOwner">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />

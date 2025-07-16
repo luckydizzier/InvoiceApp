@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:helpers="clr-namespace:InvoiceApp.Helpers"
         Title="Confirm"
-        Height="150" Width="350"
+        MinHeight="150" MinWidth="350"
         WindowStartupLocation="CenterOwner"
         WindowStyle="ToolWindow" ResizeMode="NoResize"
         KeyDown="Window_KeyDown">

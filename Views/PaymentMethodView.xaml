@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="clr-namespace:InvoiceApp.ViewModels"
         mc:Ignorable="d"
-        Title="Payment Methods" MinHeight="300" MinWidth="400">
+        Title="Payment Methods" MinHeight="300" MinWidth="400"
+        WindowStartupLocation="CenterOwner">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />

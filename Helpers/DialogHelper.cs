@@ -1,4 +1,5 @@
 using System.Windows;
+using System.Linq;
 using InvoiceApp.Views;
 
 namespace InvoiceApp
@@ -13,7 +14,14 @@ namespace InvoiceApp
 
         public static bool ShowConfirmation(string message, string title)
         {
-            var dialog = new ConfirmDialog(message) { Title = title };
+            var owner = Application.Current?.Windows
+                .OfType<Window>()
+                .FirstOrDefault(w => w.IsActive);
+            var dialog = new ConfirmDialog(message)
+            {
+                Title = title,
+                Owner = owner
+            };
             return dialog.ShowDialog() == true;
         }
 

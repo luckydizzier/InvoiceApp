@@ -73,7 +73,10 @@ namespace InvoiceApp.Views
 
         private void ShowPaymentMethods()
         {
-            var win = new PaymentMethodView();
+            var win = new PaymentMethodView
+            {
+                Owner = this
+            };
             win.ShowDialog();
         }
 
@@ -81,7 +84,10 @@ namespace InvoiceApp.Views
 
         private void ShowSuppliers()
         {
-            var win = new SupplierView();
+            var win = new SupplierView
+            {
+                Owner = this
+            };
             win.ShowDialog();
         }
 
@@ -89,7 +95,10 @@ namespace InvoiceApp.Views
 
         private void ShowProductGroups()
         {
-            var win = new ProductGroupView();
+            var win = new ProductGroupView
+            {
+                Owner = this
+            };
             win.ShowDialog();
         }
 
@@ -97,7 +106,10 @@ namespace InvoiceApp.Views
 
         private void ShowTaxRates()
         {
-            var win = new TaxRateView();
+            var win = new TaxRateView
+            {
+                Owner = this
+            };
             win.ShowDialog();
         }
 
