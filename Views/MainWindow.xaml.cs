@@ -44,22 +44,6 @@ namespace InvoiceApp.Views
             _viewModel.IsInvoiceListFocused = true;
         }
 
-        private void AddItemClicked(object sender, RoutedEventArgs e)
-        {
-            _viewModel.AddItemCommand.Execute(null);
-        }
-
-        private void DeleteItemClicked(object sender, RoutedEventArgs e)
-        {
-            if (ItemsGrid.SelectedItem is InvoiceItemViewModel item)
-            {
-                if (DialogHelper.ConfirmDeletion("tételt"))
-                {
-                    _viewModel.RemoveItemCommand.Execute(item);
-                    DialogHelper.ShowInfo("Tétel törölve.");
-                }
-            }
-        }
 
         private void OpenPaymentMethods(object sender, RoutedEventArgs e)
         {

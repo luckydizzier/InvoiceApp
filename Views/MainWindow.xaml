@@ -149,8 +149,8 @@
 
             <!-- Gombok -->
             <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Content="➕ Tétel hozzáadása" Click="AddItemClicked" Style="{StaticResource IconButtonStyle}"/>
-                <Button Content="🗑️ Tétel törlése" Click="DeleteItemClicked" Style="{StaticResource IconButtonStyle}"/>
+                <Button Content="➕ Tétel hozzáadása" Command="{Binding AddItemCommand}" Style="{StaticResource IconButtonStyle}"/>
+                <Button Content="🗑️ Tétel törlése" Command="{Binding RemoveItemCommand}" Style="{StaticResource IconButtonStyle}"/>
                 <Button Content="💾 Mentés" Command="{Binding SaveCommand}" Style="{StaticResource IconButtonStyle}"/>
             </StackPanel>
 
