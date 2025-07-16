@@ -91,6 +91,18 @@ namespace InvoiceApp.ViewModels
             }
         }
 
+        private InvoiceItemViewModel? _selectedItem;
+
+        public InvoiceItemViewModel? SelectedItem
+        {
+            get => _selectedItem;
+            set
+            {
+                _selectedItem = value;
+                OnPropertyChanged();
+            }
+        }
+
         public ObservableCollection<Product> Products
         {
             get => _products;
@@ -199,6 +211,7 @@ namespace InvoiceApp.ViewModels
 
         public ICommand AddItemCommand { get; }
         public ICommand RemoveItemCommand { get; }
+        public ICommand SaveItemCommand { get; }
         public ICommand SaveCommand { get; }
 
         public InvoiceViewModel(IInvoiceService service,
@@ -225,6 +238,13 @@ namespace InvoiceApp.ViewModels
                     RemoveItem(item);
                 }
             });
+            SaveItemCommand = new RelayCommand(async obj =>
+            {
+                if (obj is InvoiceItemViewModel item)
+                {
+                    await SaveItemAsync(item);
+                }
+            }, obj => obj is InvoiceItemViewModel);
             SaveCommand = new RelayCommand(async _ => await SaveAsync());
         }
 
@@ -287,6 +307,16 @@ namespace InvoiceApp.ViewModels
             item.PropertyChanged -= Item_PropertyChanged;
             Items.Remove(item);
             UpdateTotals();
+        }
+
+        private async Task SaveItemAsync(InvoiceItemViewModel item)
+        {
+            if (item.Item.Product != null)
+            {
+                await _productService.SaveAsync(item.Item.Product);
+            }
+            await _itemService.SaveAsync(item.Item);
+            StatusMessage = $"Tétel mentve. ({DateTime.Now:g})";
         }
 
         private async void SuggestNextNumberAsync()
