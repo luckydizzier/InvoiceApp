@@ -9,6 +9,7 @@ namespace InvoiceApp.Repositories
         Task<IEnumerable<Invoice>> GetAllAsync();
         Task<Invoice?> GetByIdAsync(int id);
         Task<Invoice?> GetLatestForSupplierAsync(int supplierId);
+        Task<Invoice?> GetLatestAsync();
         Task AddAsync(Invoice invoice);
         Task UpdateAsync(Invoice invoice);
         Task DeleteAsync(int id);

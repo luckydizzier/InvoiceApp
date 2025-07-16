@@ -23,6 +23,8 @@ namespace InvoiceApp.Views
         private async void OnLoaded(object sender, RoutedEventArgs e)
         {
             await _viewModel.LoadAsync();
+            _viewModel.NewInvoiceCommand.Execute(null);
+            this.MoveFocus(new System.Windows.Input.TraversalRequest(System.Windows.Input.FocusNavigationDirection.First));
         }
 
         private void AddItemClicked(object sender, RoutedEventArgs e)
@@ -113,6 +115,41 @@ namespace InvoiceApp.Views
                         e.Handled = true;
                     }
                     break;
+                case System.Windows.Input.Key.N:
+                    if ((System.Windows.Input.Keyboard.Modifiers & System.Windows.Input.ModifierKeys.Control) == System.Windows.Input.ModifierKeys.Control)
+                    {
+                        _viewModel.NewInvoiceCommand.Execute(null);
+                        ItemsGrid.Focus();
+                        e.Handled = true;
+                    }
+                    break;
+                case System.Windows.Input.Key.S:
+                    if ((System.Windows.Input.Keyboard.Modifiers & (System.Windows.Input.ModifierKeys.Control | System.Windows.Input.ModifierKeys.Shift)) == (System.Windows.Input.ModifierKeys.Control | System.Windows.Input.ModifierKeys.Shift))
+                    {
+                        _viewModel.AddSupplierCommand.Execute(null);
+                        e.Handled = true;
+                    }
+                    break;
+            }
+        }
+
+        private void ItemsGrid_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == System.Windows.Input.Key.Enter && ItemsGrid.CurrentCell != null && ItemsGrid.SelectedItem is InvoiceItemViewModel item)
+            {
+                ItemsGrid.CommitEdit(DataGridEditingUnit.Cell, true);
+                ItemsGrid.CommitEdit(DataGridEditingUnit.Row, true);
+
+                var index = ItemsGrid.Columns.IndexOf(ItemsGrid.CurrentCell.Column);
+                if (index < ItemsGrid.Columns.Count - 2)
+                {
+                    ItemsGrid.CurrentCell = new DataGridCellInfo(item, ItemsGrid.Columns[index + 1]);
+                }
+                else
+                {
+                    _viewModel.SaveItemCommand.Execute(item);
+                }
+                e.Handled = true;
             }
         }
     }

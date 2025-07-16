@@ -36,12 +36,13 @@
         </Menu>
 
         <!-- Számlák listája -->
-        <ListView x:Name="InvoicesList"
-                  ItemsSource="{Binding Invoices}"
-                  SelectedItem="{Binding SelectedInvoice}"
-                  Grid.Row="1" Grid.Column="0"
-                  DisplayMemberPath="Id"
-                  Margin="4"/>
+        <StackPanel Grid.Row="1" Grid.Column="0" Margin="4">
+            <Button Content="🆕 Új számla" Command="{Binding NewInvoiceCommand}" Margin="0,0,0,4" Padding="4"/>
+            <ListView x:Name="InvoicesList"
+                      ItemsSource="{Binding Invoices}"
+                      SelectedItem="{Binding SelectedInvoice}"
+                      DisplayMemberPath="Id"/>
+        </StackPanel>
 
         <!-- Kiválasztott számla tételei -->
         <Grid Grid.Row="1" Grid.Column="1" Margin="4">
@@ -62,7 +63,8 @@
                       AutoGenerateColumns="False"
                       CanUserAddRows="False"
                       RowDetailsVisibilityMode="VisibleWhenSelected"
-                      Margin="0,0,0,4">
+                      Margin="0,0,0,4"
+                      KeyDown="ItemsGrid_KeyDown">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Leírás" Binding="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Width="2*"/>
                     <DataGridTextColumn Header="Mennyiség" Binding="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}" Width="Auto"/>
@@ -127,7 +129,10 @@
                 </DataGrid.RowDetailsTemplate>
             </DataGrid>
 
-            <views:InvoiceHeaderView Grid.Row="0" Margin="0,0,0,4" />
+            <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,4">
+                <views:InvoiceHeaderView />
+                <Button Content="➕ Szállító" Command="{Binding AddSupplierCommand}" Margin="8,0,0,0" Padding="8,4" />
+            </StackPanel>
 
             <!-- Gombok -->
             <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
