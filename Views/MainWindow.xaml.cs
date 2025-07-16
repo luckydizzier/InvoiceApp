@@ -12,12 +12,20 @@ namespace InvoiceApp.Views
     public partial class MainWindow : Window
     {
         private readonly InvoiceViewModel _viewModel;
+        private IInputElement? _lastFocused;
 
         public MainWindow()
         {
             InitializeComponent();
             _viewModel = ((App)Application.Current).Services.GetRequiredService<InvoiceViewModel>();
             DataContext = _viewModel;
+            PreviewGotKeyboardFocus += (s, e) =>
+            {
+                if (e.Source != InvoicesList)
+                {
+                    _lastFocused = (IInputElement)e.Source;
+                }
+            };
             Loaded += OnLoaded;
         }
 
@@ -93,41 +101,49 @@ namespace InvoiceApp.Views
                     e.Handled = true;
                     break;
                 case System.Windows.Input.Key.Enter:
-                    if (InvoicesList.SelectedItem != null)
+                    if (InvoicesList.IsKeyboardFocusWithin)
                     {
-                        ItemsGrid.Focus();
-                    }
-                    e.Handled = true;
-                    break;
-                case System.Windows.Input.Key.Escape:
-                    InvoicesList.Focus();
-                    e.Handled = true;
-                    break;
-                case System.Windows.Input.Key.Delete:
-                    if (InvoicesList.SelectedItem is InvoiceApp.Models.Invoice invoice)
-                    {
-                        var result = MessageBox.Show("Biztosan törli a számlát?", "Törlés", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                        if (result == MessageBoxResult.Yes)
+                        if (InvoicesList.Items.Count == 0 || InvoicesList.SelectedIndex == 0)
                         {
-                            var service = ((App)Application.Current).Services.GetRequiredService<InvoiceApp.Services.IInvoiceService>();
-                            service.DeleteAsync(invoice.Id).GetAwaiter().GetResult();
-                            _viewModel.Invoices.Remove(invoice);
+                            _viewModel.NewInvoiceCommand.Execute(null);
+                        }
+                        if (InvoicesList.SelectedItem != null)
+                        {
+                            _lastFocused = ItemsGrid;
+                            ItemsGrid.Focus();
                         }
                         e.Handled = true;
                     }
-                    break;
-                case System.Windows.Input.Key.N:
-                    if ((System.Windows.Input.Keyboard.Modifiers & System.Windows.Input.ModifierKeys.Control) == System.Windows.Input.ModifierKeys.Control)
+                    else if (InvoicesList.SelectedItem != null)
                     {
-                        _viewModel.NewInvoiceCommand.Execute(null);
+                        _lastFocused = ItemsGrid;
                         ItemsGrid.Focus();
                         e.Handled = true;
                     }
                     break;
-                case System.Windows.Input.Key.S:
-                    if ((System.Windows.Input.Keyboard.Modifiers & (System.Windows.Input.ModifierKeys.Control | System.Windows.Input.ModifierKeys.Shift)) == (System.Windows.Input.ModifierKeys.Control | System.Windows.Input.ModifierKeys.Shift))
+                case System.Windows.Input.Key.Escape:
+                    if (InvoicesList.IsKeyboardFocusWithin)
                     {
-                        _viewModel.AddSupplierCommand.Execute(null);
+                        if (_lastFocused != null)
+                        {
+                            (_lastFocused as Control)?.Focus();
+                        }
+                    }
+                    else
+                    {
+                        _lastFocused = System.Windows.Input.Keyboard.FocusedElement;
+                        InvoicesList.Focus();
+                    }
+                    e.Handled = true;
+                    break;
+                case System.Windows.Input.Key.Delete:
+                    if (InvoicesList.IsKeyboardFocusWithin && InvoicesList.SelectedItem is InvoiceApp.Models.Invoice invoice)
+                    {
+                        if (DialogHelper.ConfirmDeletion("számlát"))
+                        {
+                            _viewModel.RemoveInvoiceCommand.Execute(invoice);
+                            DialogHelper.ShowInfo("Számla törölve.");
+                        }
                         e.Handled = true;
                     }
                     break;
