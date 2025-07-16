@@ -9,6 +9,9 @@ namespace InvoiceApp.Models
     public enum AppState
     {
         MainWindow,
+        Dashboard,
+        InvoiceList,
+        InvoiceEditor,
         InvoiceHeader,
         InvoiceItems,
         InvoiceSummary,
@@ -37,6 +40,9 @@ namespace InvoiceApp.Models
         public static Type GetViewType(this AppState state) => state switch
         {
             AppState.MainWindow => typeof(MainWindow),
+            AppState.Dashboard => typeof(DashboardView),
+            AppState.InvoiceList => typeof(InvoiceListView),
+            AppState.InvoiceEditor => typeof(InvoiceEditorView),
             AppState.InvoiceHeader => typeof(InvoiceHeaderView),
             AppState.InvoiceItems => typeof(InvoiceItemDataGrid),
             AppState.InvoiceSummary => typeof(InvoiceSummaryPanel),
