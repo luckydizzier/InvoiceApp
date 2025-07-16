@@ -202,7 +202,7 @@ namespace InvoiceApp.ViewModels
                     SelectedInvoice.Supplier = value;
                     SelectedInvoice.SupplierId = value?.Id ?? 0;
                     OnPropertyChanged();
-                    SuggestNextNumberAsync();
+                    _ = SuggestNextNumberAsync();
                     ((RelayCommand)SaveCommand).RaiseCanExecuteChanged();
                 }
             }
@@ -293,7 +293,7 @@ namespace InvoiceApp.ViewModels
                 }
             }, obj => obj is InvoiceItemViewModel);
             SaveCommand = new RelayCommand(async _ => await SaveAsync(), _ => Validate());
-            NewInvoiceCommand = new RelayCommand(_ => NewInvoice());
+            NewInvoiceCommand = new RelayCommand(async _ => await NewInvoice());
             AddSupplierCommand = new RelayCommand(_ => AddSupplier());
             NewItemCommand = CreateItemViewModel;
         }
@@ -410,7 +410,7 @@ namespace InvoiceApp.ViewModels
             ShowStatus($"Tétel mentve. ({DateTime.Now:g})");
         }
 
-        private async void SuggestNextNumberAsync()
+        private async Task SuggestNextNumberAsync()
         {
             Log.Debug("InvoiceViewModel.SuggestNextNumberAsync called");
             if (SelectedInvoice == null || SelectedInvoice.Id != 0 || SelectedInvoice.SupplierId == 0)
@@ -446,7 +446,7 @@ namespace InvoiceApp.ViewModels
             return lastNumber;
         }
 
-        private async void NewInvoice()
+        public async Task NewInvoice()
         {
             var invoice = new Invoice
             {

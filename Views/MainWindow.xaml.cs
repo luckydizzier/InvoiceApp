@@ -1,6 +1,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Threading.Tasks;
 using InvoiceApp.ViewModels;
 using InvoiceApp;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,7 +33,7 @@ namespace InvoiceApp.Views
             DataContext = _viewModel;
             NavigateUpCommand = new RelayCommand(_ => NavigateUp());
             NavigateDownCommand = new RelayCommand(_ => NavigateDown());
-            EnterCommand = new RelayCommand(_ => EnterKey());
+            EnterCommand = new RelayCommand(async _ => await EnterKey());
             EscapeCommand = new RelayCommand(_ => EscapeKey());
             DeleteInvoiceCommand = new RelayCommand(_ => DeleteInvoice());
             ItemsEnterCommand = new RelayCommand(_ => ItemsEnter());
@@ -57,7 +58,7 @@ namespace InvoiceApp.Views
         private async void OnLoaded(object sender, RoutedEventArgs e)
         {
             await _viewModel.LoadAsync();
-            _viewModel.NewInvoiceCommand.Execute(null);
+            await _viewModel.NewInvoice();
             _viewModel.IsInvoiceListFocused = true;
         }
 
@@ -104,13 +105,13 @@ namespace InvoiceApp.Views
             }
         }
 
-        private void EnterKey()
+        private async Task EnterKey()
         {
             if (InvoicesList.IsKeyboardFocusWithin)
             {
                 if (InvoicesList.Items.Count == 0 || InvoicesList.SelectedIndex == 0)
                 {
-                    _viewModel.NewInvoiceCommand.Execute(null);
+                    await _viewModel.NewInvoice();
                 }
                 _lastFocused = ItemsDataGrid;
                 ItemsDataGrid.Focus();
