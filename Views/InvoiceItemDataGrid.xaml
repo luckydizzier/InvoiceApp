@@ -5,11 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d"
              d:DesignHeight="200" d:DesignWidth="400">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+    </UserControl.Resources>
     <DataGrid x:Name="InnerGrid"
               ItemsSource="{Binding Items}"
               AutoGenerateColumns="False"
               CanUserAddRows="True"
-              NewItemPlaceholder="{Binding NewItemCommand}"
               RowDetailsVisibilityMode="{Binding IsRowDetailsVisible, Converter={StaticResource BoolToVisibilityConverter}}"
               Margin="0,0,0,4">
         <DataGrid.InputBindings>
