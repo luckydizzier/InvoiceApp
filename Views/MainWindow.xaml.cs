@@ -15,6 +15,8 @@ namespace InvoiceApp.Views
         private readonly InvoiceViewModel _viewModel;
         private IInputElement? _lastFocused;
         private IInputElement? _focusBeforeList;
+
+        private DataGrid ItemsDataGrid => ItemsGrid.DataGrid;
         public ICommand NavigateUpCommand { get; }
         public ICommand NavigateDownCommand { get; }
         public ICommand EnterCommand { get; }
@@ -110,20 +112,20 @@ namespace InvoiceApp.Views
                 {
                     _viewModel.NewInvoiceCommand.Execute(null);
                 }
-                _lastFocused = ItemsGrid;
-                ItemsGrid.Focus();
-                if (ItemsGrid.Items.Count > 0)
+                _lastFocused = ItemsDataGrid;
+                ItemsDataGrid.Focus();
+                if (ItemsDataGrid.Items.Count > 0)
                 {
-                    ItemsGrid.CurrentCell = new DataGridCellInfo(ItemsGrid.Items[0], ItemsGrid.Columns[0]);
+                    ItemsDataGrid.CurrentCell = new DataGridCellInfo(ItemsDataGrid.Items[0], ItemsDataGrid.Columns[0]);
                 }
             }
-            else if (!ItemsGrid.IsKeyboardFocusWithin && InvoicesList.SelectedItem != null)
+            else if (!ItemsDataGrid.IsKeyboardFocusWithin && InvoicesList.SelectedItem != null)
             {
-                _lastFocused = ItemsGrid;
-                ItemsGrid.Focus();
-                if (ItemsGrid.Items.Count > 0)
+                _lastFocused = ItemsDataGrid;
+                ItemsDataGrid.Focus();
+                if (ItemsDataGrid.Items.Count > 0)
                 {
-                    ItemsGrid.CurrentCell = new DataGridCellInfo(ItemsGrid.Items[0], ItemsGrid.Columns[0]);
+                    ItemsDataGrid.CurrentCell = new DataGridCellInfo(ItemsDataGrid.Items[0], ItemsDataGrid.Columns[0]);
                 }
             }
         }
@@ -159,23 +161,23 @@ namespace InvoiceApp.Views
 
         private void ItemsEnter()
         {
-            if (ItemsGrid.CurrentCell != null && ItemsGrid.SelectedItem is InvoiceItemViewModel item)
+            if (ItemsDataGrid.CurrentCell != null && ItemsDataGrid.SelectedItem is InvoiceItemViewModel item)
             {
-                ItemsGrid.CommitEdit(DataGridEditingUnit.Cell, true);
-                ItemsGrid.CommitEdit(DataGridEditingUnit.Row, true);
+                ItemsDataGrid.CommitEdit(DataGridEditingUnit.Cell, true);
+                ItemsDataGrid.CommitEdit(DataGridEditingUnit.Row, true);
 
-                var index = ItemsGrid.Columns.IndexOf(ItemsGrid.CurrentCell.Column);
-                var lastColumn = ItemsGrid.Columns.Count - 2;
-                if (ItemsGrid.SelectedIndex == ItemsGrid.Items.Count - 1 && index == lastColumn)
+                var index = ItemsDataGrid.Columns.IndexOf(ItemsDataGrid.CurrentCell.Column);
+                var lastColumn = ItemsDataGrid.Columns.Count - 2;
+                if (ItemsDataGrid.SelectedIndex == ItemsDataGrid.Items.Count - 1 && index == lastColumn)
                 {
                     _viewModel.SaveItemCommand.Execute(item);
                     _viewModel.AddItemCommand.Execute(null);
-                    ItemsGrid.SelectedIndex = ItemsGrid.Items.Count - 1;
-                    ItemsGrid.CurrentCell = new DataGridCellInfo(ItemsGrid.SelectedItem, ItemsGrid.Columns[0]);
+                    ItemsDataGrid.SelectedIndex = ItemsDataGrid.Items.Count - 1;
+                    ItemsDataGrid.CurrentCell = new DataGridCellInfo(ItemsDataGrid.SelectedItem, ItemsDataGrid.Columns[0]);
                 }
                 else if (index < lastColumn)
                 {
-                    ItemsGrid.CurrentCell = new DataGridCellInfo(item, ItemsGrid.Columns[index + 1]);
+                    ItemsDataGrid.CurrentCell = new DataGridCellInfo(item, ItemsDataGrid.Columns[index + 1]);
                 }
                 else
                 {
@@ -186,7 +188,7 @@ namespace InvoiceApp.Views
 
         private void ItemsDelete()
         {
-            if (ItemsGrid.SelectedItem is InvoiceItemViewModel delItem)
+            if (ItemsDataGrid.SelectedItem is InvoiceItemViewModel delItem)
             {
                 if (DialogHelper.ConfirmDeletion("tételt"))
                 {

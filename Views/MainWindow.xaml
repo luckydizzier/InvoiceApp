@@ -79,81 +79,7 @@
                 <!-- Összegzés -->
             </Grid.RowDefinitions>
 
-            <DataGrid x:Name="ItemsGrid"
-                      Grid.Row="1"
-                      ItemsSource="{Binding Items}"
-                      AutoGenerateColumns="False"
-                      CanUserAddRows="True"
-                      NewItemPlaceholder="{Binding NewItemCommand}"
-                      RowDetailsVisibilityMode="{Binding IsRowDetailsVisible, Converter={StaticResource BoolToVisibilityConverter}}"
-                      Margin="0,0,0,4">
-                <DataGrid.InputBindings>
-                    <KeyBinding Key="Enter" Command="{Binding ItemsEnterCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
-                    <KeyBinding Key="Delete" Command="{Binding ItemsDeleteCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
-                </DataGrid.InputBindings>
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Leírás" Binding="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Width="2*"/>
-                    <DataGridTextColumn Header="Mennyiség" Binding="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}" Width="Auto"/>
-                    <DataGridTextColumn Header="Egységár" Binding="{Binding UnitPrice, UpdateSourceTrigger=PropertyChanged}" Width="Auto"/>
-                    <DataGridTextColumn Header="Betétdíj" Binding="{Binding Deposit, UpdateSourceTrigger=PropertyChanged}" Width="Auto"/>
-                    <DataGridTextColumn Header="Visszáru" Binding="{Binding Return, UpdateSourceTrigger=PropertyChanged}" Width="Auto"/>
-                    <DataGridTemplateColumn Header="Termék" Width="2*">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Item.Product.Name}" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                        <DataGridTemplateColumn.CellEditingTemplate>
-                            <DataTemplate>
-                                <ComboBox ItemsSource="{Binding DataContext.Products, RelativeSource={RelativeSource AncestorType=Window}}"
-                                          SelectedItem="{Binding Item.Product, UpdateSourceTrigger=PropertyChanged}"
-                                          DisplayMemberPath="Name"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellEditingTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="ÁFA" Width="Auto">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Item.TaxRate.Name}" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                        <DataGridTemplateColumn.CellEditingTemplate>
-                            <DataTemplate>
-                                <ComboBox ItemsSource="{Binding DataContext.TaxRates, RelativeSource={RelativeSource AncestorType=Window}}"
-                                          SelectedItem="{Binding TaxRate, UpdateSourceTrigger=PropertyChanged}"
-                                          DisplayMemberPath="Name"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellEditingTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="" Width="Auto">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Button Content="💾"
-                                        Command="{Binding DataContext.SaveItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                                        CommandParameter="{Binding}"
-                                        Style="{StaticResource IconButtonStyle}"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                </DataGrid.Columns>
-
-                <DataGrid.RowDetailsTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Vertical" Margin="5">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Név" Width="50" />
-                                <TextBox Text="{Binding Item.Product.Name, UpdateSourceTrigger=PropertyChanged}" Width="200" />
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Nettó" Width="50" />
-                                <TextBox Text="{Binding Item.Product.Net, UpdateSourceTrigger=PropertyChanged}" Width="100" />
-                                <TextBlock Text="Bruttó" Width="50" Margin="10,0,0,0" />
-                                <TextBox Text="{Binding Item.Product.Gross, UpdateSourceTrigger=PropertyChanged}" Width="100" />
-                            </StackPanel>
-                        </StackPanel>
-                    </DataTemplate>
-                </DataGrid.RowDetailsTemplate>
-            </DataGrid>
+            <views:InvoiceItemDataGrid x:Name="ItemsGrid" Grid.Row="1" Margin="0,0,0,4" />
 
             <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,4">
                 <views:InvoiceHeaderView />
@@ -168,44 +94,7 @@
             </StackPanel>
 
             <!-- Összegző panel -->
-            <StackPanel Grid.Row="3" Orientation="Vertical" Margin="0,4,0,0">
-                <Separator/>
-                <Grid Margin="0,4,0,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="2*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <StackPanel Grid.Column="0">
-                        <TextBlock Text="VAT Breakdown by Rate" Margin="0,0,0,4"/>
-                        <DataGrid ItemsSource="{Binding VatBreakdown}" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" Margin="0,0,8,0">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="VAT %" Binding="{Binding Rate}" Width="Auto"/>
-                                <DataGridTextColumn Header="Net Amount" Binding="{Binding Net}" Width="*" ElementStyle="{StaticResource RightAlignedCellStyle}"/>
-                                <DataGridTextColumn Header="VAT Amount" Binding="{Binding Vat}" Width="*" ElementStyle="{StaticResource RightAlignedCellStyle}"/>
-                                <DataGridTextColumn Header="Gross Amount" Binding="{Binding Gross}" Width="*" ElementStyle="{StaticResource RightAlignedCellStyle}"/>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </StackPanel>
-                    <Grid Grid.Column="1" Margin="8,0,0,0">
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Total Net:"/>
-                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding TotalNet}" HorizontalAlignment="Right"/>
-                        <TextBlock Grid.Row="1" Grid.Column="0" Text="Total VAT:"/>
-                        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding TotalVat}" HorizontalAlignment="Right"/>
-                        <TextBlock Grid.Row="2" Grid.Column="0" Text="Total Gross:"/>
-                        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding TotalGross}" HorizontalAlignment="Right"/>
-                    </Grid>
-                </Grid>
-                <TextBlock Text="{Binding InWords}" HorizontalAlignment="Right" Margin="0,4,0,0" TextWrapping="Wrap" FontStyle="Italic"/>
-            </StackPanel>
+            <views:InvoiceSummaryPanel Grid.Row="3" />
         </Grid>
 
         <!-- Státuszsor -->
