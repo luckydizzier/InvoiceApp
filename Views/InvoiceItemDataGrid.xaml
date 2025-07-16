@@ -10,6 +10,7 @@
     </UserControl.Resources>
     <DataGrid x:Name="InnerGrid"
               ItemsSource="{Binding Items}"
+              SelectedItem="{Binding SelectedItem}"
               AutoGenerateColumns="False"
               CanUserAddRows="True"
               RowDetailsVisibilityMode="{Binding IsRowDetailsVisible, Converter={StaticResource BoolToVisibilityConverter}}"
