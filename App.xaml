@@ -4,6 +4,12 @@
              xmlns:local="clr-namespace:InvoiceApp"
              StartupUri="Views/MainWindow.xaml">
     <Application.Resources>
-         
+        <Style x:Key="RightAlignedCellStyle" TargetType="TextBlock">
+            <Setter Property="TextAlignment" Value="Right"/>
+        </Style>
+        <Style x:Key="IconButtonStyle" TargetType="Button">
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="Margin" Value="4"/>
+        </Style>
     </Application.Resources>
 </Application>

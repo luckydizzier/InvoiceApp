@@ -1,0 +1,81 @@
+<UserControl x:Class="InvoiceApp.Views.InvoiceItemDataGrid"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignHeight="200" d:DesignWidth="400">
+    <DataGrid x:Name="InnerGrid"
+              ItemsSource="{Binding Items}"
+              AutoGenerateColumns="False"
+              CanUserAddRows="True"
+              NewItemPlaceholder="{Binding NewItemCommand}"
+              RowDetailsVisibilityMode="{Binding IsRowDetailsVisible, Converter={StaticResource BoolToVisibilityConverter}}"
+              Margin="0,0,0,4">
+        <DataGrid.InputBindings>
+            <KeyBinding Key="Enter" Command="{Binding ItemsEnterCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
+            <KeyBinding Key="Delete" Command="{Binding ItemsDeleteCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
+        </DataGrid.InputBindings>
+        <DataGrid.Columns>
+            <DataGridTextColumn Header="Leírás" Binding="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Width="2*"/>
+            <DataGridTextColumn Header="Mennyiség" Binding="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}" Width="Auto"/>
+            <DataGridTextColumn Header="Egységár" Binding="{Binding UnitPrice, UpdateSourceTrigger=PropertyChanged}" Width="Auto"/>
+            <DataGridTextColumn Header="Betétdíj" Binding="{Binding Deposit, UpdateSourceTrigger=PropertyChanged}" Width="Auto"/>
+            <DataGridTextColumn Header="Visszáru" Binding="{Binding Return, UpdateSourceTrigger=PropertyChanged}" Width="Auto"/>
+            <DataGridTemplateColumn Header="Termék" Width="2*">
+                <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Item.Product.Name}" />
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+                <DataGridTemplateColumn.CellEditingTemplate>
+                    <DataTemplate>
+                        <ComboBox ItemsSource="{Binding DataContext.Products, RelativeSource={RelativeSource AncestorType=Window}}"
+                                  SelectedItem="{Binding Item.Product, UpdateSourceTrigger=PropertyChanged}"
+                                  DisplayMemberPath="Name"/>
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellEditingTemplate>
+            </DataGridTemplateColumn>
+            <DataGridTemplateColumn Header="ÁFA" Width="Auto">
+                <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Item.TaxRate.Name}" />
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+                <DataGridTemplateColumn.CellEditingTemplate>
+                    <DataTemplate>
+                        <ComboBox ItemsSource="{Binding DataContext.TaxRates, RelativeSource={RelativeSource AncestorType=Window}}"
+                                  SelectedItem="{Binding TaxRate, UpdateSourceTrigger=PropertyChanged}"
+                                  DisplayMemberPath="Name"/>
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellEditingTemplate>
+            </DataGridTemplateColumn>
+            <DataGridTemplateColumn Header="" Width="Auto">
+                <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                        <Button Content="💾"
+                                Command="{Binding DataContext.SaveItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                CommandParameter="{Binding}"
+                                Style="{StaticResource IconButtonStyle}"/>
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+            </DataGridTemplateColumn>
+        </DataGrid.Columns>
+        <DataGrid.RowDetailsTemplate>
+            <DataTemplate>
+                <StackPanel Orientation="Vertical" Margin="5">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Név" Width="50" />
+                        <TextBox Text="{Binding Item.Product.Name, UpdateSourceTrigger=PropertyChanged}" Width="200" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Nettó" Width="50" />
+                        <TextBox Text="{Binding Item.Product.Net, UpdateSourceTrigger=PropertyChanged}" Width="100" />
+                        <TextBlock Text="Bruttó" Width="50" Margin="10,0,0,0" />
+                        <TextBox Text="{Binding Item.Product.Gross, UpdateSourceTrigger=PropertyChanged}" Width="100" />
+                    </StackPanel>
+                </StackPanel>
+            </DataTemplate>
+        </DataGrid.RowDetailsTemplate>
+    </DataGrid>
+</UserControl>

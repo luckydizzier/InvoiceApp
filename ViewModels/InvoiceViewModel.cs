@@ -147,6 +147,8 @@ namespace InvoiceApp.ViewModels
         private decimal _totalVat;
         private decimal _totalGross;
         private string _inWords = string.Empty;
+        private bool _isInvoiceListFocused = true;
+        private bool _isRowDetailsVisible;
 
         public ObservableCollection<VatBreakdownEntry> VatBreakdown
         {
@@ -176,6 +178,18 @@ namespace InvoiceApp.ViewModels
         {
             get => _inWords;
             set { _inWords = value; OnPropertyChanged(); }
+        }
+
+        public bool IsInvoiceListFocused
+        {
+            get => _isInvoiceListFocused;
+            set { _isInvoiceListFocused = value; OnPropertyChanged(); }
+        }
+
+        public bool IsRowDetailsVisible
+        {
+            get => _isRowDetailsVisible;
+            set { _isRowDetailsVisible = value; OnPropertyChanged(); }
         }
 
         public Supplier? SelectedSupplier
@@ -229,6 +243,7 @@ namespace InvoiceApp.ViewModels
         public ICommand SaveCommand { get; }
         public ICommand NewInvoiceCommand { get; }
         public ICommand AddSupplierCommand { get; }
+        public Func<InvoiceItemViewModel> NewItemCommand { get; }
 
         public InvoiceViewModel(IInvoiceService service,
             IInvoiceItemService itemService,
@@ -280,6 +295,7 @@ namespace InvoiceApp.ViewModels
             SaveCommand = new RelayCommand(async _ => await SaveAsync(), _ => Validate());
             NewInvoiceCommand = new RelayCommand(_ => NewInvoice());
             AddSupplierCommand = new RelayCommand(_ => AddSupplier());
+            NewItemCommand = CreateItemViewModel;
         }
 
         public async Task LoadAsync()
