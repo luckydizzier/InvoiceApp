@@ -67,8 +67,6 @@
                     <DataGridTextColumn Header="Leírás" Binding="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Width="2*"/>
                     <DataGridTextColumn Header="Mennyiség" Binding="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}" Width="Auto"/>
                     <DataGridTextColumn Header="Egységár" Binding="{Binding UnitPrice, UpdateSourceTrigger=PropertyChanged}" Width="Auto"/>
-                    <DataGridTextColumn Header="Betétdíj" Binding="{Binding Deposit, UpdateSourceTrigger=PropertyChanged}" Width="Auto"/>
-                    <DataGridTextColumn Header="Visszáru" Binding="{Binding Return, UpdateSourceTrigger=PropertyChanged}" Width="Auto"/>
                     <DataGridTemplateColumn Header="Termék" Width="2*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>

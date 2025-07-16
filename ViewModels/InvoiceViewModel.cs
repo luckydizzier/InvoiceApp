@@ -268,8 +268,6 @@ namespace InvoiceApp.ViewModels
             {
                 InvoiceId = SelectedInvoice.Id,
                 Quantity = 1,
-                Deposit = 0,
-                Return = 0,
                 Product = firstProduct,
                 ProductId = firstProduct?.Id ?? 0,
                 TaxRate = firstRate,

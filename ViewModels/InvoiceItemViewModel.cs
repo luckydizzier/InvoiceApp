@@ -37,18 +37,6 @@ namespace InvoiceApp.ViewModels
             set { if (_item.UnitPrice != value) { _item.UnitPrice = value; OnPropertyChanged(); } }
         }
 
-        public decimal Deposit
-        {
-            get => _item.Deposit;
-            set { if (_item.Deposit != value) { _item.Deposit = value; OnPropertyChanged(); } }
-        }
-
-        public decimal Return
-        {
-            get => _item.Return;
-            set { if (_item.Return != value) { _item.Return = value; OnPropertyChanged(); } }
-        }
-
         public int InvoiceId
         {
             get => _item.InvoiceId;

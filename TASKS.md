@@ -30,7 +30,7 @@ This document outlines tasks to align the repository with the MVP requirements d
   external: false
 
 - id: task-F05-net-gross-calculation
-  goal: Implement net ↔ gross calculation per tax rate with deposit/return support.
+  goal: Implement net ↔ gross calculation per tax rate.
   input: [Models, Services, ViewModels]
   output: [Models, Services, ViewModels]
   depends_on: []
