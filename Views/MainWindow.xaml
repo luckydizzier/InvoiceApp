@@ -3,8 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:InvoiceApp" 
+        xmlns:local="clr-namespace:InvoiceApp"
         xmlns:viewModels="clr-namespace:InvoiceApp.ViewModels"
+        xmlns:views="clr-namespace:InvoiceApp.Views"
         mc:Ignorable="d"
         Title="Számlakezelő" Height="600" Width="1000"
         FocusManager.FocusedElement="{Binding ElementName=InvoicesList}">
@@ -116,20 +117,7 @@
                 </DataGrid.RowDetailsTemplate>
             </DataGrid>
 
-            <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,4">
-                <TextBlock Text="Számlaszám" VerticalAlignment="Center" Margin="0,0,4,0"/>
-                <TextBox Text="{Binding SelectedInvoice.Number, UpdateSourceTrigger=PropertyChanged}" Width="80" Margin="0,0,10,0"/>
-                <TextBlock Text="Dátum" VerticalAlignment="Center" Margin="0,0,4,0"/>
-                <DatePicker SelectedDate="{Binding SelectedInvoice.Date, UpdateSourceTrigger=PropertyChanged}" Width="120" Margin="0,0,10,0"/>
-                <TextBlock Text="Szállító" VerticalAlignment="Center" Margin="0,0,4,0"/>
-                <ComboBox ItemsSource="{Binding Suppliers}"
-                          SelectedItem="{Binding SelectedSupplier, UpdateSourceTrigger=PropertyChanged}"
-                          DisplayMemberPath="Name" Width="150" Margin="0,0,10,0"/>
-                <TextBlock Text="Fizetés" VerticalAlignment="Center" Margin="0,0,4,0"/>
-                <ComboBox ItemsSource="{Binding PaymentMethods}"
-                          SelectedItem="{Binding SelectedPaymentMethod, UpdateSourceTrigger=PropertyChanged}"
-                          DisplayMemberPath="Name" Width="150"/>
-            </StackPanel>
+            <views:InvoiceHeaderView Grid.Row="0" Margin="0,0,0,4" />
 
             <!-- Gombok -->
             <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
