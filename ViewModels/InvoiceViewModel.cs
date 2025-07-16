@@ -600,5 +600,84 @@ namespace InvoiceApp.ViewModels
 
             return words.Trim();
         }
+
+        /// <summary>
+        /// Selects the previous invoice in the list if available.
+        /// </summary>
+        public void SelectPreviousInvoice()
+        {
+            if (SelectedInvoice == null)
+            {
+                if (Invoices.Count > 0)
+                    SelectedInvoice = Invoices[0];
+                return;
+            }
+
+            var index = Invoices.IndexOf(SelectedInvoice);
+            if (index > 0)
+            {
+                SelectedInvoice = Invoices[index - 1];
+            }
+        }
+
+        /// <summary>
+        /// Selects the next invoice in the list if available.
+        /// </summary>
+        public void SelectNextInvoice()
+        {
+            if (SelectedInvoice == null)
+            {
+                if (Invoices.Count > 0)
+                    SelectedInvoice = Invoices[0];
+                return;
+            }
+
+            var index = Invoices.IndexOf(SelectedInvoice);
+            if (index < Invoices.Count - 1)
+            {
+                SelectedInvoice = Invoices[index + 1];
+            }
+        }
+
+        /// <summary>
+        /// Toggles visibility of invoice item row details.
+        /// </summary>
+        public void ToggleRowDetails()
+        {
+            IsRowDetailsVisible = !IsRowDetailsVisible;
+        }
+
+        /// <summary>
+        /// Deletes the currently selected invoice.
+        /// </summary>
+        public void DeleteCurrentInvoice()
+        {
+            if (SelectedInvoice != null && RemoveInvoiceCommand.CanExecute(SelectedInvoice))
+            {
+                RemoveInvoiceCommand.Execute(SelectedInvoice);
+            }
+        }
+
+        /// <summary>
+        /// Saves the currently selected invoice item.
+        /// </summary>
+        public void SaveCurrentItem()
+        {
+            if (SelectedItem != null && SaveItemCommand.CanExecute(SelectedItem))
+            {
+                SaveItemCommand.Execute(SelectedItem);
+            }
+        }
+
+        /// <summary>
+        /// Removes the currently selected invoice item.
+        /// </summary>
+        public void DeleteCurrentItem()
+        {
+            if (SelectedItem != null && RemoveItemCommand.CanExecute(SelectedItem))
+            {
+                RemoveItemCommand.Execute(SelectedItem);
+            }
+        }
     }
 }
