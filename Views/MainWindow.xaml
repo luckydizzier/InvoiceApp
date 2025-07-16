@@ -57,17 +57,16 @@
             </Grid.RowDefinitions>
 
             <DataGrid x:Name="ItemsGrid"
-                      Grid.Row="1"
-                      ItemsSource="{Binding Items}"
-                      AutoGenerateColumns="False"
-                      CanUserAddRows="False"
-                      RowDetailsVisibilityMode="VisibleWhenSelected"
-                      Margin="0,0,0,4">
+          Grid.Row="1"
+          ItemsSource="{Binding Items}"
+          AutoGenerateColumns="False"
+          CanUserAddRows="False"
+          RowDetailsVisibilityMode="VisibleWhenSelected"
+          Margin="4">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Leírás" Binding="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Width="2*"/>
-                    <DataGridTextColumn Header="Mennyiség" Binding="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}" Width="Auto"/>
-                    <DataGridTextColumn Header="Egységár" Binding="{Binding UnitPrice, UpdateSourceTrigger=PropertyChanged}" Width="Auto"/>
-                    <DataGridTemplateColumn Header="Termék" Width="2*">
+
+                    <!-- Termék -->
+                    <DataGridTemplateColumn Header="Termék" Width="">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Item.Product.Name}" />
@@ -76,11 +75,19 @@
                         <DataGridTemplateColumn.CellEditingTemplate>
                             <DataTemplate>
                                 <ComboBox ItemsSource="{Binding DataContext.Products, RelativeSource={RelativeSource AncestorType=Window}}"
-                                          SelectedItem="{Binding Item.Product, UpdateSourceTrigger=PropertyChanged}"
-                                          DisplayMemberPath="Name"/>
+                              SelectedItem="{Binding Item.Product, UpdateSourceTrigger=PropertyChanged}"
+                              DisplayMemberPath="Name" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellEditingTemplate>
                     </DataGridTemplateColumn>
+
+                    <!-- Mennyiség -->
+                    <DataGridTextColumn Header="Mennyiség" Binding="{Binding Item.Quantity, UpdateSourceTrigger=PropertyChanged}" Width="Auto"/>
+
+                    <!-- Egységár -->
+                    <DataGridTextColumn Header="Egységár" Binding="{Binding Item.UnitPrice, UpdateSourceTrigger=PropertyChanged}" Width="Auto"/>
+
+                    <!-- ÁFA -->
                     <DataGridTemplateColumn Header="ÁFA" Width="Auto">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -90,11 +97,38 @@
                         <DataGridTemplateColumn.CellEditingTemplate>
                             <DataTemplate>
                                 <ComboBox ItemsSource="{Binding DataContext.TaxRates, RelativeSource={RelativeSource AncestorType=Window}}"
-                                          SelectedItem="{Binding TaxRate, UpdateSourceTrigger=PropertyChanged}"
-                                          DisplayMemberPath="Name"/>
+                              SelectedItem="{Binding Item.TaxRate, UpdateSourceTrigger=PropertyChanged}"
+                              DisplayMemberPath="Name" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellEditingTemplate>
                     </DataGridTemplateColumn>
+
+                    <!-- Nettó / Áfa / Bruttó / Összeg -->
+                    <DataGridTextColumn Header="Nettó" Binding="{Binding Item.NetAmount}" Width="Auto" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="ÁFA" Binding="{Binding Item.VatAmount}" Width="Auto" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Bruttó" Binding="{Binding Item.GrossAmount}" Width="Auto" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Összeg" Binding="{Binding Item.Total}" Width="Auto" IsReadOnly="True"/>
+
+                    <!-- Mentés gomb -->
+                    <DataGridTemplateColumn Header="Mentés" Width="Auto">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="💾" Command="{Binding DataContext.SaveItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                            CommandParameter="{Binding}" Padding="4,0" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <!-- Törlés gomb -->
+                    <DataGridTemplateColumn Header="Törlés" Width="Auto">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="🗑️" Command="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                            CommandParameter="{Binding}" Padding="4,0" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
                 </DataGrid.Columns>
 
                 <DataGrid.RowDetailsTemplate>
@@ -113,8 +147,7 @@
                         </StackPanel>
                     </DataTemplate>
                 </DataGrid.RowDetailsTemplate>
-            </DataGrid>
-
+            </DataGrid> 
             <views:InvoiceHeaderView Grid.Row="0" Margin="0,0,0,4" />
 
             <!-- Gombok -->

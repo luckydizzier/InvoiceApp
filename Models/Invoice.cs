@@ -16,7 +16,7 @@ namespace InvoiceApp.Models
         public int PaymentMethodId { get; set; }
         public PaymentMethod? PaymentMethod { get; set; }
 
-        public bool IsGross { get; set; }
+        public bool IsGross { get; set; } = true;
 
         public List<InvoiceItem> Items { get; set; } = new();
     }

@@ -375,7 +375,7 @@ namespace InvoiceApp.ViewModels
                 .GroupBy(i => i.TaxRate?.Percentage ?? 0)
                 .Select(g =>
                 {
-                    var net = g.Sum(x => x.Quantity * x.UnitPrice + x.Deposit - x.Return);
+                    var net = g.Sum(x => x.Quantity * x.UnitPrice);
                     var vat = net * g.Key / 100m;
                     return new VatBreakdownEntry
                     {
