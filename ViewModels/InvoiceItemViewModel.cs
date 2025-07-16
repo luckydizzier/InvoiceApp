@@ -82,7 +82,7 @@ namespace InvoiceApp.ViewModels
             }
         }
 
-        public decimal NetAmount => Quantity * UnitPrice + Deposit - Return;
+        public decimal NetAmount => Quantity * UnitPrice + _item.Deposit - _item.Return;
 
         public decimal VatAmount => NetAmount * (TaxRate?.Percentage ?? 0) / 100m;
 
