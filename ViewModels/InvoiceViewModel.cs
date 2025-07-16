@@ -147,6 +147,7 @@ namespace InvoiceApp.ViewModels
         private decimal _totalVat;
         private decimal _totalGross;
         private string _inWords = string.Empty;
+        private bool _isInvoiceListFocused = true;
 
         public ObservableCollection<VatBreakdownEntry> VatBreakdown
         {
@@ -176,6 +177,12 @@ namespace InvoiceApp.ViewModels
         {
             get => _inWords;
             set { _inWords = value; OnPropertyChanged(); }
+        }
+
+        public bool IsInvoiceListFocused
+        {
+            get => _isInvoiceListFocused;
+            set { _isInvoiceListFocused = value; OnPropertyChanged(); }
         }
 
         public Supplier? SelectedSupplier
