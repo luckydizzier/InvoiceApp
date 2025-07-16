@@ -236,6 +236,7 @@ namespace InvoiceApp.ViewModels
         public ICommand SaveCommand { get; }
         public ICommand NewInvoiceCommand { get; }
         public ICommand AddSupplierCommand { get; }
+        public Func<InvoiceItemViewModel> NewItemCommand { get; }
 
         public InvoiceViewModel(IInvoiceService service,
             IInvoiceItemService itemService,
@@ -287,6 +288,7 @@ namespace InvoiceApp.ViewModels
             SaveCommand = new RelayCommand(async _ => await SaveAsync(), _ => Validate());
             NewInvoiceCommand = new RelayCommand(_ => NewInvoice());
             AddSupplierCommand = new RelayCommand(_ => AddSupplier());
+            NewItemCommand = CreateItemViewModel;
         }
 
         public async Task LoadAsync()

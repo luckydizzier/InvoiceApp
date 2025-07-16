@@ -184,9 +184,5 @@ namespace InvoiceApp.Views
             }
         }
 
-        private void ItemsGrid_AddingNewItem(object sender, AddingNewItemEventArgs e)
-        {
-            e.NewItem = _viewModel.CreateItemViewModel();
-        }
     }
 }
