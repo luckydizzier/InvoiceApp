@@ -20,6 +20,10 @@
         <KeyBinding Key="Enter" Command="{Binding EnterCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
         <KeyBinding Key="Escape" Command="{Binding EscapeCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
         <KeyBinding Key="Delete" Command="{Binding DeleteInvoiceCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
+        <KeyBinding Modifiers="Ctrl+Shift" Key="P" Command="{Binding OpenPaymentMethodsCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
+        <KeyBinding Modifiers="Ctrl+Shift" Key="S" Command="{Binding OpenSuppliersCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
+        <KeyBinding Modifiers="Ctrl+Shift" Key="G" Command="{Binding OpenProductGroupsCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
+        <KeyBinding Modifiers="Ctrl+Shift" Key="T" Command="{Binding OpenTaxRatesCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
     </Window.InputBindings>
     <Grid>
         <Grid.RowDefinitions>

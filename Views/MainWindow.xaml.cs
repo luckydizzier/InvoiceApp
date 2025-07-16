@@ -25,6 +25,10 @@ namespace InvoiceApp.Views
         public ICommand DeleteInvoiceCommand { get; }
         public ICommand ItemsEnterCommand { get; }
         public ICommand ItemsDeleteCommand { get; }
+        public ICommand OpenPaymentMethodsCommand { get; }
+        public ICommand OpenSuppliersCommand { get; }
+        public ICommand OpenProductGroupsCommand { get; }
+        public ICommand OpenTaxRatesCommand { get; }
 
         public MainWindow()
         {
@@ -38,6 +42,10 @@ namespace InvoiceApp.Views
             DeleteInvoiceCommand = new RelayCommand(_ => DeleteInvoice());
             ItemsEnterCommand = new RelayCommand(_ => ItemsEnter());
             ItemsDeleteCommand = new RelayCommand(_ => ItemsDelete());
+            OpenPaymentMethodsCommand = new RelayCommand(_ => ShowPaymentMethods());
+            OpenSuppliersCommand = new RelayCommand(_ => ShowSuppliers());
+            OpenProductGroupsCommand = new RelayCommand(_ => ShowProductGroups());
+            OpenTaxRatesCommand = new RelayCommand(_ => ShowTaxRates());
             PreviewGotKeyboardFocus += (s, e) =>
             {
                 if (e.Source == InvoicesList)
@@ -63,29 +71,37 @@ namespace InvoiceApp.Views
         }
 
 
-        private void OpenPaymentMethods(object sender, RoutedEventArgs e)
+        private void ShowPaymentMethods()
         {
             var win = new PaymentMethodView();
             win.ShowDialog();
         }
 
-        private void OpenSuppliers(object sender, RoutedEventArgs e)
+        private void OpenPaymentMethods(object? sender, RoutedEventArgs? e) => ShowPaymentMethods();
+
+        private void ShowSuppliers()
         {
             var win = new SupplierView();
             win.ShowDialog();
         }
 
-        private void OpenProductGroups(object sender, RoutedEventArgs e)
+        private void OpenSuppliers(object? sender, RoutedEventArgs? e) => ShowSuppliers();
+
+        private void ShowProductGroups()
         {
             var win = new ProductGroupView();
             win.ShowDialog();
         }
 
-        private void OpenTaxRates(object sender, RoutedEventArgs e)
+        private void OpenProductGroups(object? sender, RoutedEventArgs? e) => ShowProductGroups();
+
+        private void ShowTaxRates()
         {
             var win = new TaxRateView();
             win.ShowDialog();
         }
+
+        private void OpenTaxRates(object? sender, RoutedEventArgs? e) => ShowTaxRates();
 
         private void NavigateUp()
         {
