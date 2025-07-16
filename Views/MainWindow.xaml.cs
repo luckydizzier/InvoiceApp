@@ -89,6 +89,11 @@ namespace InvoiceApp.Views
 
         private void NavigateUp()
         {
+            if (!InvoicesList.IsKeyboardFocusWithin)
+            {
+                return;
+            }
+
             if (InvoicesList.SelectedIndex > 0)
             {
                 InvoicesList.SelectedIndex--;
@@ -98,6 +103,11 @@ namespace InvoiceApp.Views
 
         private void NavigateDown()
         {
+            if (!InvoicesList.IsKeyboardFocusWithin)
+            {
+                return;
+            }
+
             if (InvoicesList.SelectedIndex < InvoicesList.Items.Count - 1)
             {
                 InvoicesList.SelectedIndex++;
