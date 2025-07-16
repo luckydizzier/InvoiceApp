@@ -41,12 +41,12 @@ namespace InvoiceApp.ViewModels
 
             BackCommand = new RelayCommand(_ => _navigation.Pop());
             ShowInvoicesCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.MainWindow));
-            ShowPaymentMethodsCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.PaymentMethod));
-            ShowSuppliersCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.Supplier));
-            ShowProductGroupsCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.ProductGroup));
-            ShowTaxRatesCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.TaxRate));
-            ShowUnitsCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.Unit));
-            ShowProductsCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.Product));
+            ShowPaymentMethodsCommand = new RelayCommand(_ => _navigation.Push(AppState.PaymentMethod));
+            ShowSuppliersCommand = new RelayCommand(_ => _navigation.Push(AppState.Supplier));
+            ShowProductGroupsCommand = new RelayCommand(_ => _navigation.Push(AppState.ProductGroup));
+            ShowTaxRatesCommand = new RelayCommand(_ => _navigation.Push(AppState.TaxRate));
+            ShowUnitsCommand = new RelayCommand(_ => _navigation.Push(AppState.Unit));
+            ShowProductsCommand = new RelayCommand(_ => _navigation.Push(AppState.Product));
         }
     }
 }
