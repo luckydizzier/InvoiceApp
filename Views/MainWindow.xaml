@@ -116,12 +116,12 @@
         <KeyBinding Key="Enter" Command="{Binding EnterCommand}"/>
         <KeyBinding Key="Escape" Command="{Binding BackCommand}"/>
         <KeyBinding Key="Delete" Command="{Binding DeleteInvoiceCommand}"/>
-        <KeyBinding Key="F1" Command="{Binding ShowPaymentMethodsCommand}"/>
-        <KeyBinding Key="F2" Command="{Binding ShowSuppliersCommand}"/>
-        <KeyBinding Key="F3" Command="{Binding ShowProductGroupsCommand}"/>
-        <KeyBinding Key="F4" Command="{Binding ShowTaxRatesCommand}"/>
-        <KeyBinding Key="F5" Command="{Binding ShowUnitsCommand}"/>
-        <KeyBinding Key="F6" Command="{Binding ShowProductsCommand}"/>
+        <KeyBinding Key="F1" Command="{Binding SwitchPaymentMethodsCommand}"/>
+        <KeyBinding Key="F2" Command="{Binding SwitchSuppliersCommand}"/>
+        <KeyBinding Key="F3" Command="{Binding SwitchProductGroupsCommand}"/>
+        <KeyBinding Key="F4" Command="{Binding SwitchTaxRatesCommand}"/>
+        <KeyBinding Key="F5" Command="{Binding SwitchUnitsCommand}"/>
+        <KeyBinding Key="F6" Command="{Binding SwitchProductsCommand}"/>
         <KeyBinding Key="F12" Command="{Binding ShowInvoicesCommand}"/>
     </Window.InputBindings>
     <ContentControl Content="{Binding CurrentState}" ContentTemplateSelector="{StaticResource StateSelector}" />

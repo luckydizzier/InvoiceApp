@@ -36,6 +36,12 @@ namespace InvoiceApp.ViewModels
         public RelayCommand ShowTaxRatesCommand { get; }
         public RelayCommand ShowUnitsCommand { get; }
         public RelayCommand ShowProductsCommand { get; }
+        public RelayCommand SwitchPaymentMethodsCommand { get; }
+        public RelayCommand SwitchSuppliersCommand { get; }
+        public RelayCommand SwitchProductGroupsCommand { get; }
+        public RelayCommand SwitchTaxRatesCommand { get; }
+        public RelayCommand SwitchUnitsCommand { get; }
+        public RelayCommand SwitchProductsCommand { get; }
         public RelayCommand ShowInvoicesCommand { get; }
 
         public MainViewModel(INavigationService navigation, InvoiceViewModel invoiceViewModel)
@@ -59,6 +65,12 @@ namespace InvoiceApp.ViewModels
             ShowTaxRatesCommand = new RelayCommand(_ => _navigation.Push(AppState.TaxRate));
             ShowUnitsCommand = new RelayCommand(_ => _navigation.Push(AppState.Unit));
             ShowProductsCommand = new RelayCommand(_ => _navigation.Push(AppState.Product));
+            SwitchPaymentMethodsCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.PaymentMethod));
+            SwitchSuppliersCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.Supplier));
+            SwitchProductGroupsCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.ProductGroup));
+            SwitchTaxRatesCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.TaxRate));
+            SwitchUnitsCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.Unit));
+            SwitchProductsCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.Product));
         }
     }
 }
