@@ -6,6 +6,16 @@ namespace InvoiceApp.ViewModels
     {
         private readonly InvoiceItem _item;
 
+        public InvoiceItemViewModel()
+        {
+            _item = new InvoiceItem
+            {
+                Active = true,
+                DateCreated = System.DateTime.Now,
+                DateUpdated = System.DateTime.Now
+            };
+        }
+
         public InvoiceItemViewModel(InvoiceItem item)
         {
             _item = item;
