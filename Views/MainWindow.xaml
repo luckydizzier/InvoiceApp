@@ -11,6 +11,13 @@
         Title="Számlakezelő"
         MinHeight="600" MinWidth="1000"
         helpers:FocusBehavior.IsFocused="{Binding IsInvoiceListFocused}">
+    <Window.InputBindings>
+        <KeyBinding Key="Up" Command="{Binding NavigateUpCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
+        <KeyBinding Key="Down" Command="{Binding NavigateDownCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
+        <KeyBinding Key="Enter" Command="{Binding EnterCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
+        <KeyBinding Key="Escape" Command="{Binding EscapeCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
+        <KeyBinding Key="Delete" Command="{Binding DeleteInvoiceCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
+    </Window.InputBindings>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -76,8 +83,11 @@
                       CanUserAddRows="True"
                       NewItemPlaceholder="{Binding NewItemCommand}"
                       RowDetailsVisibilityMode="VisibleWhenSelected"
-                      Margin="0,0,0,4"
-                      KeyDown="ItemsGrid_KeyDown">
+                      Margin="0,0,0,4">
+                <DataGrid.InputBindings>
+                    <KeyBinding Key="Enter" Command="{Binding ItemsEnterCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                    <KeyBinding Key="Delete" Command="{Binding ItemsDeleteCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                </DataGrid.InputBindings>
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Leírás" Binding="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Width="2*"/>
                     <DataGridTextColumn Header="Mennyiség" Binding="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}" Width="Auto"/>
