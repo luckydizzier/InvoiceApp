@@ -17,6 +17,9 @@ namespace InvoiceApp.Helpers
         public DataTemplate? TaxRateTemplate { get; set; }
         public DataTemplate? UnitTemplate { get; set; }
         public DataTemplate? ProductTemplate { get; set; }
+        public DataTemplate? InvoiceHeaderTemplate { get; set; }
+        public DataTemplate? InvoiceItemsTemplate { get; set; }
+        public DataTemplate? InvoiceSummaryTemplate { get; set; }
 
         public override DataTemplate? SelectTemplate(object item, DependencyObject container)
         {
@@ -31,6 +34,9 @@ namespace InvoiceApp.Helpers
                 AppState.TaxRate => TaxRateTemplate,
                 AppState.Unit => UnitTemplate,
                 AppState.Product => ProductTemplate,
+                AppState.InvoiceHeader => InvoiceHeaderTemplate,
+                AppState.InvoiceItems => InvoiceItemsTemplate,
+                AppState.InvoiceSummary => InvoiceSummaryTemplate,
                 _ => MainWindowTemplate
             };
         }
