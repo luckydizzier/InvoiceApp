@@ -1,110 +1,116 @@
-﻿<Window x:Class="InvoiceApp.Views.MainWindow"
+<Window x:Class="InvoiceApp.Views.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:InvoiceApp"
-        xmlns:viewModels="clr-namespace:InvoiceApp.ViewModels"
         xmlns:views="clr-namespace:InvoiceApp.Views"
         xmlns:helpers="clr-namespace:InvoiceApp.Helpers"
         mc:Ignorable="d"
-        Title="Számlakezelő"
-        MinHeight="600" MinWidth="1000"
-        helpers:FocusBehavior.IsFocused="{Binding IsInvoiceListFocused}">
+        Title="Számlakezelő" MinHeight="600" MinWidth="1000">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <DataTemplate x:Key="MainWindowTemplate">
+            <Grid helpers:FocusBehavior.IsFocused="{Binding InvoiceViewModel.IsInvoiceListFocused}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="220" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Menu Grid.Row="0" Grid.ColumnSpan="2">
+                    <MenuItem Header="_Ablakok">
+                        <MenuItem Header="_Fizetési módok" Command="{Binding ShowPaymentMethodsCommand}" />
+                        <MenuItem Header="_Szállítók" Command="{Binding ShowSuppliersCommand}" />
+                        <MenuItem Header="_Termékcsoportok" Command="{Binding ShowProductGroupsCommand}" />
+                        <MenuItem Header="_Áfakulcsok" Command="{Binding ShowTaxRatesCommand}" />
+                        <MenuItem Header="_Termékek" Command="{Binding ShowProductsCommand}" />
+                        <MenuItem Header="_Egységek" Command="{Binding ShowUnitsCommand}" />
+                    </MenuItem>
+                </Menu>
+                <StackPanel Grid.Row="1" Grid.Column="0" Margin="4">
+                    <Button Content="🆕 Új számla" Command="{Binding InvoiceViewModel.NewInvoiceCommand}" Style="{StaticResource IconButtonStyle}" Margin="0,0,0,4"/>
+                    <ListView x:Name="InvoicesList"
+                              ItemsSource="{Binding InvoiceViewModel.Invoices}"
+                              SelectedItem="{Binding InvoiceViewModel.SelectedInvoice}"
+                              ScrollViewer.VerticalScrollBarVisibility="Auto">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Number}" Margin="0,0,8,0"/>
+                                    <TextBlock Text="{Binding Date, StringFormat='{}{0:d}'}" Margin="0,0,8,0"/>
+                                    <TextBlock Text="{Binding Supplier.Name}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </StackPanel>
+                <Grid Grid.Row="1" Grid.Column="1" Margin="4">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <views:InvoiceItemDataGrid x:Name="ItemsGrid" Grid.Row="1" Margin="0,0,0,4" />
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,4">
+                        <views:InvoiceHeaderView />
+                        <Button Content="➕ Szállító" Command="{Binding InvoiceViewModel.AddSupplierCommand}" Style="{StaticResource IconButtonStyle}" Margin="8,0,0,0" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Content="➕ Tétel hozzáadása" Command="{Binding InvoiceViewModel.AddItemCommand}" Style="{StaticResource IconButtonStyle}"/>
+                        <Button Content="🗑️ Tétel törlése" Command="{Binding InvoiceViewModel.RemoveItemCommand}" Style="{StaticResource IconButtonStyle}"/>
+                        <Button Content="💾 Mentés" Command="{Binding InvoiceViewModel.SaveCommand}" Style="{StaticResource IconButtonStyle}"/>
+                    </StackPanel>
+                    <views:InvoiceSummaryPanel Grid.Row="3" />
+                </Grid>
+                <StatusBar Grid.Row="2" Grid.ColumnSpan="2">
+                    <TextBlock Text="{Binding InvoiceViewModel.StatusMessage}" />
+                </StatusBar>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="PaymentMethodTemplate">
+            <views:PaymentMethodView />
+        </DataTemplate>
+        <DataTemplate x:Key="SupplierTemplate">
+            <views:SupplierView />
+        </DataTemplate>
+        <DataTemplate x:Key="ProductGroupTemplate">
+            <views:ProductGroupView />
+        </DataTemplate>
+        <DataTemplate x:Key="TaxRateTemplate">
+            <views:TaxRateView />
+        </DataTemplate>
+        <DataTemplate x:Key="UnitTemplate">
+            <views:UnitView />
+        </DataTemplate>
+        <DataTemplate x:Key="ProductTemplate">
+            <views:ProductView />
+        </DataTemplate>
+        <helpers:AppStateTemplateSelector x:Key="StateSelector"
+                                          MainWindowTemplate="{StaticResource MainWindowTemplate}"
+                                          PaymentMethodTemplate="{StaticResource PaymentMethodTemplate}"
+                                          SupplierTemplate="{StaticResource SupplierTemplate}"
+                                          ProductGroupTemplate="{StaticResource ProductGroupTemplate}"
+                                          TaxRateTemplate="{StaticResource TaxRateTemplate}"
+                                          UnitTemplate="{StaticResource UnitTemplate}"
+                                          ProductTemplate="{StaticResource ProductTemplate}" />
     </Window.Resources>
     <Window.InputBindings>
-        <KeyBinding Key="Up" Command="{Binding NavigateUpCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
-        <KeyBinding Key="Down" Command="{Binding NavigateDownCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
-        <KeyBinding Key="Enter" Command="{Binding EnterCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
-        <KeyBinding Key="Escape" Command="{Binding EscapeCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
-        <KeyBinding Key="Delete" Command="{Binding DeleteInvoiceCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
-        <KeyBinding Modifiers="Ctrl+Shift" Key="P" Command="{Binding OpenPaymentMethodsCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
-        <KeyBinding Modifiers="Ctrl+Shift" Key="S" Command="{Binding OpenSuppliersCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
-        <KeyBinding Modifiers="Ctrl+Shift" Key="G" Command="{Binding OpenProductGroupsCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
-        <KeyBinding Modifiers="Ctrl+Shift" Key="T" Command="{Binding OpenTaxRatesCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
+        <KeyBinding Key="Up" Command="{Binding NavigateUpCommand}"/>
+        <KeyBinding Key="Down" Command="{Binding NavigateDownCommand}"/>
+        <KeyBinding Key="Enter" Command="{Binding EnterCommand}"/>
+        <KeyBinding Key="Escape" Command="{Binding BackCommand}"/>
+        <KeyBinding Key="Delete" Command="{Binding DeleteInvoiceCommand}"/>
+        <KeyBinding Key="F1" Command="{Binding ShowPaymentMethodsCommand}"/>
+        <KeyBinding Key="F2" Command="{Binding ShowSuppliersCommand}"/>
+        <KeyBinding Key="F3" Command="{Binding ShowProductGroupsCommand}"/>
+        <KeyBinding Key="F4" Command="{Binding ShowTaxRatesCommand}"/>
+        <KeyBinding Key="F5" Command="{Binding ShowUnitsCommand}"/>
+        <KeyBinding Key="F6" Command="{Binding ShowProductsCommand}"/>
+        <KeyBinding Key="F12" Command="{Binding ShowInvoicesCommand}"/>
     </Window.InputBindings>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <!-- == Menü == -->
-            <RowDefinition Height="*" />
-            <!-- == Tartalom == -->
-            <RowDefinition Height="Auto" />
-            <!-- == Státuszsor == -->
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="220" />
-            <!-- == Számlalista == -->
-            <ColumnDefinition Width="*" />
-            <!-- == Számlatartalom == -->
-        </Grid.ColumnDefinitions>
-
-        <!-- Menü -->
-        <Menu Grid.Row="0" Grid.ColumnSpan="2">
-            <MenuItem Header="_Ablakok">
-                <MenuItem Header="_Fizetési módok" Click="OpenPaymentMethods" />
-                <MenuItem Header="_Szállítók" Click="OpenSuppliers" />
-                <MenuItem Header="_Termékcsoportok" Click="OpenProductGroups" />
-                <MenuItem Header="_Áfakulcsok" Click="OpenTaxRates" />
-                <MenuItem Header="_Termékek" Click="OpenProducts" />
-            </MenuItem>
-        </Menu>
-
-        <!-- Számlák listája -->
-        <StackPanel Grid.Row="1" Grid.Column="0" Margin="4">
-            <Button Content="🆕 Új számla" Command="{Binding NewInvoiceCommand}" Style="{StaticResource IconButtonStyle}" Margin="0,0,0,4"/>
-            <ListView x:Name="InvoicesList"
-                      ItemsSource="{Binding Invoices}"
-                      SelectedItem="{Binding SelectedInvoice}"
-                      ScrollViewer.VerticalScrollBarVisibility="Auto">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding Number}" Margin="0,0,8,0"/>
-                            <TextBlock Text="{Binding Date, StringFormat='{}{0:d}'}" Margin="0,0,8,0"/>
-                            <TextBlock Text="{Binding Supplier.Name}"/>
-                        </StackPanel>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-        </StackPanel>
-
-        <!-- Kiválasztott számla tételei -->
-        <Grid Grid.Row="1" Grid.Column="1" Margin="4">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <!-- Fejléc -->
-                <RowDefinition Height="*"/>
-                <!-- DataGrid -->
-                <RowDefinition Height="Auto"/>
-                <!-- Gombok -->
-                <RowDefinition Height="Auto"/>
-                <!-- Összegzés -->
-            </Grid.RowDefinitions>
-
-            <views:InvoiceItemDataGrid x:Name="ItemsGrid" Grid.Row="1" Margin="0,0,0,4" />
-
-            <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,4">
-                <views:InvoiceHeaderView />
-                <Button Content="➕ Szállító" Command="{Binding AddSupplierCommand}" Style="{StaticResource IconButtonStyle}" Margin="8,0,0,0" />
-            </StackPanel>
-
-            <!-- Gombok -->
-            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Content="➕ Tétel hozzáadása" Command="{Binding AddItemCommand}" Style="{StaticResource IconButtonStyle}"/>
-                <Button Content="🗑️ Tétel törlése" Command="{Binding RemoveItemCommand}" Style="{StaticResource IconButtonStyle}"/>
-                <Button Content="💾 Mentés" Command="{Binding SaveCommand}" Style="{StaticResource IconButtonStyle}"/>
-            </StackPanel>
-
-            <!-- Összegző panel -->
-            <views:InvoiceSummaryPanel Grid.Row="3" />
-        </Grid>
-
-        <!-- Státuszsor -->
-        <StatusBar Grid.Row="2" Grid.ColumnSpan="2">
-            <TextBlock Text="{Binding StatusMessage}" />
-        </StatusBar>
-    </Grid>
+    <ContentControl Content="{Binding CurrentState}" ContentTemplateSelector="{StaticResource StateSelector}" />
 </Window>
