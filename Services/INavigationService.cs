@@ -19,9 +19,19 @@ namespace InvoiceApp.Services
         void Push(AppState state);
 
         /// <summary>
+        /// Navigate forward to a sub-state within the current editor.
+        /// </summary>
+        void PushSubstate(AppState state);
+
+        /// <summary>
         /// Navigate back to the previous state.
         /// </summary>
         void Pop();
+
+        /// <summary>
+        /// Navigate back within the editor sub-state stack.
+        /// </summary>
+        void PopSubstate();
 
         /// <summary>
         /// Clears the navigation stack and sets the new root state.
