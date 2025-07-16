@@ -11,6 +11,9 @@
         Title="Számlakezelő"
         MinHeight="600" MinWidth="1000"
         helpers:FocusBehavior.IsFocused="{Binding IsInvoiceListFocused}">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+    </Window.Resources>
     <Window.InputBindings>
         <KeyBinding Key="Up" Command="{Binding NavigateUpCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
         <KeyBinding Key="Down" Command="{Binding NavigateDownCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
@@ -82,7 +85,7 @@
                       AutoGenerateColumns="False"
                       CanUserAddRows="True"
                       NewItemPlaceholder="{Binding NewItemCommand}"
-                      RowDetailsVisibilityMode="VisibleWhenSelected"
+                      RowDetailsVisibilityMode="{Binding IsRowDetailsVisible, Converter={StaticResource BoolToVisibilityConverter}}"
                       Margin="0,0,0,4">
                 <DataGrid.InputBindings>
                     <KeyBinding Key="Enter" Command="{Binding ItemsEnterCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
