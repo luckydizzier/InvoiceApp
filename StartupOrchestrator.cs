@@ -77,6 +77,8 @@ namespace InvoiceApp
             services.AddSingleton<ViewModels.SupplierViewModel>();
             services.AddSingleton<ViewModels.ProductGroupViewModel>();
             services.AddSingleton<ViewModels.TaxRateViewModel>();
+            services.AddSingleton<INavigationService, NavigationService>();
+            services.AddSingleton<ViewModels.MainViewModel>();
 
             Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(config)
