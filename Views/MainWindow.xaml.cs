@@ -41,7 +41,7 @@ namespace InvoiceApp.Views
         {
             await _viewModel.LoadAsync();
             _viewModel.NewInvoiceCommand.Execute(null);
-            this.MoveFocus(new System.Windows.Input.TraversalRequest(System.Windows.Input.FocusNavigationDirection.First));
+            _viewModel.IsInvoiceListFocused = true;
         }
 
         private void AddItemClicked(object sender, RoutedEventArgs e)
