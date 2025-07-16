@@ -69,6 +69,18 @@ namespace InvoiceApp.Views
         {
             await _viewModel.LoadAsync();
             await _viewModel.NewInvoice();
+
+            if (StartupOrchestrator.IsNewDatabase && _viewModel.Invoices.Count == 0)
+            {
+                if (DialogHelper.ShowConfirmation("Telepíti a mintaadatokat?", "Telepítés"))
+                {
+                    var provider = ((App)Application.Current).Services;
+                    await StartupOrchestrator.PopulateSampleDataAsync(provider);
+                    await _viewModel.LoadAsync();
+                    await _viewModel.NewInvoice();
+                }
+            }
+
             _viewModel.IsInvoiceListFocused = true;
         }
 
