@@ -471,6 +471,7 @@ namespace InvoiceApp.ViewModels
                 invoice.PaymentMethodId = invoice.PaymentMethod?.Id ?? 0;
             }
 
+            Invoices.Insert(0, invoice);
             SelectedInvoice = invoice;
             Items = new ObservableCollection<InvoiceItemViewModel>();
             ShowStatus("Új számla szerkesztése");
