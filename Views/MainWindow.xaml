@@ -89,6 +89,15 @@
         <DataTemplate x:Key="ProductTemplate">
             <views:ProductView />
         </DataTemplate>
+        <DataTemplate x:Key="InvoiceHeaderTemplate">
+            <views:InvoiceHeaderView />
+        </DataTemplate>
+        <DataTemplate x:Key="InvoiceItemsTemplate">
+            <views:InvoiceItemDataGrid />
+        </DataTemplate>
+        <DataTemplate x:Key="InvoiceSummaryTemplate">
+            <views:InvoiceSummaryPanel />
+        </DataTemplate>
         <helpers:AppStateTemplateSelector x:Key="StateSelector"
                                           MainWindowTemplate="{StaticResource MainWindowTemplate}"
                                           PaymentMethodTemplate="{StaticResource PaymentMethodTemplate}"
@@ -96,7 +105,10 @@
                                           ProductGroupTemplate="{StaticResource ProductGroupTemplate}"
                                           TaxRateTemplate="{StaticResource TaxRateTemplate}"
                                           UnitTemplate="{StaticResource UnitTemplate}"
-                                          ProductTemplate="{StaticResource ProductTemplate}" />
+                                          ProductTemplate="{StaticResource ProductTemplate}"
+                                          InvoiceHeaderTemplate="{StaticResource InvoiceHeaderTemplate}"
+                                          InvoiceItemsTemplate="{StaticResource InvoiceItemsTemplate}"
+                                          InvoiceSummaryTemplate="{StaticResource InvoiceSummaryTemplate}" />
     </Window.Resources>
     <Window.InputBindings>
         <KeyBinding Key="Up" Command="{Binding NavigateUpCommand}"/>
