@@ -19,5 +19,13 @@ namespace InvoiceApp.Models
         public bool IsGross { get; set; } = true;
 
         public List<InvoiceItem> Items { get; set; } = new();
+
+        public bool IsValid()
+        {
+            return !string.IsNullOrWhiteSpace(Number)
+                && SupplierId != 0
+                && PaymentMethodId != 0
+                && Date != default;
+        }
     }
 }

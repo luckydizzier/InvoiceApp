@@ -61,11 +61,17 @@ namespace InvoiceApp.ViewModels
             Suppliers = new ObservableCollection<Supplier>(items);
         }
 
-        private void AddSupplier()
+        public Supplier AddSupplier()
         {
-            var supplier = new Supplier();
+            var supplier = new Supplier
+            {
+                Active = true,
+                DateCreated = System.DateTime.Now,
+                DateUpdated = System.DateTime.Now
+            };
             Suppliers.Add(supplier);
             SelectedSupplier = supplier;
+            return supplier;
         }
 
         private async Task DeleteSupplierAsync(Supplier supplier)

@@ -91,6 +91,15 @@ namespace InvoiceApp.Repositories
                 .FirstOrDefaultAsync();
         }
 
+        public async Task<Invoice?> GetLatestAsync()
+        {
+            using var ctx = _contextFactory.CreateDbContext();
+            return await ctx.Invoices
+                .OrderByDescending(i => i.DateCreated)
+                .Include(i => i.Supplier)
+                .FirstOrDefaultAsync();
+        }
+
         public async Task AddAsync(Invoice invoice)
         {
             Log.Debug("EfInvoiceRepository.AddAsync called for {Id}", invoice.Id);

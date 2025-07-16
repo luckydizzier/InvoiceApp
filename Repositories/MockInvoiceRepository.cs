@@ -26,6 +26,14 @@ namespace InvoiceApp.Repositories
             return Task.FromResult<Invoice?>(item);
         }
 
+        public Task<Invoice?> GetLatestAsync()
+        {
+            var item = _storage
+                .OrderByDescending(i => i.DateCreated)
+                .FirstOrDefault();
+            return Task.FromResult<Invoice?>(item);
+        }
+
         public Task AddAsync(Invoice invoice)
         {
             invoice.Id = _storage.Count + 1;
