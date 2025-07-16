@@ -13,6 +13,7 @@ namespace InvoiceApp.Views
     {
         private readonly InvoiceViewModel _viewModel;
         private IInputElement? _lastFocused;
+        private IInputElement? _focusBeforeList;
 
         public MainWindow()
         {
@@ -21,7 +22,14 @@ namespace InvoiceApp.Views
             DataContext = _viewModel;
             PreviewGotKeyboardFocus += (s, e) =>
             {
-                if (e.Source != InvoicesList)
+                if (e.Source == InvoicesList)
+                {
+                    if (_focusBeforeList == null)
+                    {
+                        _focusBeforeList = _lastFocused;
+                    }
+                }
+                else
                 {
                     _lastFocused = (IInputElement)e.Source;
                 }
@@ -107,31 +115,37 @@ namespace InvoiceApp.Views
                         {
                             _viewModel.NewInvoiceCommand.Execute(null);
                         }
-                        if (InvoicesList.SelectedItem != null)
+                        _lastFocused = ItemsGrid;
+                        ItemsGrid.Focus();
+                        if (ItemsGrid.Items.Count > 0)
                         {
-                            _lastFocused = ItemsGrid;
-                            ItemsGrid.Focus();
+                            ItemsGrid.CurrentCell = new DataGridCellInfo(ItemsGrid.Items[0], ItemsGrid.Columns[0]);
                         }
                         e.Handled = true;
                     }
-                    else if (InvoicesList.SelectedItem != null)
+                    else if (!ItemsGrid.IsKeyboardFocusWithin && InvoicesList.SelectedItem != null)
                     {
                         _lastFocused = ItemsGrid;
                         ItemsGrid.Focus();
+                        if (ItemsGrid.Items.Count > 0)
+                        {
+                            ItemsGrid.CurrentCell = new DataGridCellInfo(ItemsGrid.Items[0], ItemsGrid.Columns[0]);
+                        }
                         e.Handled = true;
                     }
                     break;
                 case System.Windows.Input.Key.Escape:
                     if (InvoicesList.IsKeyboardFocusWithin)
                     {
-                        if (_lastFocused != null)
+                        if (_focusBeforeList != null)
                         {
-                            (_lastFocused as Control)?.Focus();
+                            (_focusBeforeList as Control)?.Focus();
+                            _focusBeforeList = null;
                         }
                     }
                     else
                     {
-                        _lastFocused = System.Windows.Input.Keyboard.FocusedElement;
+                        _focusBeforeList = System.Windows.Input.Keyboard.FocusedElement;
                         InvoicesList.Focus();
                     }
                     e.Handled = true;
@@ -158,13 +172,29 @@ namespace InvoiceApp.Views
                 ItemsGrid.CommitEdit(DataGridEditingUnit.Row, true);
 
                 var index = ItemsGrid.Columns.IndexOf(ItemsGrid.CurrentCell.Column);
-                if (index < ItemsGrid.Columns.Count - 2)
+                var lastColumn = ItemsGrid.Columns.Count - 2;
+                if (ItemsGrid.SelectedIndex == ItemsGrid.Items.Count - 1 && index == lastColumn)
+                {
+                    _viewModel.SaveItemCommand.Execute(item);
+                    _viewModel.AddItemCommand.Execute(null);
+                    ItemsGrid.SelectedIndex = ItemsGrid.Items.Count - 1;
+                    ItemsGrid.CurrentCell = new DataGridCellInfo(ItemsGrid.SelectedItem, ItemsGrid.Columns[0]);
+                }
+                else if (index < lastColumn)
                 {
                     ItemsGrid.CurrentCell = new DataGridCellInfo(item, ItemsGrid.Columns[index + 1]);
                 }
                 else
                 {
                     _viewModel.SaveItemCommand.Execute(item);
+                }
+                e.Handled = true;
+            }
+            else if (e.Key == System.Windows.Input.Key.Delete && ItemsGrid.SelectedItem is InvoiceItemViewModel delItem)
+            {
+                if (DialogHelper.ConfirmDeletion("tételt"))
+                {
+                    _viewModel.RemoveItemCommand.Execute(delItem);
                 }
                 e.Handled = true;
             }
