@@ -224,6 +224,7 @@ namespace InvoiceApp.ViewModels
 
         public ICommand AddItemCommand { get; }
         public ICommand RemoveItemCommand { get; }
+        public ICommand RemoveInvoiceCommand { get; }
         public ICommand SaveItemCommand { get; }
         public ICommand SaveCommand { get; }
         public ICommand NewInvoiceCommand { get; }
@@ -261,6 +262,14 @@ namespace InvoiceApp.ViewModels
                     RemoveItem(item);
                 }
             });
+            RemoveInvoiceCommand = new RelayCommand(obj =>
+            {
+                if (obj is Invoice invoice)
+                {
+                    _service.DeleteAsync(invoice.Id).GetAwaiter().GetResult();
+                    Invoices.Remove(invoice);
+                }
+            }, obj => obj is Invoice);
             SaveItemCommand = new RelayCommand(async obj =>
             {
                 if (obj is InvoiceItemViewModel item)
