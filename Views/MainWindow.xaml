@@ -48,6 +48,7 @@
                 <MenuItem Header="_Szállítók" Click="OpenSuppliers" />
                 <MenuItem Header="_Termékcsoportok" Click="OpenProductGroups" />
                 <MenuItem Header="_Áfakulcsok" Click="OpenTaxRates" />
+                <MenuItem Header="_Termékek" Click="OpenProducts" />
             </MenuItem>
         </Menu>
 
