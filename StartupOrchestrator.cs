@@ -219,8 +219,7 @@ namespace InvoiceApp
             {
                 if (!ctx.Invoices.Any())
                 {
-                    var result = MessageBox.Show("Telepíti a mintaadatokat?", "Telepítés", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                    if (result == MessageBoxResult.Yes)
+                    if (DialogHelper.ShowConfirmation("Telepíti a mintaadatokat?", "Telepítés"))
                     {
                         var invoiceService = scope.ServiceProvider.GetRequiredService<IInvoiceService>();
                         var itemService = scope.ServiceProvider.GetRequiredService<IInvoiceItemService>();
