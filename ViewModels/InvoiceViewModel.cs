@@ -184,6 +184,19 @@ namespace InvoiceApp.ViewModels
             }
         }
 
+        public bool IsGrossCalculation
+        {
+            get => SelectedInvoice?.IsGross ?? false;
+            set
+            {
+                if (SelectedInvoice != null && SelectedInvoice.IsGross != value)
+                {
+                    SelectedInvoice.IsGross = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public ICommand AddItemCommand { get; }
         public ICommand RemoveItemCommand { get; }
         public ICommand SaveCommand { get; }

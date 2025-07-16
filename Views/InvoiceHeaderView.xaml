@@ -1,0 +1,56 @@
+<UserControl x:Class="InvoiceApp.Views.InvoiceHeaderView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignHeight="120" d:DesignWidth="400">
+    <Grid Margin="0,0,0,8">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <!-- Row 0 -->
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="Szállító" VerticalAlignment="Center" Margin="2"/>
+        <ComboBox Grid.Row="0" Grid.Column="1" Margin="2"
+                  ItemsSource="{Binding Suppliers}"
+                  SelectedItem="{Binding SelectedSupplier, UpdateSourceTrigger=PropertyChanged}"
+                  DisplayMemberPath="Name"
+                  IsEditable="True"
+                  IsTextSearchEnabled="True"/>
+        <TextBlock Grid.Row="0" Grid.Column="2" Text="Számlaszám" VerticalAlignment="Center" Margin="2"/>
+        <TextBox Grid.Row="0" Grid.Column="3" Margin="2"
+                 Text="{Binding SelectedInvoice.Number, UpdateSourceTrigger=PropertyChanged}"/>
+
+        <!-- Row 1 -->
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="Cím" VerticalAlignment="Center" Margin="2"/>
+        <TextBox Grid.Row="1" Grid.Column="1" Margin="2"
+                 Text="{Binding SelectedSupplier.Address, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBlock Grid.Row="1" Grid.Column="2" Text="Dátum" VerticalAlignment="Center" Margin="2"/>
+        <DatePicker Grid.Row="1" Grid.Column="3" Margin="2"
+                    SelectedDate="{Binding SelectedInvoice.Date, UpdateSourceTrigger=PropertyChanged}"/>
+
+        <!-- Row 2 -->
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="Adószám" VerticalAlignment="Center" Margin="2"/>
+        <TextBox Grid.Row="2" Grid.Column="1" Margin="2"
+                 Text="{Binding SelectedSupplier.TaxId, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBlock Grid.Row="2" Grid.Column="2" Text="Fizetés" VerticalAlignment="Center" Margin="2"/>
+        <ComboBox Grid.Row="2" Grid.Column="3" Margin="2"
+                  ItemsSource="{Binding PaymentMethods}"
+                  SelectedItem="{Binding SelectedPaymentMethod, UpdateSourceTrigger=PropertyChanged}"
+                  DisplayMemberPath="Name"/>
+
+        <!-- Row 3 -->
+        <CheckBox Grid.Row="3" Grid.Column="3" Content="Bruttó?" Margin="2"
+                  HorizontalAlignment="Right"
+                  IsChecked="{Binding IsGrossCalculation, UpdateSourceTrigger=PropertyChanged}"/>
+    </Grid>
+</UserControl>
