@@ -153,5 +153,10 @@ namespace InvoiceApp.Views
                 e.Handled = true;
             }
         }
+
+        private void ItemsGrid_AddingNewItem(object sender, AddingNewItemEventArgs e)
+        {
+            e.NewItem = _viewModel.CreateItemViewModel();
+        }
     }
 }

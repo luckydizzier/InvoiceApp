@@ -303,25 +303,34 @@ namespace InvoiceApp.ViewModels
             }
         }
 
-        private void AddItem()
+        public InvoiceItemViewModel CreateItemViewModel()
         {
-            Log.Debug("InvoiceViewModel.AddItem called");
-            if (SelectedInvoice == null) return;
             var firstProduct = Products.FirstOrDefault();
             var firstRate = TaxRates.FirstOrDefault();
             var newItem = new InvoiceItem
             {
-                InvoiceId = SelectedInvoice.Id,
+                InvoiceId = SelectedInvoice?.Id ?? 0,
                 Quantity = 1,
                 Deposit = 0,
                 Return = 0,
                 Product = firstProduct,
                 ProductId = firstProduct?.Id ?? 0,
                 TaxRate = firstRate,
-                TaxRateId = firstRate?.Id ?? 0
+                TaxRateId = firstRate?.Id ?? 0,
+                Active = true,
+                DateCreated = DateTime.Now,
+                DateUpdated = DateTime.Now
             };
             var vm = new InvoiceItemViewModel(newItem);
             vm.PropertyChanged += Item_PropertyChanged;
+            return vm;
+        }
+
+        private void AddItem()
+        {
+            Log.Debug("InvoiceViewModel.AddItem called");
+            if (SelectedInvoice == null) return;
+            var vm = CreateItemViewModel();
             Items.Add(vm);
             UpdateTotals();
             ((RelayCommand)SaveCommand).RaiseCanExecuteChanged();
@@ -339,6 +348,30 @@ namespace InvoiceApp.ViewModels
         private void AddSupplier()
         {
             var supplier = _supplierViewModel.AddSupplier();
+            Suppliers.Add(supplier);
+            SelectedSupplier = supplier;
+            ShowStatus("Új szállító hozzáadva");
+        }
+
+        public void EnsureSupplierExists(string text)
+        {
+            if (string.IsNullOrWhiteSpace(text)) return;
+
+            var existing = Suppliers.FirstOrDefault(s =>
+                string.Equals(s.Name, text, StringComparison.OrdinalIgnoreCase));
+            if (existing != null)
+            {
+                SelectedSupplier = existing;
+                return;
+            }
+
+            var supplier = new Supplier
+            {
+                Name = text,
+                Active = true,
+                DateCreated = DateTime.Now,
+                DateUpdated = DateTime.Now
+            };
             Suppliers.Add(supplier);
             SelectedSupplier = supplier;
             ShowStatus("Új szállító hozzáadva");
