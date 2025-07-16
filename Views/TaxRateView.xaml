@@ -11,7 +11,8 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <DataGrid ItemsSource="{Binding Rates}"
+        <DataGrid x:Name="DataGrid"
+                  ItemsSource="{Binding Rates}"
                   SelectedItem="{Binding SelectedRate}"
                   AutoGenerateColumns="False"
                   CanUserAddRows="False"

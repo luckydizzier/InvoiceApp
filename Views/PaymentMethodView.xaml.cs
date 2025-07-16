@@ -1,5 +1,6 @@
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Controls;
 using InvoiceApp.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -22,6 +23,16 @@ namespace InvoiceApp.Views
             base.OnKeyDown(e);
             if (e.Key == Key.Escape)
             {
+                if (DataGrid.IsKeyboardFocusWithin)
+                {
+                    var row = DataGrid.ItemContainerGenerator.ContainerFromItem(DataGrid.CurrentItem) as DataGridRow;
+                    if (row != null && row.IsEditing)
+                    {
+                        DataGrid.CancelEdit();
+                        e.Handled = true;
+                        return;
+                    }
+                }
                 Close();
                 e.Handled = true;
             }
