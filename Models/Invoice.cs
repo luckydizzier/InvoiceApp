@@ -1,24 +1,119 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using InvoiceApp.DTOs;
+using InvoiceApp.Mappers;
+using InvoiceApp.Validators;
 
 namespace InvoiceApp.Models
 {
-    public class Invoice : Base
+    public partial class Invoice : Base, INotifyPropertyChanged, INotifyDataErrorInfo
     {
-        public string Number { get; set; } = string.Empty;
-        public string Issuer { get; set; } = string.Empty;
-        public DateTime Date { get; set; }
-        public decimal Amount { get; set; }
+        private readonly InvoiceDtoValidator _validator = new();
+        private readonly Dictionary<string, List<string>> _errors = new();
 
-        public int SupplierId { get; set; }
-        public Supplier? Supplier { get; set; }
+        private string _number = string.Empty;
+        private string _issuer = string.Empty;
+        private DateTime _date;
+        private decimal _amount;
+        private int _supplierId;
+        private Supplier? _supplier;
+        private int _paymentMethodId;
+        private PaymentMethod? _paymentMethod;
+        private bool _isGross = true;
 
-        public int PaymentMethodId { get; set; }
-        public PaymentMethod? PaymentMethod { get; set; }
+        public string Number
+        {
+            get => _number;
+            set { if (_number != value) { _number = value; OnPropertyChanged(); } }
+        }
 
-        public bool IsGross { get; set; } = true;
+        public string Issuer
+        {
+            get => _issuer;
+            set { if (_issuer != value) { _issuer = value; OnPropertyChanged(); } }
+        }
+
+        public DateTime Date
+        {
+            get => _date;
+            set { if (_date != value) { _date = value; OnPropertyChanged(); } }
+        }
+
+        public decimal Amount
+        {
+            get => _amount;
+            set { if (_amount != value) { _amount = value; OnPropertyChanged(); } }
+        }
+
+        public int SupplierId
+        {
+            get => _supplierId;
+            set { if (_supplierId != value) { _supplierId = value; OnPropertyChanged(); } }
+        }
+
+        public Supplier? Supplier
+        {
+            get => _supplier;
+            set { if (_supplier != value) { _supplier = value; OnPropertyChanged(); } }
+        }
+
+        public int PaymentMethodId
+        {
+            get => _paymentMethodId;
+            set { if (_paymentMethodId != value) { _paymentMethodId = value; OnPropertyChanged(); } }
+        }
+
+        public PaymentMethod? PaymentMethod
+        {
+            get => _paymentMethod;
+            set { if (_paymentMethod != value) { _paymentMethod = value; OnPropertyChanged(); } }
+        }
+
+        public bool IsGross
+        {
+            get => _isGross;
+            set { if (_isGross != value) { _isGross = value; OnPropertyChanged(); } }
+        }
 
         public List<InvoiceItem> Items { get; set; } = new();
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+        public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
+
+        public bool HasErrors => _errors.Count > 0;
+
+        public IEnumerable GetErrors(string? propertyName)
+        {
+            if (string.IsNullOrEmpty(propertyName))
+                return _errors.SelectMany(kv => kv.Value);
+            return _errors.TryGetValue(propertyName, out var list) ? list : Enumerable.Empty<string>();
+        }
+
+        private void Validate(string propertyName)
+        {
+            var result = _validator.Validate(this.ToDto());
+            var propErrors = result.Errors
+                .Where(e => e.PropertyName == propertyName)
+                .Select(e => e.ErrorMessage)
+                .ToList();
+
+            if (propErrors.Any())
+                _errors[propertyName] = propErrors;
+            else
+                _errors.Remove(propertyName);
+
+            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
+        }
+
+        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            if (propertyName != null) Validate(propertyName);
+        }
 
         public bool IsValid()
         {
