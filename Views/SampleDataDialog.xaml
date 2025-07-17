@@ -13,6 +13,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -26,13 +27,15 @@
         <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding ProductCount}"/>
         <TextBlock Grid.Row="3" Grid.Column="0" Margin="0,0,5,5" VerticalAlignment="Center" Text="Számlák"/>
         <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding InvoiceCount}"/>
-        <TextBlock Grid.Row="4" Grid.Column="0" Margin="0,0,5,5" VerticalAlignment="Center" Text="Tételek számlánként"/>
-        <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding ItemsPerInvoice}"/>
-        <TextBlock Grid.Row="5" Grid.Column="0" Margin="0,0,5,5" VerticalAlignment="Center" Text="Mennyiség (min)"/>
-        <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding ItemQuantityMin}"/>
-        <TextBlock Grid.Row="6" Grid.Column="0" Margin="0,0,5,10" VerticalAlignment="Center" Text="Mennyiség (max)"/>
-        <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding ItemQuantityMax}"/>
-        <StackPanel Grid.Row="7" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
+        <TextBlock Grid.Row="4" Grid.Column="0" Margin="0,0,5,5" VerticalAlignment="Center" Text="Tételek (min)"/>
+        <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding ItemsPerInvoiceMin}"/>
+        <TextBlock Grid.Row="5" Grid.Column="0" Margin="0,0,5,5" VerticalAlignment="Center" Text="Tételek (max)"/>
+        <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding ItemsPerInvoiceMax}"/>
+        <TextBlock Grid.Row="6" Grid.Column="0" Margin="0,0,5,5" VerticalAlignment="Center" Text="Mennyiség (min)"/>
+        <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding ItemQuantityMin}"/>
+        <TextBlock Grid.Row="7" Grid.Column="0" Margin="0,0,5,10" VerticalAlignment="Center" Text="Mennyiség (max)"/>
+        <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding ItemQuantityMax}"/>
+        <StackPanel Grid.Row="8" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Content="OK" Width="75" Margin="5" Click="Ok_Click" IsDefault="True"/>
             <Button Content="Mégse" Width="75" Margin="5" Click="Cancel_Click" IsCancel="True"/>
         </StackPanel>
