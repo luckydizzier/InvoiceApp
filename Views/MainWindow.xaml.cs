@@ -16,7 +16,7 @@ namespace InvoiceApp.Views
             Loaded += async (s, e) =>
             {
                 await _viewModel.InvoiceViewModel.LoadAsync();
-                await _viewModel.InvoiceViewModel.NewInvoice();
+                _viewModel.ShowInvoiceListCommand.Execute(null);
                 _viewModel.InvoiceViewModel.IsInvoiceListFocused = true;
             };
         }
