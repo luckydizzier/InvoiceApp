@@ -453,6 +453,7 @@ namespace InvoiceApp.ViewModels
             }
             item.Item.TaxRate = rate;
             item.Item.TaxRateId = rate.Id;
+            item.TaxRate = rate;
 
             if (item.Item.Product != null)
             {
@@ -574,6 +575,8 @@ namespace InvoiceApp.ViewModels
                 }
                 it.TaxRate = rate;
                 it.TaxRateId = rate.Id;
+                vm.TaxRate = rate;
+
 
                 if (it.Product != null)
                 {
@@ -621,7 +624,7 @@ namespace InvoiceApp.ViewModels
         private void UpdateTotals()
         {
             var breakdown = Items
-                .GroupBy(i => i.TaxRate?.Percentage ?? 0)
+                .GroupBy(i => i.TaxRatePercentage)
                 .Select(g =>
                 {
                     var net = g.Sum(x => x.Quantity * x.UnitPrice);

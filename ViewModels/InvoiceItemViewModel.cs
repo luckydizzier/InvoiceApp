@@ -142,7 +142,7 @@ namespace InvoiceApp.ViewModels
 
         public decimal NetAmount => Quantity * UnitPrice;
 
-        public decimal VatAmount => IsGross ? NetAmount * (TaxRate?.Percentage ?? 0) / 100m : 0m;
+        public decimal VatAmount => IsGross ? NetAmount * TaxRatePercentage / 100m : 0m;
 
         public decimal GrossAmount => NetAmount + VatAmount;
 
