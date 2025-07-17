@@ -108,6 +108,10 @@
                                 Command="{Binding InvoiceViewModel.SaveCommand}"
                                 Style="{StaticResource IconButtonStyle}"
                                 ToolTip="Számla mentése"/>
+                        <Button Content="💾➕ Mentés és új"
+                                Command="{Binding InvoiceViewModel.SaveAndNewCommand}"
+                                Style="{StaticResource IconButtonStyle}"
+                                ToolTip="Mentés és új számla"/>
                     </StackPanel>
                     <Border Grid.Row="3">
                         <Border.Style>
@@ -189,6 +193,7 @@
         <KeyBinding Key="Escape" Command="{Binding BackCommand}"/>
         <KeyBinding Key="Delete" Command="{Binding DeleteInvoiceCommand}"/>
         <KeyBinding Key="Insert" Command="{Binding InvoiceViewModel.NewInvoiceCommand}"/>
+        <KeyBinding Key="N" Modifiers="Control+Shift" Command="{Binding InvoiceViewModel.SaveAndNewCommand}"/>
         <KeyBinding Key="F1" Command="{Binding ShowDashboardCommand}"/>
         <KeyBinding Key="F2" Command="{Binding ShowInvoiceListCommand}"/>
         <KeyBinding Key="F4" Command="{Binding ShowProductsCommand}"/>
