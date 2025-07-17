@@ -18,16 +18,16 @@
                   CanUserAddRows="False"
                   Margin="5">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Name" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Width="*" />
+                <DataGridTextColumn Header="Név" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Width="*" />
                 <DataGridTextColumn Header="%" Binding="{Binding Percentage, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
-                <DataGridTextColumn Header="From" Binding="{Binding EffectiveFrom, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
-                <DataGridTextColumn Header="To" Binding="{Binding EffectiveTo, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
+                <DataGridTextColumn Header="Kezdete" Binding="{Binding EffectiveFrom, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
+                <DataGridTextColumn Header="Vége" Binding="{Binding EffectiveTo, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
-            <Button Content="Add" Command="{Binding AddCommand}" Margin="4" />
-            <Button Content="Delete" Command="{Binding DeleteCommand}" Margin="4" />
-            <Button Content="Save" Command="{Binding SaveCommand}" Margin="4" />
+            <Button Content="Hozzáadás" Command="{Binding AddCommand}" Margin="4" />
+            <Button Content="Törlés" Command="{Binding DeleteCommand}" Margin="4" />
+            <Button Content="Mentés" Command="{Binding SaveCommand}" Margin="4" />
         </StackPanel>
     </Grid>
 </UserControl>
