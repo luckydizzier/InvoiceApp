@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using InvoiceApp.Models;
 using InvoiceApp.Services;
+using InvoiceApp;
 using Serilog;
 
 namespace InvoiceApp.ViewModels
@@ -439,28 +440,52 @@ namespace InvoiceApp.ViewModels
             var rate = TaxRates.FirstOrDefault(r => r.Percentage == item.TaxRatePercentage);
             if (rate == null)
             {
-                rate = new TaxRate
+                var confirmAdd = DialogHelper.ShowConfirmation(
+                    $"Nincs {item.TaxRatePercentage}% áfakulcs. Új áfakulcsot szeretnél létrehozni?",
+                    "Megerősítés");
+                if (!confirmAdd)
                 {
-                    Name = $"ÁFA {item.TaxRatePercentage}%",
-                    Percentage = item.TaxRatePercentage,
-                    EffectiveFrom = DateTime.Today,
-                    Active = true,
-                    DateCreated = DateTime.Now,
-                    DateUpdated = DateTime.Now
-                };
-                await _taxRateService.SaveAsync(rate);
-                TaxRates.Add(rate);
+                    // revert to current product tax rate if user cancels
+                    rate = item.Item.Product?.TaxRate ?? rate;
+                    item.TaxRatePercentage = rate?.Percentage ?? item.TaxRatePercentage;
+                }
+                else
+                {
+                    rate = new TaxRate
+                    {
+                        Name = $"ÁFA {item.TaxRatePercentage}%",
+                        Percentage = item.TaxRatePercentage,
+                        EffectiveFrom = DateTime.Today,
+                        Active = true,
+                        DateCreated = DateTime.Now,
+                        DateUpdated = DateTime.Now
+                    };
+                    await _taxRateService.SaveAsync(rate);
+                    TaxRates.Add(rate);
+                }
             }
-            item.Item.TaxRate = rate;
-            item.Item.TaxRateId = rate.Id;
-            item.TaxRate = rate;
 
-            if (item.Item.Product != null)
+            if (rate != null)
             {
-                item.Item.Product.TaxRate = rate;
-                item.Item.Product.TaxRateId = rate.Id;
-                await _productService.SaveAsync(item.Item.Product);
+                item.Item.TaxRate = rate;
+                item.Item.TaxRateId = rate.Id;
+                item.TaxRate = rate;
             }
+
+            if (item.Item.Product != null && rate != null &&
+                item.Item.Product.TaxRateId != rate.Id)
+            {
+                var confirm = DialogHelper.ShowConfirmation(
+                    "Valóban módosítod az adott termék ÁFA-kulcsát?",
+                    "Megerősítés");
+                if (confirm)
+                {
+                    item.Item.Product.TaxRate = rate;
+                    item.Item.Product.TaxRateId = rate.Id;
+                    await _productService.SaveAsync(item.Item.Product);
+                }
+            }
+
             await _itemService.SaveAsync(item.Item);
             ShowStatus($"Tétel mentve. ({DateTime.Now:g})");
         }
