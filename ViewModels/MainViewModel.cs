@@ -1,6 +1,7 @@
 using System;
 using InvoiceApp.Models;
 using InvoiceApp.Services;
+using InvoiceApp;
 
 namespace InvoiceApp.ViewModels
 {
@@ -79,6 +80,11 @@ namespace InvoiceApp.ViewModels
             ItemsDownCommand = new RelayCommand(_ => InvoiceViewModel.SelectNextItem());
             ItemsEscapeCommand = new RelayCommand(_ =>
             {
+                if (InvoiceViewModel.HasChanges)
+                {
+                    if (!DialogHelper.ShowConfirmation("Mentés nélkül kilép?", "Megerősítés"))
+                        return;
+                }
                 InvoiceViewModel.CancelItemEdit();
                 _navigation.PopSubstate();
             });
@@ -89,6 +95,11 @@ namespace InvoiceApp.ViewModels
             });
             HeaderEscapeCommand = new RelayCommand(_ =>
             {
+                if (InvoiceViewModel.HasChanges)
+                {
+                    if (!DialogHelper.ShowConfirmation("Mentés nélkül kilép?", "Megerősítés"))
+                        return;
+                }
                 InvoiceViewModel.CancelHeaderOrSummary();
                 _navigation.PopSubstate();
             });
@@ -101,6 +112,11 @@ namespace InvoiceApp.ViewModels
             });
             SummaryEscapeCommand = new RelayCommand(_ =>
             {
+                if (InvoiceViewModel.HasChanges)
+                {
+                    if (!DialogHelper.ShowConfirmation("Mentés nélkül kilép?", "Megerősítés"))
+                        return;
+                }
                 InvoiceViewModel.CancelHeaderOrSummary();
                 _navigation.PopSubstate();
             });

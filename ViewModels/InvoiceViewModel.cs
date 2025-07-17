@@ -71,6 +71,7 @@ namespace InvoiceApp.ViewModels
                 SelectedPaymentMethod = value?.PaymentMethod;
                 OnPropertyChanged();
                 ((RelayCommand)SaveCommand).RaiseCanExecuteChanged();
+                ClearChanges();
             }
         }
 
@@ -149,11 +150,31 @@ namespace InvoiceApp.ViewModels
         private string _inWords = string.Empty;
         private bool _isInvoiceListFocused = true;
         private bool _isRowDetailsVisible;
+        private bool _hasChanges;
+
+        /// <summary>
+        /// Indicates whether there are unsaved modifications.
+        /// </summary>
+        public bool HasChanges
+        {
+            get => _hasChanges;
+            private set { _hasChanges = value; OnPropertyChanged(); }
+        }
 
         public ObservableCollection<VatBreakdownEntry> VatBreakdown
         {
             get => _vatBreakdown;
             set { _vatBreakdown = value; OnPropertyChanged(); }
+        }
+
+        private void MarkDirty()
+        {
+            HasChanges = true;
+        }
+
+        private void ClearChanges()
+        {
+            HasChanges = false;
         }
 
         public decimal TotalNet
@@ -204,6 +225,7 @@ namespace InvoiceApp.ViewModels
                     OnPropertyChanged();
                     _ = SuggestNextNumberAsync();
                     ((RelayCommand)SaveCommand).RaiseCanExecuteChanged();
+                    MarkDirty();
                 }
             }
         }
@@ -219,6 +241,7 @@ namespace InvoiceApp.ViewModels
                     SelectedInvoice.PaymentMethodId = value?.Id ?? 0;
                     OnPropertyChanged();
                     ((RelayCommand)SaveCommand).RaiseCanExecuteChanged();
+                    MarkDirty();
                 }
             }
         }
@@ -232,6 +255,7 @@ namespace InvoiceApp.ViewModels
                 {
                     SelectedInvoice.IsGross = value;
                     OnPropertyChanged();
+                    MarkDirty();
                 }
             }
         }
@@ -326,6 +350,7 @@ namespace InvoiceApp.ViewModels
             {
                 ShowStatus(Invoices.Count == 0 ? "Üres lista." : $"{Invoices.Count} számla betöltve.");
             }
+            ClearChanges();
         }
 
         public InvoiceItemViewModel CreateItemViewModel()
@@ -357,6 +382,7 @@ namespace InvoiceApp.ViewModels
             Items.Add(vm);
             UpdateTotals();
             ((RelayCommand)SaveCommand).RaiseCanExecuteChanged();
+            MarkDirty();
         }
 
         private void RemoveItem(InvoiceItemViewModel item)
@@ -366,6 +392,7 @@ namespace InvoiceApp.ViewModels
             Items.Remove(item);
             UpdateTotals();
             ((RelayCommand)SaveCommand).RaiseCanExecuteChanged();
+            MarkDirty();
         }
 
         private void AddSupplier()
@@ -476,6 +503,7 @@ namespace InvoiceApp.ViewModels
             Items = new ObservableCollection<InvoiceItemViewModel>();
             ShowStatus("Új számla szerkesztése");
             ((RelayCommand)SaveCommand).RaiseCanExecuteChanged();
+            MarkDirty();
         }
 
         private bool Validate()
@@ -511,6 +539,7 @@ namespace InvoiceApp.ViewModels
 
             ShowStatus($"Számla mentve. ({DateTime.Now:g})");
             Log.Information("Invoice {Id} saved", SelectedInvoice.Id);
+            ClearChanges();
         }
 
         private void Items_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -531,12 +560,14 @@ namespace InvoiceApp.ViewModels
             }
             UpdateTotals();
             ((RelayCommand)SaveCommand).RaiseCanExecuteChanged();
+            MarkDirty();
         }
 
         private void Item_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             UpdateTotals();
             ((RelayCommand)SaveCommand).RaiseCanExecuteChanged();
+            MarkDirty();
         }
 
         private void UpdateTotals()
