@@ -1,0 +1,34 @@
+<Window x:Class="InvoiceApp.Views.SampleDataDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Mintadatok" MinHeight="250" MinWidth="300"
+        WindowStartupLocation="CenterOwner" WindowStyle="ToolWindow" ResizeMode="NoResize">
+    <Grid Margin="10" >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="60"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Row="0" Grid.Column="0" Margin="0,0,5,5" VerticalAlignment="Center" Text="Szállítók"/>
+        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding SupplierCount}"/>
+        <TextBlock Grid.Row="1" Grid.Column="0" Margin="0,0,5,5" VerticalAlignment="Center" Text="Termékcsoportok"/>
+        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding ProductGroupCount}"/>
+        <TextBlock Grid.Row="2" Grid.Column="0" Margin="0,0,5,5" VerticalAlignment="Center" Text="Termékek"/>
+        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding ProductCount}"/>
+        <TextBlock Grid.Row="3" Grid.Column="0" Margin="0,0,5,5" VerticalAlignment="Center" Text="Számlák"/>
+        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding InvoiceCount}"/>
+        <TextBlock Grid.Row="4" Grid.Column="0" Margin="0,0,5,10" VerticalAlignment="Center" Text="Tételek számlánként"/>
+        <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding ItemsPerInvoice}"/>
+        <StackPanel Grid.Row="5" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="OK" Width="75" Margin="5" Click="Ok_Click" IsDefault="True"/>
+            <Button Content="Mégse" Width="75" Margin="5" Click="Cancel_Click" IsCancel="True"/>
+        </StackPanel>
+    </Grid>
+</Window>

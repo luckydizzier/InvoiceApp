@@ -223,7 +223,7 @@ namespace InvoiceApp
             IsNewDatabase = isNew;
         }
 
-        public static async Task PopulateSampleDataAsync(IServiceProvider provider)
+        public static async Task PopulateSampleDataAsync(IServiceProvider provider, SampleDataOptions options)
         {
             using var scope = provider.CreateScope();
             var factory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<InvoiceContext>>();
@@ -234,134 +234,7 @@ namespace InvoiceApp
                 return;
             }
 
-            var invoiceService = scope.ServiceProvider.GetRequiredService<IInvoiceService>();
-            var itemService = scope.ServiceProvider.GetRequiredService<IInvoiceItemService>();
-            var productService = scope.ServiceProvider.GetRequiredService<IProductService>();
-            var unitRepo = scope.ServiceProvider.GetRequiredService<IUnitRepository>();
-            var groupRepo = scope.ServiceProvider.GetRequiredService<IProductGroupRepository>();
-            var taxRepo = scope.ServiceProvider.GetRequiredService<ITaxRateRepository>();
-            var supplierService = scope.ServiceProvider.GetRequiredService<ISupplierService>();
-            var paymentService = scope.ServiceProvider.GetRequiredService<IPaymentMethodService>();
-            var logService = scope.ServiceProvider.GetRequiredService<IChangeLogService>();
-
-            var supplier = new Supplier
-            {
-                Name = "Minta beszállító",
-                Active = true,
-                DateCreated = DateTime.Now,
-                DateUpdated = DateTime.Now
-            };
-            await supplierService.SaveAsync(supplier);
-
-            var payment = new PaymentMethod
-            {
-                Name = "Átutalás",
-                DueInDays = 8,
-                Active = true,
-                DateCreated = DateTime.Now,
-                DateUpdated = DateTime.Now
-            };
-            await paymentService.SaveAsync(payment);
-
-            var createdInvoices = new List<Invoice>();
-            for (int i = 1; i <= 17; i++)
-            {
-                var inv = new Invoice
-                {
-                    Number = $"INV-{i:000}",
-                    Issuer = "Minta Kft.",
-                    Date = DateTime.Today.AddDays(-i),
-                    Amount = 100 + i,
-                    SupplierId = supplier.Id,
-                    Supplier = supplier,
-                    PaymentMethodId = payment.Id,
-                    PaymentMethod = payment
-                };
-
-                await invoiceService.SaveAsync(inv);
-                createdInvoices.Add(inv);
-            }
-
-            var unit = new Unit
-            {
-                Code = "db",
-                Name = "Darab",
-                Active = true,
-                DateCreated = DateTime.Now,
-                DateUpdated = DateTime.Now
-            };
-            await unitRepo.AddAsync(unit);
-            await logService.AddAsync(new ChangeLog
-            {
-                Entity = nameof(Unit),
-                Operation = "Add",
-                Data = JsonSerializer.Serialize(unit),
-                DateCreated = DateTime.Now,
-                DateUpdated = DateTime.Now,
-                Active = true
-            });
-
-            var group = new ProductGroup
-            {
-                Name = "Általános",
-                Active = true,
-                DateCreated = DateTime.Now,
-                DateUpdated = DateTime.Now
-            };
-            await groupRepo.AddAsync(group);
-            await logService.AddAsync(new ChangeLog
-            {
-                Entity = nameof(ProductGroup),
-                Operation = "Add",
-                Data = JsonSerializer.Serialize(group),
-                DateCreated = DateTime.Now,
-                DateUpdated = DateTime.Now,
-                Active = true
-            });
-
-            var tax = new TaxRate
-            {
-                Name = "ÁFA 27%",
-                Percentage = 27,
-                EffectiveFrom = DateTime.Today.AddYears(-1),
-                Active = true,
-                DateCreated = DateTime.Now,
-                DateUpdated = DateTime.Now
-            };
-            await taxRepo.AddAsync(tax);
-            await logService.AddAsync(new ChangeLog
-            {
-                Entity = nameof(TaxRate),
-                Operation = "Add",
-                Data = JsonSerializer.Serialize(tax),
-                DateCreated = DateTime.Now,
-                DateUpdated = DateTime.Now,
-                Active = true
-            });
-
-            var product = new Product
-            {
-                Name = "Minta termék",
-                Net = 100,
-                Gross = 127,
-                UnitId = unit.Id,
-                ProductGroupId = group.Id,
-                TaxRateId = tax.Id
-            };
-            await productService.SaveAsync(product);
-
-            foreach (var inv in createdInvoices)
-            {
-                await itemService.SaveAsync(new InvoiceItem
-                {
-                    InvoiceId = inv.Id,
-                    ProductId = product.Id,
-                    TaxRateId = tax.Id,
-                    Description = product.Name,
-                    Quantity = 1,
-                    UnitPrice = inv.Amount
-                });
-            }
+            await SampleDataSeeder.GenerateAsync(provider, options);
         }
     }
 }
