@@ -84,21 +84,5 @@
                 </DataGridTemplateColumn.CellTemplate>
             </DataGridTemplateColumn>
         </DataGrid.Columns>
-        <DataGrid.RowDetailsTemplate>
-            <DataTemplate>
-                <StackPanel Orientation="Vertical" Margin="5">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Név" Width="50" />
-                        <TextBox Text="{Binding Item.Product.Name, UpdateSourceTrigger=PropertyChanged}" Width="200" />
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Nettó" Width="50" />
-                        <TextBox Text="{Binding Item.Product.Net, UpdateSourceTrigger=PropertyChanged}" Width="100" />
-                        <TextBlock Text="Bruttó" Width="50" Margin="10,0,0,0" />
-                        <TextBox Text="{Binding Item.Product.Gross, UpdateSourceTrigger=PropertyChanged}" Width="100" />
-                    </StackPanel>
-                </StackPanel>
-            </DataTemplate>
-        </DataGrid.RowDetailsTemplate>
     </DataGrid>
 </UserControl>

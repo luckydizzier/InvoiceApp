@@ -577,6 +577,7 @@ namespace InvoiceApp.ViewModels
                 it.TaxRateId = rate.Id;
                 vm.TaxRate = rate;
 
+
                 if (it.Product != null)
                 {
                     it.Product.TaxRate = rate;
