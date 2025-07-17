@@ -3,10 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:views="clr-namespace:InvoiceApp.Views"
              xmlns:helpers="clr-namespace:InvoiceApp.Helpers">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
@@ -14,5 +18,12 @@
                                  helpers:FocusBehavior.IsFocused="True" />
         <views:InvoiceItemDataGrid Grid.Row="1" Margin="0,0,0,4" />
         <views:InvoiceSummaryPanel Grid.Row="2" />
+        <Border Grid.Row="3" Background="#FFFFE0E0" Padding="4"
+                Visibility="{Binding HasValidationErrors, Converter={StaticResource BoolToVisibilityConverter}}">
+            <StackPanel>
+                <TextBlock Text="Hibák (Alt+1-6):" FontWeight="Bold" Margin="0,0,0,4" />
+                <ItemsControl ItemsSource="{Binding ValidationErrors}" />
+            </StackPanel>
+        </Border>
     </Grid>
 </UserControl>

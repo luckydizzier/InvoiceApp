@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 using System.Collections.Generic;
 using System.Linq;
+using System.ComponentModel;
 using InvoiceApp.Models;
 using InvoiceApp.Services;
 using InvoiceApp;
@@ -30,6 +31,10 @@ namespace InvoiceApp.ViewModels
         private Invoice? _selectedInvoice;
         private string _statusMessage = string.Empty;
         private readonly System.Windows.Threading.DispatcherTimer _statusTimer;
+
+        public IEnumerable<string> ValidationErrors => SelectedInvoice?.GetErrors(null).OfType<string>() ?? Enumerable.Empty<string>();
+
+        public bool HasValidationErrors => ValidationErrors.Any();
 
         public ObservableCollection<Invoice> Invoices
         {
@@ -58,12 +63,28 @@ namespace InvoiceApp.ViewModels
             _statusTimer.Start();
         }
 
+        private void Invoice_ErrorsChanged(object? sender, System.ComponentModel.DataErrorsChangedEventArgs e)
+        {
+            OnPropertyChanged(nameof(ValidationErrors));
+            OnPropertyChanged(nameof(HasValidationErrors));
+        }
+
         public Invoice? SelectedInvoice
         {
             get => _selectedInvoice;
             set
             {
+                if (_selectedInvoice != null)
+                {
+                    _selectedInvoice.ErrorsChanged -= Invoice_ErrorsChanged;
+                }
+
                 _selectedInvoice = value;
+
+                if (_selectedInvoice != null)
+                {
+                    _selectedInvoice.ErrorsChanged += Invoice_ErrorsChanged;
+                }
                 Items = value != null
                     ? new ObservableCollection<InvoiceItemViewModel>(
                         value.Items.Select(i => new InvoiceItemViewModel(i)))
@@ -71,6 +92,8 @@ namespace InvoiceApp.ViewModels
                 SelectedSupplier = value?.Supplier;
                 SelectedPaymentMethod = value?.PaymentMethod;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(ValidationErrors));
+                OnPropertyChanged(nameof(HasValidationErrors));
                 ((RelayCommand)SaveCommand).RaiseCanExecuteChanged();
                 ClearChanges();
             }
@@ -327,6 +350,11 @@ namespace InvoiceApp.ViewModels
             NewInvoiceCommand = new RelayCommand(async _ => await NewInvoice());
             AddSupplierCommand = new RelayCommand(_ => AddSupplier());
             NewItemCommand = CreateItemViewModel;
+
+            if (SelectedInvoice != null)
+            {
+                SelectedInvoice.ErrorsChanged += Invoice_ErrorsChanged;
+            }
         }
 
         public async Task LoadAsync()
@@ -569,7 +597,7 @@ namespace InvoiceApp.ViewModels
             Log.Debug("InvoiceViewModel.SaveAsync called");
             if (!Validate())
             {
-                ShowStatus("Hibás adatok. Mentés megszakítva.");
+                ShowStatus("Hibás adatok. Használd az Alt+1-6 billentyűket a mezők kiválasztásához.");
                 return;
             }
 

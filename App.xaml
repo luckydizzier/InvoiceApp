@@ -25,6 +25,15 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+        <Style TargetType="DatePicker">
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="true">
+                    <Setter Property="BorderBrush" Value="Red"/>
+                    <Setter Property="BorderThickness" Value="2"/>
+                    <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
         <Style x:Key="IconButtonStyle" TargetType="Button">
             <Setter Property="Padding" Value="8,4"/>
             <Setter Property="Margin" Value="4"/>
