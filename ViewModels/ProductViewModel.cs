@@ -24,6 +24,7 @@ namespace InvoiceApp.ViewModels
         private ICollectionView? _productsView;
         private Product? _selectedProduct;
         private string _searchText = string.Empty;
+        private bool _hasChanges;
 
         public ObservableCollection<Product> Products
         {
@@ -78,6 +79,24 @@ namespace InvoiceApp.ViewModels
             }
         }
 
+        public bool HasChanges
+        {
+            get => _hasChanges;
+            private set { _hasChanges = value; OnPropertyChanged(); }
+        }
+
+        public void MarkDirty()
+        {
+            HasChanges = true;
+            SaveCommand.RaiseCanExecuteChanged();
+        }
+
+        public void ClearChanges()
+        {
+            HasChanges = false;
+            SaveCommand.RaiseCanExecuteChanged();
+        }
+
         public RelayCommand AddCommand { get; }
         public RelayCommand DeleteCommand { get; }
         public RelayCommand SaveCommand { get; }
@@ -103,8 +122,11 @@ namespace InvoiceApp.ViewModels
             SaveCommand = new RelayCommand(async _ =>
             {
                 await SaveSelectedAsync();
+                ClearChanges();
                 DialogHelper.ShowInfo("Mentés kész.");
             }, _ => SelectedProduct != null && !string.IsNullOrWhiteSpace(SelectedProduct?.Name));
+
+            ClearChanges();
         }
 
         public async Task LoadAsync()
@@ -155,12 +177,14 @@ namespace InvoiceApp.ViewModels
             }
             Products.Add(product);
             SelectedProduct = product;
+            MarkDirty();
         }
 
         private async Task DeleteProductAsync(Product product)
         {
             await _service.DeleteAsync(product.Id);
             Products.Remove(product);
+            MarkDirty();
         }
 
         private async Task SaveSelectedAsync()

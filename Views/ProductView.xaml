@@ -32,7 +32,8 @@
                   AutoGenerateColumns="False"
                   CanUserAddRows="False"
                   Margin="5"
-                  PreviewKeyDown="DataGrid_OnPreviewKeyDown">
+                  PreviewKeyDown="DataGrid_OnPreviewKeyDown"
+                  CellEditEnding="DataGrid_CellEditEnding">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Név" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
                 <DataGridTextColumn Header="Nettó"

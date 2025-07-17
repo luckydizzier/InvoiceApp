@@ -13,6 +13,7 @@ namespace InvoiceApp.ViewModels
         private readonly ISupplierService _service;
         private ObservableCollection<Supplier> _suppliers = new();
         private Supplier? _selectedSupplier;
+        private bool _hasChanges;
 
         public ObservableCollection<Supplier> Suppliers
         {
@@ -30,6 +31,24 @@ namespace InvoiceApp.ViewModels
                 DeleteCommand.RaiseCanExecuteChanged();
                 SaveCommand.RaiseCanExecuteChanged();
             }
+        }
+
+        public bool HasChanges
+        {
+            get => _hasChanges;
+            private set { _hasChanges = value; OnPropertyChanged(); }
+        }
+
+        public void MarkDirty()
+        {
+            HasChanges = true;
+            SaveCommand.RaiseCanExecuteChanged();
+        }
+
+        public void ClearChanges()
+        {
+            HasChanges = false;
+            SaveCommand.RaiseCanExecuteChanged();
         }
 
         public RelayCommand AddCommand { get; }
@@ -51,8 +70,11 @@ namespace InvoiceApp.ViewModels
             SaveCommand = new RelayCommand(async _ =>
             {
                 await SaveSelectedAsync();
+                ClearChanges();
                 DialogHelper.ShowInfo("Mentés kész.");
             }, _ => SelectedSupplier != null && !string.IsNullOrWhiteSpace(SelectedSupplier?.Name));
+
+            ClearChanges();
         }
 
         public async Task LoadAsync()
@@ -71,6 +93,7 @@ namespace InvoiceApp.ViewModels
             };
             Suppliers.Add(supplier);
             SelectedSupplier = supplier;
+            MarkDirty();
             return supplier;
         }
 
@@ -78,6 +101,7 @@ namespace InvoiceApp.ViewModels
         {
             await _service.DeleteAsync(supplier.Id);
             Suppliers.Remove(supplier);
+            MarkDirty();
         }
 
         private async Task SaveSelectedAsync()

@@ -20,7 +20,8 @@
                   SelectedItem="{Binding SelectedSupplier}"
                   AutoGenerateColumns="False"
                   CanUserAddRows="False"
-                  Margin="5">
+                  Margin="5"
+                  CellEditEnding="DataGrid_CellEditEnding">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Név" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
                 <DataGridTextColumn Header="Adószám" Binding="{Binding TaxId, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />

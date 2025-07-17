@@ -16,5 +16,10 @@ namespace InvoiceApp.Views
             DataContext = _viewModel;
             Loaded += async (s, e) => await _viewModel.LoadAsync();
         }
+
+        private void DataGrid_CellEditEnding(object? sender, DataGridCellEditEndingEventArgs e)
+        {
+            _viewModel.MarkDirty();
+        }
     }
 }

@@ -47,6 +47,11 @@ namespace InvoiceApp.Views
             e.Handled = true;
         }
 
+        private void DataGrid_CellEditEnding(object? sender, DataGridCellEditEndingEventArgs e)
+        {
+            _viewModel.MarkDirty();
+        }
+
         private static T? FindParent<T>(DependencyObject? child) where T : DependencyObject
         {
             while (child != null && child is not T)
