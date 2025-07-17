@@ -94,6 +94,7 @@ namespace InvoiceApp.ViewModels
                 foreach (var it in _items)
                 {
                     it.PropertyChanged += Item_PropertyChanged;
+                    it.IsGross = IsGrossCalculation;
                 }
                 _items.CollectionChanged += Items_CollectionChanged;
 
@@ -255,6 +256,11 @@ namespace InvoiceApp.ViewModels
                 {
                     SelectedInvoice.IsGross = value;
                     OnPropertyChanged();
+                    foreach (var it in Items)
+                    {
+                        it.IsGross = value;
+                    }
+                    UpdateTotals();
                     MarkDirty();
                 }
             }
@@ -379,6 +385,7 @@ namespace InvoiceApp.ViewModels
             Log.Debug("InvoiceViewModel.AddItem called");
             if (SelectedInvoice == null) return;
             var vm = CreateItemViewModel();
+            vm.IsGross = IsGrossCalculation;
             Items.Add(vm);
             UpdateTotals();
             ((RelayCommand)SaveCommand).RaiseCanExecuteChanged();
@@ -549,6 +556,7 @@ namespace InvoiceApp.ViewModels
                 foreach (InvoiceItemViewModel item in e.NewItems)
                 {
                     item.PropertyChanged += Item_PropertyChanged;
+                    item.IsGross = IsGrossCalculation;
                 }
             }
             if (e.OldItems != null)
@@ -577,7 +585,7 @@ namespace InvoiceApp.ViewModels
                 .Select(g =>
                 {
                     var net = g.Sum(x => x.Quantity * x.UnitPrice);
-                    var vat = net * g.Key / 100m;
+                    var vat = IsGrossCalculation ? net * g.Key / 100m : 0m;
                     return new VatBreakdownEntry
                     {
                         Rate = g.Key,
@@ -588,7 +596,7 @@ namespace InvoiceApp.ViewModels
 
             VatBreakdown = new ObservableCollection<VatBreakdownEntry>(breakdown);
             TotalNet = VatBreakdown.Sum(v => v.Net);
-            TotalVat = VatBreakdown.Sum(v => v.Vat);
+            TotalVat = IsGrossCalculation ? VatBreakdown.Sum(v => v.Vat) : 0m;
             TotalGross = TotalNet + TotalVat;
             InWords = $"In Words: {NumberToWords((long)TotalGross)} Forint";
         }
