@@ -40,10 +40,10 @@ namespace InvoiceApp.Helpers
                 AppState.Products => ProductsTemplate,
                 AppState.Dashboard => DashboardTemplate,
                 AppState.InvoiceList => InvoiceListTemplate,
-                AppState.InvoiceEditor => InvoiceEditorTemplate,
-                AppState.Header => HeaderTemplate,
-                AppState.ItemList => ItemListTemplate,
-                AppState.Summary => SummaryTemplate,
+                AppState.InvoiceEditor => MainWindowTemplate,
+                AppState.Header => MainWindowTemplate,
+                AppState.ItemList => MainWindowTemplate,
+                AppState.Summary => MainWindowTemplate,
                 AppState.ConfirmDialog => ConfirmDialogTemplate,
                 _ => MainWindowTemplate
             };

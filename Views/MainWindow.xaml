@@ -54,17 +54,59 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <views:InvoiceItemDataGrid x:Name="ItemsGrid" Grid.Row="1" Margin="0,0,0,4" />
-                    <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,4">
-                        <views:InvoiceHeaderView />
-                        <Button Content="➕ Szállító" Command="{Binding InvoiceViewModel.AddSupplierCommand}" Style="{StaticResource IconButtonStyle}" Margin="8,0,0,0" />
-                    </StackPanel>
+                    <Border Grid.Row="0" Margin="0,0,0,4">
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Setter Property="BorderThickness" Value="0"/>
+                                <Setter Property="BorderBrush" Value="Transparent"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding CurrentState}" Value="Header">
+                                        <Setter Property="BorderBrush" Value="DodgerBlue"/>
+                                        <Setter Property="BorderThickness" Value="2"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                            <views:InvoiceHeaderView />
+                            <Button Content="➕ Szállító" Command="{Binding InvoiceViewModel.AddSupplierCommand}" Style="{StaticResource IconButtonStyle}" Margin="8,0,0,0" />
+                        </StackPanel>
+                    </Border>
+                    <Border Grid.Row="1" Margin="0,0,0,4">
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Setter Property="BorderThickness" Value="0"/>
+                                <Setter Property="BorderBrush" Value="Transparent"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding CurrentState}" Value="ItemList">
+                                        <Setter Property="BorderBrush" Value="DodgerBlue"/>
+                                        <Setter Property="BorderThickness" Value="2"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                        <views:InvoiceItemDataGrid x:Name="ItemsGrid" />
+                    </Border>
                     <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
                         <Button Content="➕ Tétel hozzáadása" Command="{Binding InvoiceViewModel.AddItemCommand}" Style="{StaticResource IconButtonStyle}"/>
                         <Button Content="🗑️ Tétel törlése" Command="{Binding InvoiceViewModel.RemoveItemCommand}" Style="{StaticResource IconButtonStyle}"/>
                         <Button Content="💾 Mentés" Command="{Binding InvoiceViewModel.SaveCommand}" Style="{StaticResource IconButtonStyle}"/>
                     </StackPanel>
-                    <views:InvoiceSummaryPanel Grid.Row="3" />
+                    <Border Grid.Row="3">
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Setter Property="BorderThickness" Value="0"/>
+                                <Setter Property="BorderBrush" Value="Transparent"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding CurrentState}" Value="Summary">
+                                        <Setter Property="BorderBrush" Value="DodgerBlue"/>
+                                        <Setter Property="BorderThickness" Value="2"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                        <views:InvoiceSummaryPanel />
+                    </Border>
                 </Grid>
                 <StatusBar Grid.Row="2" Grid.ColumnSpan="2">
                     <TextBlock Text="{Binding InvoiceViewModel.StatusMessage}" />

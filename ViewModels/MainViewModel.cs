@@ -106,7 +106,7 @@ namespace InvoiceApp.ViewModels
             SummaryEnterCommand = new RelayCommand(_ =>
             {
                 InvoiceViewModel.SaveCurrentInvoice();
-                _navigation.PopSubstate();
+                _navigation.ClearSubstates();
             });
             SummaryEscapeCommand = new RelayCommand(_ =>
             {
@@ -130,7 +130,7 @@ namespace InvoiceApp.ViewModels
             ShowInvoiceListCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.InvoiceList));
             StartInvoiceEditorCommand = new RelayCommand(_ =>
             {
-                _navigation.SwitchRoot(AppState.InvoiceEditor);
+                _navigation.ClearSubstates();
                 _navigation.PushSubstate(AppState.Header);
             });
             SwitchPaymentMethodsCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.PaymentMethods));

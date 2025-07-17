@@ -34,6 +34,11 @@ namespace InvoiceApp.Services
         void PopSubstate();
 
         /// <summary>
+        /// Clears all sub-states without affecting the root history.
+        /// </summary>
+        void ClearSubstates();
+
+        /// <summary>
         /// Clears the navigation stack and sets the new root state.
         /// </summary>
         void SwitchRoot(AppState state);
