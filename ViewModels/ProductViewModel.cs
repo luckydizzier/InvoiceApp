@@ -198,5 +198,28 @@ namespace InvoiceApp.ViewModels
                 await _service.SaveAsync(SelectedProduct);
             }
         }
+
+        public void SelectPreviousProduct()
+        {
+            if (SelectedProduct == null)
+            {
+                if (Products.Count > 0)
+                    SelectedProduct = Products[0];
+                return;
+            }
+
+            var index = Products.IndexOf(SelectedProduct);
+            if (index > 0)
+            {
+                SelectedProduct = Products[index - 1];
+            }
+            else if (index == 0)
+            {
+                if (DialogHelper.ShowConfirmation("Új terméket szeretnél létrehozni?", "Megerősítés"))
+                {
+                    AddCommand.Execute(null);
+                }
+            }
+        }
     }
 }

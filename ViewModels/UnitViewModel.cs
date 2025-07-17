@@ -81,5 +81,28 @@ namespace InvoiceApp.ViewModels
                 await _service.SaveAsync(SelectedUnit);
             }
         }
+
+        public void SelectPreviousUnit()
+        {
+            if (SelectedUnit == null)
+            {
+                if (Units.Count > 0)
+                    SelectedUnit = Units[0];
+                return;
+            }
+
+            var index = Units.IndexOf(SelectedUnit);
+            if (index > 0)
+            {
+                SelectedUnit = Units[index - 1];
+            }
+            else if (index == 0)
+            {
+                if (DialogHelper.ShowConfirmation("Új mértékegységet szeretnél létrehozni?", "Megerősítés"))
+                {
+                    AddCommand.Execute(null);
+                }
+            }
+        }
     }
 }

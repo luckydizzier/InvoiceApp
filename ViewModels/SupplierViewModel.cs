@@ -87,5 +87,28 @@ namespace InvoiceApp.ViewModels
                 await _service.SaveAsync(SelectedSupplier);
             }
         }
+
+        public void SelectPreviousSupplier()
+        {
+            if (SelectedSupplier == null)
+            {
+                if (Suppliers.Count > 0)
+                    SelectedSupplier = Suppliers[0];
+                return;
+            }
+
+            var index = Suppliers.IndexOf(SelectedSupplier);
+            if (index > 0)
+            {
+                SelectedSupplier = Suppliers[index - 1];
+            }
+            else if (index == 0)
+            {
+                if (DialogHelper.ShowConfirmation("Új szállítót szeretnél létrehozni?", "Megerősítés"))
+                {
+                    AddCommand.Execute(null);
+                }
+            }
+        }
     }
 }

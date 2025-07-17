@@ -81,5 +81,28 @@ namespace InvoiceApp.ViewModels
                 await _service.SaveAsync(SelectedGroup);
             }
         }
+
+        public void SelectPreviousGroup()
+        {
+            if (SelectedGroup == null)
+            {
+                if (Groups.Count > 0)
+                    SelectedGroup = Groups[0];
+                return;
+            }
+
+            var index = Groups.IndexOf(SelectedGroup);
+            if (index > 0)
+            {
+                SelectedGroup = Groups[index - 1];
+            }
+            else if (index == 0)
+            {
+                if (DialogHelper.ShowConfirmation("Új termékcsoportot szeretnél létrehozni?", "Megerősítés"))
+                {
+                    AddCommand.Execute(null);
+                }
+            }
+        }
     }
 }
