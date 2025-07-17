@@ -24,19 +24,15 @@
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="ÁFA %"
                                             Binding="{Binding Rate, StringFormat={}{0:F2}}"
-                                            Width="Auto"
                                             ElementStyle="{StaticResource RightAlignedCellStyle}"/>
                         <DataGridTextColumn Header="Nettó összeg"
                                             Binding="{Binding Net, StringFormat={}{0:F2}}"
-                                            Width="*"
                                             ElementStyle="{StaticResource RightAlignedCellStyle}"/>
                         <DataGridTextColumn Header="ÁFA összeg"
                                             Binding="{Binding Vat, StringFormat={}{0:F2}}"
-                                            Width="*"
                                             ElementStyle="{StaticResource RightAlignedCellStyle}"/>
                         <DataGridTextColumn Header="Bruttó összeg"
                                             Binding="{Binding Gross, StringFormat={}{0:F2}}"
-                                            Width="*"
                                             ElementStyle="{StaticResource RightAlignedCellStyle}"/>
                     </DataGrid.Columns>
                 </DataGrid>

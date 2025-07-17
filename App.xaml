@@ -29,5 +29,18 @@
             <Setter Property="Padding" Value="8,4"/>
             <Setter Property="Margin" Value="4"/>
         </Style>
+        <Style TargetType="DataGrid">
+            <Setter Property="ColumnWidth" Value="*"/>
+            <Setter Property="RowBackground" Value="White"/>
+            <Setter Property="AlternatingRowBackground" Value="LightGray"/>
+            <Setter Property="SelectionUnit" Value="FullRow"/>
+            <Setter Property="RowStyle">
+                <Setter.Value>
+                    <Style TargetType="DataGridRow">
+                        <Setter Property="SelectedBackground" Value="LightBlue"/>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Application.Resources>
 </Application>

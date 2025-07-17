@@ -22,9 +22,9 @@
                   CanUserAddRows="False"
                   Margin="5">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Név" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
-                <DataGridTextColumn Header="Adószám" Binding="{Binding TaxId, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
-                <DataGridTextColumn Header="Bankszámla" Binding="{Binding BankAccntNr, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
+                <DataGridTextColumn Header="Név" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridTextColumn Header="Adószám" Binding="{Binding TaxId, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridTextColumn Header="Bankszámla" Binding="{Binding BankAccntNr, UpdateSourceTrigger=PropertyChanged}" />
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">

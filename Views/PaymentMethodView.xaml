@@ -22,10 +22,9 @@
                   CanUserAddRows="False"
                   Margin="5">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Név" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Width="*" />
+                <DataGridTextColumn Header="Név" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
                 <DataGridTextColumn Header="Határidő"
                                       Binding="{Binding DueInDays, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:F2}}"
-                                      Width="Auto"
                                       ElementStyle="{StaticResource RightAlignedCellStyle}" />
             </DataGrid.Columns>
         </DataGrid>
