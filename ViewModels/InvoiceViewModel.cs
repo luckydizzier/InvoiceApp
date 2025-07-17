@@ -436,8 +436,28 @@ namespace InvoiceApp.ViewModels
 
         private async Task SaveItemAsync(InvoiceItemViewModel item)
         {
+            var rate = TaxRates.FirstOrDefault(r => r.Percentage == item.TaxRatePercentage);
+            if (rate == null)
+            {
+                rate = new TaxRate
+                {
+                    Name = $"ÁFA {item.TaxRatePercentage}%",
+                    Percentage = item.TaxRatePercentage,
+                    EffectiveFrom = DateTime.Today,
+                    Active = true,
+                    DateCreated = DateTime.Now,
+                    DateUpdated = DateTime.Now
+                };
+                await _taxRateService.SaveAsync(rate);
+                TaxRates.Add(rate);
+            }
+            item.Item.TaxRate = rate;
+            item.Item.TaxRateId = rate.Id;
+
             if (item.Item.Product != null)
             {
+                item.Item.Product.TaxRate = rate;
+                item.Item.Product.TaxRateId = rate.Id;
                 await _productService.SaveAsync(item.Item.Product);
             }
             await _itemService.SaveAsync(item.Item);
@@ -537,8 +557,28 @@ namespace InvoiceApp.ViewModels
             foreach (var vm in Items)
             {
                 var it = vm.Item;
+                var rate = TaxRates.FirstOrDefault(r => r.Percentage == vm.TaxRatePercentage);
+                if (rate == null)
+                {
+                    rate = new TaxRate
+                    {
+                        Name = $"ÁFA {vm.TaxRatePercentage}%",
+                        Percentage = vm.TaxRatePercentage,
+                        EffectiveFrom = DateTime.Today,
+                        Active = true,
+                        DateCreated = DateTime.Now,
+                        DateUpdated = DateTime.Now
+                    };
+                    await _taxRateService.SaveAsync(rate);
+                    TaxRates.Add(rate);
+                }
+                it.TaxRate = rate;
+                it.TaxRateId = rate.Id;
+
                 if (it.Product != null)
                 {
+                    it.Product.TaxRate = rate;
+                    it.Product.TaxRateId = rate.Id;
                     await _productService.SaveAsync(it.Product);
                 }
                 await _itemService.SaveAsync(it);
