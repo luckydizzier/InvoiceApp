@@ -129,5 +129,135 @@ namespace InvoiceApp.Mappers
                 EffectiveTo = dto.EffectiveTo
             };
         }
+
+        public static ProductDto ToDto(this Product entity)
+        {
+            if (entity == null) throw new ArgumentNullException(nameof(entity));
+
+            return new ProductDto
+            {
+                Id = entity.Id,
+                Name = entity.Name,
+                Net = entity.Net,
+                Gross = entity.Gross,
+                UnitId = entity.UnitId,
+                ProductGroupId = entity.ProductGroupId,
+                TaxRateId = entity.TaxRateId
+            };
+        }
+
+        public static Product ToEntity(this ProductDto dto)
+        {
+            if (dto == null) throw new ArgumentNullException(nameof(dto));
+
+            return new Product
+            {
+                Id = dto.Id,
+                Name = dto.Name,
+                Net = dto.Net,
+                Gross = dto.Gross,
+                UnitId = dto.UnitId,
+                ProductGroupId = dto.ProductGroupId,
+                TaxRateId = dto.TaxRateId
+            };
+        }
+
+        public static ProductGroupDto ToDto(this ProductGroup entity)
+        {
+            if (entity == null) throw new ArgumentNullException(nameof(entity));
+
+            return new ProductGroupDto
+            {
+                Id = entity.Id,
+                Name = entity.Name
+            };
+        }
+
+        public static ProductGroup ToEntity(this ProductGroupDto dto)
+        {
+            if (dto == null) throw new ArgumentNullException(nameof(dto));
+
+            return new ProductGroup
+            {
+                Id = dto.Id,
+                Name = dto.Name
+            };
+        }
+
+        public static UnitDto ToDto(this Unit entity)
+        {
+            if (entity == null) throw new ArgumentNullException(nameof(entity));
+
+            return new UnitDto
+            {
+                Id = entity.Id,
+                Code = entity.Code,
+                Name = entity.Name
+            };
+        }
+
+        public static Unit ToEntity(this UnitDto dto)
+        {
+            if (dto == null) throw new ArgumentNullException(nameof(dto));
+
+            return new Unit
+            {
+                Id = dto.Id,
+                Code = dto.Code,
+                Name = dto.Name
+            };
+        }
+
+        public static PaymentMethodDto ToDto(this PaymentMethod entity)
+        {
+            if (entity == null) throw new ArgumentNullException(nameof(entity));
+
+            return new PaymentMethodDto
+            {
+                Id = entity.Id,
+                Name = entity.Name,
+                DueInDays = entity.DueInDays
+            };
+        }
+
+        public static PaymentMethod ToEntity(this PaymentMethodDto dto)
+        {
+            if (dto == null) throw new ArgumentNullException(nameof(dto));
+
+            return new PaymentMethod
+            {
+                Id = dto.Id,
+                Name = dto.Name,
+                DueInDays = dto.DueInDays
+            };
+        }
+
+        public static ChangeLogDto ToDto(this ChangeLog entity)
+        {
+            if (entity == null) throw new ArgumentNullException(nameof(entity));
+
+            return new ChangeLogDto
+            {
+                Id = entity.Id,
+                Entity = entity.Entity,
+                Operation = entity.Operation,
+                Data = entity.Data,
+                DateCreated = entity.DateCreated
+            };
+        }
+
+        public static ChangeLog ToEntity(this ChangeLogDto dto)
+        {
+            if (dto == null) throw new ArgumentNullException(nameof(dto));
+
+            return new ChangeLog
+            {
+                Id = dto.Id,
+                Entity = dto.Entity,
+                Operation = dto.Operation,
+                Data = dto.Data,
+                DateCreated = dto.DateCreated
+            };
+        }
     }
 }
