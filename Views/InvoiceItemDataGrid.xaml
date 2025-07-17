@@ -14,7 +14,7 @@
               SelectedItem="{Binding SelectedItem}"
               AutoGenerateColumns="False"
               CanUserAddRows="True"
-              NewItemPlaceholderPosition="Top"
+              NewItemPlaceholderPosition="AtBeginning"
               RowDetailsVisibilityMode="{Binding IsRowDetailsVisible, Converter={StaticResource BoolToVisibilityConverter}}"
               PreviewKeyDown="DataGrid_PreviewKeyDown"
               InitializingNewItem="DataGrid_InitializingNewItem"
