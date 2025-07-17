@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:helpers="clr-namespace:InvoiceApp.Helpers"
              mc:Ignorable="d"
              d:DesignHeight="200" d:DesignWidth="400">
     <UserControl.Resources>
@@ -14,6 +15,7 @@
               AutoGenerateColumns="False"
               CanUserAddRows="True"
               RowDetailsVisibilityMode="{Binding IsRowDetailsVisible, Converter={StaticResource BoolToVisibilityConverter}}"
+              PreviewKeyDown="helpers:DataGridFocusBehavior.OnPreviewKeyDown"
               Margin="0,0,0,4">
         <DataGrid.InputBindings>
             <KeyBinding Key="Enter" Command="{Binding ItemsEnterCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>

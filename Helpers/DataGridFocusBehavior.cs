@@ -1,4 +1,7 @@
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media;
 
 namespace InvoiceApp.Helpers
 {
@@ -25,6 +28,43 @@ namespace InvoiceApp.Helpers
                 grid.SelectedIndex = rowIndex;
                 grid.Dispatcher.InvokeAsync(() => grid.BeginEdit());
             }
+        }
+
+        public static void OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key != Key.Enter || sender is not DataGrid grid)
+            {
+                return;
+            }
+
+            var cell = FindParent<DataGridCell>(e.OriginalSource as DependencyObject);
+            if (cell == null)
+            {
+                return;
+            }
+
+            if (!cell.IsEditing)
+            {
+                grid.BeginEdit();
+            }
+            else
+            {
+                grid.CommitEdit(DataGridEditingUnit.Cell, true);
+                grid.CommitEdit(DataGridEditingUnit.Row, true);
+                MoveFocus(grid);
+            }
+
+            e.Handled = true;
+        }
+
+        private static T? FindParent<T>(DependencyObject? child) where T : DependencyObject
+        {
+            while (child != null && child is not T)
+            {
+                child = VisualTreeHelper.GetParent(child);
+            }
+
+            return child as T;
         }
     }
 }
