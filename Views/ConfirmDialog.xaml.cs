@@ -1,46 +1,27 @@
 using System.Windows;
-using System.Windows.Input;
+using InvoiceApp.ViewModels;
 
 namespace InvoiceApp.Views
 {
     public partial class ConfirmDialog : Window
     {
+        public ConfirmDialogViewModel ViewModel { get; }
+
         public ConfirmDialog()
         {
             InitializeComponent();
+            ViewModel = new ConfirmDialogViewModel(string.Empty, SetResult);
+            DataContext = ViewModel;
         }
 
         public ConfirmDialog(string message) : this()
         {
-            Message = message;
+            ViewModel.Message = message;
         }
 
-        public string Message
+        private void SetResult(bool? result)
         {
-            get => MessageText.Text;
-            set => MessageText.Text = value;
-        }
-
-        private void Yes_Click(object sender, RoutedEventArgs e)
-        {
-            DialogResult = true;
-        }
-
-        private void No_Click(object sender, RoutedEventArgs e)
-        {
-            DialogResult = false;
-        }
-
-        private void Window_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-            {
-                DialogResult = true;
-            }
-            else if (e.Key == Key.Escape)
-            {
-                DialogResult = false;
-            }
+            DialogResult = result;
         }
     }
 }
