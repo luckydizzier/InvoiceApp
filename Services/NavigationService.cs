@@ -59,6 +59,15 @@ namespace InvoiceApp.Services
             StateChanged?.Invoke(this, CurrentState);
         }
 
+        public void ClearSubstates()
+        {
+            if (_substates.Count > 0)
+            {
+                _substates.Clear();
+                StateChanged?.Invoke(this, CurrentState);
+            }
+        }
+
         public void SwitchRoot(AppState state)
         {
             _history.Clear();
