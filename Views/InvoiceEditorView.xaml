@@ -14,8 +14,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <views:InvoiceHeaderView Grid.Row="0" Margin="0,0,0,4"
-                                 helpers:FocusBehavior.IsFocused="True" />
+        <views:InvoiceHeaderView Grid.Row="0" Margin="0,0,0,4" />
         <views:InvoiceItemDataGrid Grid.Row="1" Margin="0,0,0,4" />
         <views:InvoiceSummaryPanel Grid.Row="2" />
         <Border Grid.Row="3" Background="#FFFFE0E0" Padding="4"
