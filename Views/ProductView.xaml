@@ -8,11 +8,22 @@
              MinHeight="300" MinWidth="500">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" Margin="5" Grid.Row="0">
+            <TextBlock Text="Keresés:" VerticalAlignment="Center" />
+            <TextBox Width="200" Margin="4,0,0,0"
+                     Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
+            <Button Content="Csoportok" Margin="8,0,0,0"
+                    Command="{Binding DataContext.ShowProductGroupsCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
+            <Button Content="Egységek" Margin="4,0,0,0"
+                    Command="{Binding DataContext.ShowUnitsCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
+        </StackPanel>
         <DataGrid x:Name="DataGrid"
-                  ItemsSource="{Binding Products}"
+                  Grid.Row="1"
+                  ItemsSource="{Binding ProductsView}"
                   SelectedItem="{Binding SelectedProduct}"
                   AutoGenerateColumns="False"
                   CanUserAddRows="False"
@@ -43,9 +54,37 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Egység" Width="Auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Unit.Code}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <ComboBox ItemsSource="{Binding DataContext.Units, RelativeSource={RelativeSource AncestorType=Window}}"
+                                      SelectedItem="{Binding Unit, UpdateSourceTrigger=PropertyChanged}"
+                                      DisplayMemberPath="Code" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Csoport" Width="Auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding ProductGroup.Name}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <ComboBox ItemsSource="{Binding DataContext.Groups, RelativeSource={RelativeSource AncestorType=Window}}"
+                                      SelectedItem="{Binding ProductGroup, UpdateSourceTrigger=PropertyChanged}"
+                                      DisplayMemberPath="Name" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
             <Button Content="Hozzáadás" Command="{Binding AddCommand}" Margin="4" />
             <Button Content="Törlés" Command="{Binding DeleteCommand}" Margin="4" />
             <Button Content="Mentés" Command="{Binding SaveCommand}" Margin="4" />

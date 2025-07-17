@@ -1,4 +1,6 @@
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Windows.Data;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -13,9 +15,15 @@ namespace InvoiceApp.ViewModels
     {
         private readonly IProductService _service;
         private readonly ITaxRateService _taxRateService;
+        private readonly IUnitService _unitService;
+        private readonly IProductGroupService _groupService;
         private ObservableCollection<Product> _products = new();
         private ObservableCollection<TaxRate> _taxRates = new();
+        private ObservableCollection<Unit> _units = new();
+        private ObservableCollection<ProductGroup> _groups = new();
+        private ICollectionView? _productsView;
         private Product? _selectedProduct;
+        private string _searchText = string.Empty;
 
         public ObservableCollection<Product> Products
         {
@@ -23,10 +31,39 @@ namespace InvoiceApp.ViewModels
             set { _products = value; OnPropertyChanged(); }
         }
 
+        public ICollectionView? ProductsView
+        {
+            get => _productsView;
+            private set { _productsView = value; OnPropertyChanged(); }
+        }
+
         public ObservableCollection<TaxRate> TaxRates
         {
             get => _taxRates;
             set { _taxRates = value; OnPropertyChanged(); }
+        }
+
+        public ObservableCollection<Unit> Units
+        {
+            get => _units;
+            set { _units = value; OnPropertyChanged(); }
+        }
+
+        public ObservableCollection<ProductGroup> Groups
+        {
+            get => _groups;
+            set { _groups = value; OnPropertyChanged(); }
+        }
+
+        public string SearchText
+        {
+            get => _searchText;
+            set
+            {
+                _searchText = value;
+                OnPropertyChanged();
+                ProductsView?.Refresh();
+            }
         }
 
         public Product? SelectedProduct
@@ -45,10 +82,15 @@ namespace InvoiceApp.ViewModels
         public RelayCommand DeleteCommand { get; }
         public RelayCommand SaveCommand { get; }
 
-        public ProductViewModel(IProductService service, ITaxRateService taxRateService)
+        public ProductViewModel(IProductService service,
+                                ITaxRateService taxRateService,
+                                IUnitService unitService,
+                                IProductGroupService groupService)
         {
             _service = service;
             _taxRateService = taxRateService;
+            _unitService = unitService;
+            _groupService = groupService;
             AddCommand = new RelayCommand(_ => AddProduct());
             DeleteCommand = new RelayCommand(async obj =>
             {
@@ -69,9 +111,25 @@ namespace InvoiceApp.ViewModels
         {
             var items = await _service.GetAllAsync();
             Products = new ObservableCollection<Product>(items);
+            ProductsView = CollectionViewSource.GetDefaultView(Products);
+            if (ProductsView != null)
+            {
+                ProductsView.Filter = obj =>
+                {
+                    if (obj is not Product p) return false;
+                    return string.IsNullOrWhiteSpace(SearchText) ||
+                           p.Name.Contains(SearchText, StringComparison.OrdinalIgnoreCase);
+                };
+            }
 
             var rates = await _taxRateService.GetAllAsync();
             TaxRates = new ObservableCollection<TaxRate>(rates);
+
+            var units = await _unitService.GetAllAsync();
+            Units = new ObservableCollection<Unit>(units);
+
+            var groups = await _groupService.GetAllAsync();
+            Groups = new ObservableCollection<ProductGroup>(groups);
         }
 
         private void AddProduct()
@@ -82,6 +140,18 @@ namespace InvoiceApp.ViewModels
             {
                 product.TaxRate = firstRate;
                 product.TaxRateId = firstRate.Id;
+            }
+            var firstUnit = Units.FirstOrDefault();
+            if (firstUnit != null)
+            {
+                product.Unit = firstUnit;
+                product.UnitId = firstUnit.Id;
+            }
+            var firstGroup = Groups.FirstOrDefault();
+            if (firstGroup != null)
+            {
+                product.ProductGroup = firstGroup;
+                product.ProductGroupId = firstGroup.Id;
             }
             Products.Add(product);
             SelectedProduct = product;
@@ -115,6 +185,16 @@ namespace InvoiceApp.ViewModels
                 }
                 SelectedProduct.TaxRate = rate;
                 SelectedProduct.TaxRateId = rate.Id;
+                if (SelectedProduct.Unit != null)
+                {
+                    SelectedProduct.UnitId = SelectedProduct.Unit.Id;
+                }
+                if (SelectedProduct.ProductGroup != null)
+                {
+                    SelectedProduct.ProductGroupId = SelectedProduct.ProductGroup.Id;
+                }
+                SelectedProduct.Gross =
+                    Math.Round(SelectedProduct.Net * (1 + (rate.Percentage / 100m)), 2);
                 await _service.SaveAsync(SelectedProduct);
             }
         }
