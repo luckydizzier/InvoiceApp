@@ -29,22 +29,57 @@ namespace InvoiceApp.ViewModels
             set { if (_item.Id != value) { _item.Id = value; OnPropertyChanged(); } }
         }
 
-        public string? Description
+
+        private bool _isGross;
+
+        public bool IsGross
         {
-            get => _item.Description;
-            set { if (_item.Description != value) { _item.Description = value; OnPropertyChanged(); } }
+            get => _isGross;
+            set
+            {
+                if (_isGross != value)
+                {
+                    _isGross = value;
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(VatAmount));
+                    OnPropertyChanged(nameof(GrossAmount));
+                    OnPropertyChanged(nameof(Total));
+                }
+            }
         }
 
         public decimal Quantity
         {
             get => _item.Quantity;
-            set { if (_item.Quantity != value) { _item.Quantity = value; OnPropertyChanged(); } }
+            set
+            {
+                if (_item.Quantity != value)
+                {
+                    _item.Quantity = value;
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(NetAmount));
+                    OnPropertyChanged(nameof(VatAmount));
+                    OnPropertyChanged(nameof(GrossAmount));
+                    OnPropertyChanged(nameof(Total));
+                }
+            }
         }
 
         public decimal UnitPrice
         {
             get => _item.UnitPrice;
-            set { if (_item.UnitPrice != value) { _item.UnitPrice = value; OnPropertyChanged(); } }
+            set
+            {
+                if (_item.UnitPrice != value)
+                {
+                    _item.UnitPrice = value;
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(NetAmount));
+                    OnPropertyChanged(nameof(VatAmount));
+                    OnPropertyChanged(nameof(GrossAmount));
+                    OnPropertyChanged(nameof(Total));
+                }
+            }
         }
 
         public int InvoiceId
@@ -76,13 +111,16 @@ namespace InvoiceApp.ViewModels
                     _item.TaxRateId = value?.Id ?? 0;
                     OnPropertyChanged();
                     OnPropertyChanged(nameof(TaxRateId));
+                    OnPropertyChanged(nameof(VatAmount));
+                    OnPropertyChanged(nameof(GrossAmount));
+                    OnPropertyChanged(nameof(Total));
                 }
             }
         }
 
         public decimal NetAmount => Quantity * UnitPrice;
 
-        public decimal VatAmount => NetAmount * (TaxRate?.Percentage ?? 0) / 100m;
+        public decimal VatAmount => IsGross ? NetAmount * (TaxRate?.Percentage ?? 0) / 100m : 0m;
 
         public decimal GrossAmount => NetAmount + VatAmount;
 

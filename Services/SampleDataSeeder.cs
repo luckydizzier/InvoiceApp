@@ -166,7 +166,6 @@ namespace InvoiceApp.Services
                         InvoiceId = inv.Id,
                         ProductId = product.Id,
                         TaxRateId = product.TaxRateId,
-                        Description = product.Name,
                         Quantity = qty,
                         UnitPrice = product.Gross,
                         Active = true,

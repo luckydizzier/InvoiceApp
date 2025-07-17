@@ -22,15 +22,6 @@
             <KeyBinding Key="Escape" Command="{Binding ItemsEscapeCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
         </DataGrid.InputBindings>
         <DataGrid.Columns>
-            <DataGridTextColumn Header="Leírás" Binding="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Width="2*"/>
-            <DataGridTextColumn Header="Mennyiség"
-                               Binding="{Binding Quantity, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:F2}}"
-                               Width="Auto"
-                               ElementStyle="{StaticResource RightAlignedCellStyle}"/>
-            <DataGridTextColumn Header="Egységár"
-                               Binding="{Binding UnitPrice, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:F2}}"
-                               Width="Auto"
-                               ElementStyle="{StaticResource RightAlignedCellStyle}"/>
             <DataGridTemplateColumn Header="Termék" Width="2*">
                 <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
@@ -45,7 +36,18 @@
                     </DataTemplate>
                 </DataGridTemplateColumn.CellEditingTemplate>
             </DataGridTemplateColumn>
-            <DataGridTemplateColumn Header="ÁFA" Width="Auto">
+            <DataGridTextColumn Header="Mennyiség"
+                               Binding="{Binding Quantity, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:F2}}"
+                               Width="Auto"
+                               ElementStyle="{StaticResource RightAlignedCellStyle}"/>
+            <DataGridTextColumn Header="Egység"
+                               Binding="{Binding Item.Product.Unit.Code}"
+                               Width="Auto"/>
+            <DataGridTextColumn Header="Ár"
+                               Binding="{Binding UnitPrice, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:F2}}"
+                               Width="Auto"
+                               ElementStyle="{StaticResource RightAlignedCellStyle}"/>
+            <DataGridTemplateColumn Header="ÁFA %" Width="Auto">
                 <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Item.TaxRate.Name}" />
@@ -59,6 +61,16 @@
                     </DataTemplate>
                 </DataGridTemplateColumn.CellEditingTemplate>
             </DataGridTemplateColumn>
+            <DataGridTextColumn Header="Nettó érték"
+                               Binding="{Binding NetAmount, StringFormat={}{0:F2}}"
+                               IsReadOnly="True"
+                               Width="Auto"
+                               ElementStyle="{StaticResource RightAlignedCellStyle}"/>
+            <DataGridTextColumn Header="Bruttó érték"
+                               Binding="{Binding GrossAmount, StringFormat={}{0:F2}}"
+                               IsReadOnly="True"
+                               Width="Auto"
+                               ElementStyle="{StaticResource RightAlignedCellStyle}"/>
             <DataGridTemplateColumn Header="" Width="Auto">
                 <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
