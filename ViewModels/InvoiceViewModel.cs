@@ -135,7 +135,9 @@ namespace InvoiceApp.ViewModels
             get => _selectedItem;
             set
             {
-                _selectedItem = value;
+                // The DataGrid sometimes passes a {NewItemPlaceholder}; cast to
+                // ensure only real view models are accepted.
+                _selectedItem = value as InvoiceItemViewModel;
                 OnPropertyChanged();
             }
         }
