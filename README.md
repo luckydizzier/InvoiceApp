@@ -18,6 +18,7 @@ A small WPF application demonstrating an MRS (Model–Repository–Service) and 
 - **MRS Architecture** – Organized structure for models, repositories, and services.
 - **Unit Tests** – Basic tests for repositories and services.
 - **Sample Data** – Option to populate the database with sample data on first launch.
+- **Sample Data Options** – Configure invoice item quantity range when generating sample data.
 - **XAML-Only Views** – Clean separation of UI from logic, using XAML for design.
 - **POCO Models** – Simple data models inheriting from a base class for consistency.
 - **Mock Repositories** – For testing purposes, allowing easy unit tests without database dependencies.
