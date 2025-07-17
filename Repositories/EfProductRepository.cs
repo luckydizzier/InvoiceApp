@@ -19,13 +19,21 @@ namespace InvoiceApp.Repositories
         public async Task<IEnumerable<Product>> GetAllAsync()
         {
             using var ctx = _contextFactory.CreateDbContext();
-            return await ctx.Products.ToListAsync();
+            return await ctx.Products
+                .Include(p => p.Unit)
+                .Include(p => p.ProductGroup)
+                .Include(p => p.TaxRate)
+                .ToListAsync();
         }
 
         public Task<Product?> GetByIdAsync(int id)
         {
             using var ctx = _contextFactory.CreateDbContext();
-            return ctx.Products.FindAsync(id).AsTask();
+            return ctx.Products
+                .Include(p => p.Unit)
+                .Include(p => p.ProductGroup)
+                .Include(p => p.TaxRate)
+                .FirstOrDefaultAsync(p => p.Id == id);
         }
 
         public async Task AddAsync(Product product)
