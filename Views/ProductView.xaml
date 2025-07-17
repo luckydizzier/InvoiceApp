@@ -31,7 +31,8 @@
                   SelectedItem="{Binding SelectedProduct}"
                   AutoGenerateColumns="False"
                   CanUserAddRows="False"
-                  Margin="5">
+                  Margin="5"
+                  PreviewKeyDown="DataGrid_OnPreviewKeyDown">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Név" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
                 <DataGridTextColumn Header="Nettó"
