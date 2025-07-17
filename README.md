@@ -28,7 +28,8 @@ A small WPF application demonstrating an MRS (Model–Repository–Service) and 
 
 ## Documentation
 Detailed navigation information can be found in
-[Docs/AppStateNavigation.md](Docs/AppStateNavigation.md).
+[Docs/AppStateNavigation.md](Docs/AppStateNavigation.md) and
+[Docs/UIKeyboardNavigation.md](Docs/UIKeyboardNavigation.md).
 
 ## Getting Started
 1. Clone the repository.
