@@ -22,7 +22,7 @@
                   SelectedItem="{Binding SelectedRate}"
                   AutoGenerateColumns="False"
                   CanUserAddRows="False"
-                  PreviewKeyDown="helpers:DataGridFocusBehavior.OnPreviewKeyDown"
+                  PreviewKeyDown="DataGrid_PreviewKeyDown"
                   Margin="5">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Név" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />

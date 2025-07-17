@@ -22,7 +22,7 @@
                   SelectedItem="{Binding SelectedSupplier}"
                   AutoGenerateColumns="False"
                   CanUserAddRows="False"
-                  PreviewKeyDown="helpers:DataGridFocusBehavior.OnPreviewKeyDown"
+                  PreviewKeyDown="DataGrid_PreviewKeyDown"
                   Margin="5"
                   CellEditEnding="DataGrid_CellEditEnding">
             <DataGrid.Columns>

@@ -15,7 +15,7 @@
               AutoGenerateColumns="False"
               CanUserAddRows="True"
               RowDetailsVisibilityMode="{Binding IsRowDetailsVisible, Converter={StaticResource BoolToVisibilityConverter}}"
-              PreviewKeyDown="helpers:DataGridFocusBehavior.OnPreviewKeyDown"
+              PreviewKeyDown="DataGrid_PreviewKeyDown"
               Margin="0,0,0,4">
         <DataGrid.InputBindings>
             <KeyBinding Key="Enter" Command="{Binding ItemsEnterCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
