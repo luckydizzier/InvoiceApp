@@ -6,15 +6,19 @@
         MinHeight="150" MinWidth="350"
         WindowStartupLocation="CenterOwner"
         WindowStyle="ToolWindow" ResizeMode="NoResize"
-        KeyDown="Window_KeyDown"
         FocusManager.FocusedElement="{Binding ElementName=YesButton}">
+    <Window.InputBindings>
+        <KeyBinding Key="Enter" Command="{Binding YesCommand}"/>
+        <KeyBinding Key="Escape" Command="{Binding NoCommand}"/>
+    </Window.InputBindings>
     <StackPanel Margin="10">
-        <TextBlock x:Name="MessageText" TextWrapping="Wrap" Margin="0,0,0,10" />
+        <TextBlock Text="{Binding Message}" TextWrapping="Wrap" Margin="0,0,0,10" />
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button x:Name="YesButton" Content="Igen" Width="75" Margin="5,0" Click="Yes_Click"
-                    helpers:FocusBehavior.IsFocused="True" IsDefault="True"/>
+            <Button x:Name="YesButton" Content="Igen" Width="75" Margin="5,0"
+                    helpers:FocusBehavior.IsFocused="True" IsDefault="True"
+                    Command="{Binding YesCommand}"/>
             <Button x:Name="NoButton" Content="Nem" Width="75" Margin="5,0"
-                    IsCancel="True" Click="No_Click"/>
+                    IsCancel="True" Command="{Binding NoCommand}"/>
         </StackPanel>
     </StackPanel>
 </Window>
