@@ -71,7 +71,7 @@
                 </StatusBar>
             </Grid>
         </DataTemplate>
-        <DataTemplate x:Key="PaymentMethodTemplate">
+        <DataTemplate x:Key="PaymentMethodViewTemplate">
             <views:PaymentMethodView />
         </DataTemplate>
         <DataTemplate x:Key="SupplierTemplate">
@@ -86,7 +86,7 @@
         <DataTemplate x:Key="UnitTemplate">
             <views:UnitView />
         </DataTemplate>
-        <DataTemplate x:Key="ProductTemplate">
+        <DataTemplate x:Key="ProductViewTemplate">
             <views:ProductView />
         </DataTemplate>
         <DataTemplate x:Key="DashboardTemplate">
@@ -107,20 +107,24 @@
         <DataTemplate x:Key="InvoiceSummaryTemplate">
             <views:InvoiceSummaryPanel />
         </DataTemplate>
+        <DataTemplate x:Key="ConfirmDialogTemplate">
+            <views:ConfirmDialog />
+        </DataTemplate>
         <helpers:AppStateTemplateSelector x:Key="StateSelector"
                                           MainWindowTemplate="{StaticResource MainWindowTemplate}"
-                                          PaymentMethodTemplate="{StaticResource PaymentMethodTemplate}"
+                                          PaymentMethodViewTemplate="{StaticResource PaymentMethodViewTemplate}"
                                           SupplierTemplate="{StaticResource SupplierTemplate}"
                                           ProductGroupTemplate="{StaticResource ProductGroupTemplate}"
                                           TaxRateTemplate="{StaticResource TaxRateTemplate}"
                                           UnitTemplate="{StaticResource UnitTemplate}"
-                                          ProductTemplate="{StaticResource ProductTemplate}"
+                                          ProductViewTemplate="{StaticResource ProductViewTemplate}"
                                           DashboardTemplate="{StaticResource DashboardTemplate}"
                                           InvoiceListTemplate="{StaticResource InvoiceListTemplate}"
                                           InvoiceEditorTemplate="{StaticResource InvoiceEditorTemplate}"
                                           InvoiceHeaderTemplate="{StaticResource InvoiceHeaderTemplate}"
                                           InvoiceItemsTemplate="{StaticResource InvoiceItemsTemplate}"
-                                          InvoiceSummaryTemplate="{StaticResource InvoiceSummaryTemplate}" />
+                                          InvoiceSummaryTemplate="{StaticResource InvoiceSummaryTemplate}"
+                                          ConfirmDialogTemplate="{StaticResource ConfirmDialogTemplate}" />
     </Window.Resources>
     <Window.InputBindings>
         <KeyBinding Key="Up" Command="{Binding NavigateUpCommand}"/>
