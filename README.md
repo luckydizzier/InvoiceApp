@@ -25,6 +25,10 @@ A small WPF application demonstrating an MRS (Model–Repository–Service) and 
 - **ViewModels** – Implementing INotifyPropertyChanged for UI updates.
 - **Commands** – Implementing ICommand for user interactions.
 
+## Documentation
+Detailed navigation information can be found in
+[Docs/AppStateNavigation.md](Docs/AppStateNavigation.md).
+
 ## Getting Started
 1. Clone the repository.
 1. Open the solution in Visual Studio.
