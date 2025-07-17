@@ -34,7 +34,7 @@
                   AutoGenerateColumns="False"
                   CanUserAddRows="False"
                   Margin="5"
-                  PreviewKeyDown="DataGrid_OnPreviewKeyDown"
+                  PreviewKeyDown="helpers:DataGridFocusBehavior.OnPreviewKeyDown"
                   CellEditEnding="DataGrid_CellEditEnding">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Név" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}" />
