@@ -9,5 +9,15 @@ namespace InvoiceApp.Models
         public int ProductCount { get; set; } = 1;
         public int InvoiceCount { get; set; } = 1;
         public int ItemsPerInvoice { get; set; } = 1;
+
+        /// <summary>
+        /// Minimum quantity for generated invoice items.
+        /// </summary>
+        public decimal ItemQuantityMin { get; set; } = 1m;
+
+        /// <summary>
+        /// Maximum quantity for generated invoice items.
+        /// </summary>
+        public decimal ItemQuantityMax { get; set; } = 5m;
     }
 }

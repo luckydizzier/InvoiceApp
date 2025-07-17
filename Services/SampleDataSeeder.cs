@@ -159,7 +159,7 @@ namespace InvoiceApp.Services
                 for (int j = 0; j < options.ItemsPerInvoice; j++)
                 {
                     var product = faker.PickRandom(products);
-                    var qty = faker.Random.Decimal(1, 5);
+                    var qty = faker.Random.Decimal(options.ItemQuantityMin, options.ItemQuantityMax);
                     await itemService.SaveAsync(new InvoiceItem
                     {
                         InvoiceId = inv.Id,
