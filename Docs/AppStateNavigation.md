@@ -29,7 +29,6 @@ Global keyboard shortcuts are mapped as follows:
 |-----|-------|
 | `F1` | Open Dashboard |
 | `F2` | Open Invoice list |
-| `F3` | Start Invoice editor |
 | `F4` | Open Products view |
 | `F5` | Open Product groups |
 | `F6` | Open Suppliers |

@@ -49,7 +49,6 @@ namespace InvoiceApp.ViewModels
         public RelayCommand ShowProductsCommand { get; }
         public RelayCommand ShowDashboardCommand { get; }
         public RelayCommand ShowInvoiceListCommand { get; }
-        public RelayCommand StartInvoiceEditorCommand { get; }
         public RelayCommand SwitchPaymentMethodsCommand { get; }
         public RelayCommand SwitchSuppliersCommand { get; }
         public RelayCommand SwitchProductGroupsCommand { get; }
@@ -128,11 +127,6 @@ namespace InvoiceApp.ViewModels
             ShowProductsCommand = new RelayCommand(_ => _navigation.Push(AppState.Products));
             ShowDashboardCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.Dashboard));
             ShowInvoiceListCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.InvoiceList));
-            StartInvoiceEditorCommand = new RelayCommand(_ =>
-            {
-                _navigation.ClearSubstates();
-                _navigation.PushSubstate(AppState.Header);
-            });
             SwitchPaymentMethodsCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.PaymentMethods));
             SwitchSuppliersCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.Suppliers));
             SwitchProductGroupsCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.ProductGroups));

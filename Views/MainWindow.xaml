@@ -176,7 +176,6 @@
         <KeyBinding Key="Delete" Command="{Binding DeleteInvoiceCommand}"/>
         <KeyBinding Key="F1" Command="{Binding ShowDashboardCommand}"/>
         <KeyBinding Key="F2" Command="{Binding ShowInvoiceListCommand}"/>
-        <KeyBinding Key="F3" Command="{Binding StartInvoiceEditorCommand}"/>
         <KeyBinding Key="F4" Command="{Binding ShowProductsCommand}"/>
         <KeyBinding Key="F5" Command="{Binding ShowProductGroupsCommand}"/>
         <KeyBinding Key="F6" Command="{Binding ShowSuppliersCommand}"/>
