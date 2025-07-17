@@ -11,7 +11,6 @@ namespace InvoiceApp.Views
         public InvoiceItemDataGrid()
         {
             InitializeComponent();
-            InnerGrid.Items.NewItemPlaceholderPosition = NewItemPlaceholderPosition.AtBeginning;
         }
 
         public DataGrid DataGrid => InnerGrid;
