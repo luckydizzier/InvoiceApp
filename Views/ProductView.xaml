@@ -34,16 +34,16 @@
                   Margin="5"
                   PreviewKeyDown="DataGrid_OnPreviewKeyDown">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Név" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}" Width="Auto" />
+                <DataGridTextColumn Header="Név" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}" />
                 <DataGridTextColumn Header="Nettó"
                                     Binding="{Binding Net, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:F2}, ValidatesOnNotifyDataErrors=True}"
-                                    Width="Auto"
+
                                     ElementStyle="{StaticResource RightAlignedCellStyle}" />
                 <DataGridTextColumn Header="Bruttó"
                                     Binding="{Binding Gross, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:F2}, ValidatesOnNotifyDataErrors=True}"
-                                    Width="Auto"
+
                                     ElementStyle="{StaticResource RightAlignedCellStyle}" />
-                <DataGridTemplateColumn Header="ÁFA %" Width="Auto">
+                <DataGridTemplateColumn Header="ÁFA %">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding TaxRate.Percentage}" />
@@ -59,7 +59,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Egység" Width="Auto">
+                <DataGridTemplateColumn Header="Egység">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Unit.Code}" />
@@ -73,7 +73,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Csoport" Width="Auto">
+                <DataGridTemplateColumn Header="Csoport">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding ProductGroup.Name}" />

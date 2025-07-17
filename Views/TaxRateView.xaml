@@ -22,13 +22,13 @@
                   CanUserAddRows="False"
                   Margin="5">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Név" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Width="*" />
+                <DataGridTextColumn Header="Név" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
                 <DataGridTextColumn Header="%"
                                     Binding="{Binding Percentage, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:F2}}"
-                                    Width="Auto"
+
                                     ElementStyle="{StaticResource RightAlignedCellStyle}" />
-                <DataGridTextColumn Header="Kezdete" Binding="{Binding EffectiveFrom, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
-                <DataGridTextColumn Header="Vége" Binding="{Binding EffectiveTo, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
+                <DataGridTextColumn Header="Kezdete" Binding="{Binding EffectiveFrom, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridTextColumn Header="Vége" Binding="{Binding EffectiveTo, UpdateSourceTrigger=PropertyChanged}" />
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">

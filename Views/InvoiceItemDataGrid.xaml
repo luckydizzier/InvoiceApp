@@ -24,7 +24,7 @@
             <KeyBinding Key="Delete" Command="{Binding InvoiceViewModel.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding SelectedItem}"/>
         </DataGrid.InputBindings>
         <DataGrid.Columns>
-            <DataGridTemplateColumn Header="Termék" Width="2*">
+            <DataGridTemplateColumn Header="Termék">
                 <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Item.Product.Name}" />
@@ -40,16 +40,13 @@
             </DataGridTemplateColumn>
             <DataGridTextColumn Header="Mennyiség"
                                Binding="{Binding Quantity, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:F2}}"
-                               Width="Auto"
                                ElementStyle="{StaticResource RightAlignedCellStyle}"/>
             <DataGridTextColumn Header="Egység"
-                               Binding="{Binding Item.Product.Unit.Code}"
-                               Width="Auto"/>
+                               Binding="{Binding Item.Product.Unit.Code}"/>
             <DataGridTextColumn Header="Ár"
                                Binding="{Binding UnitPrice, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:F2}}"
-                               Width="Auto"
                                ElementStyle="{StaticResource RightAlignedCellStyle}"/>
-            <DataGridTemplateColumn Header="ÁFA %" Width="Auto">
+            <DataGridTemplateColumn Header="ÁFA %">
                 <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding TaxRatePercentage}" />
@@ -68,14 +65,12 @@
             <DataGridTextColumn Header="Nettó érték"
                                Binding="{Binding NetAmount, StringFormat={}{0:F2}}"
                                IsReadOnly="True"
-                               Width="Auto"
                                ElementStyle="{StaticResource RightAlignedCellStyle}"/>
             <DataGridTextColumn Header="Bruttó érték"
                                Binding="{Binding GrossAmount, StringFormat={}{0:F2}}"
                                IsReadOnly="True"
-                               Width="Auto"
                                ElementStyle="{StaticResource RightAlignedCellStyle}"/>
-            <DataGridTemplateColumn Header="" Width="Auto">
+            <DataGridTemplateColumn Header="">
                 <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
                         <Button Content="💾"
