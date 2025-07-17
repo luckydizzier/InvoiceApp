@@ -3,10 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-            mc:Ignorable="d"
-            d:DesignHeight="120" d:DesignWidth="400">
+             xmlns:helpers="clr-namespace:InvoiceApp.Helpers"
+             mc:Ignorable="d"
+             d:DesignHeight="120" d:DesignWidth="400">
     <UserControl.InputBindings>
-        <KeyBinding Key="Enter" Command="{Binding HeaderEnterCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
         <KeyBinding Key="Escape" Command="{Binding HeaderEscapeCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
         <KeyBinding Key="Up" Command="{Binding HeaderUpCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
         <KeyBinding Key="Down" Command="{Binding HeaderDownCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
@@ -32,32 +32,40 @@
                   DisplayMemberPath="Name"
                   IsEditable="True"
                   IsTextSearchEnabled="True"
-                  LostFocus="SupplierBox_LostFocus"/>
+                  LostFocus="SupplierBox_LostFocus"
+                  helpers:FocusBehavior.AdvanceOnEnter="True"/>
         <TextBlock Grid.Row="0" Grid.Column="2" Text="Számlaszám" VerticalAlignment="Center" Margin="2"/>
         <TextBox Grid.Row="0" Grid.Column="3" Margin="2"
-                 Text="{Binding SelectedInvoice.Number, UpdateSourceTrigger=PropertyChanged}"/>
+                 Text="{Binding SelectedInvoice.Number, UpdateSourceTrigger=PropertyChanged}"
+                 helpers:FocusBehavior.AdvanceOnEnter="True"/>
 
         <!-- Row 1 -->
         <TextBlock Grid.Row="1" Grid.Column="0" Text="Cím" VerticalAlignment="Center" Margin="2"/>
         <TextBox Grid.Row="1" Grid.Column="1" Margin="2"
-                 Text="{Binding SelectedSupplier.Address, UpdateSourceTrigger=PropertyChanged}"/>
+                 Text="{Binding SelectedSupplier.Address, UpdateSourceTrigger=PropertyChanged}"
+                 helpers:FocusBehavior.AdvanceOnEnter="True"/>
         <TextBlock Grid.Row="1" Grid.Column="2" Text="Dátum" VerticalAlignment="Center" Margin="2"/>
         <DatePicker Grid.Row="1" Grid.Column="3" Margin="2"
-                    SelectedDate="{Binding SelectedInvoice.Date, UpdateSourceTrigger=PropertyChanged}"/>
+                    SelectedDate="{Binding SelectedInvoice.Date, UpdateSourceTrigger=PropertyChanged}"
+                    helpers:FocusBehavior.AdvanceOnEnter="True"/>
 
         <!-- Row 2 -->
         <TextBlock Grid.Row="2" Grid.Column="0" Text="Adószám" VerticalAlignment="Center" Margin="2"/>
         <TextBox Grid.Row="2" Grid.Column="1" Margin="2"
-                 Text="{Binding SelectedSupplier.TaxId, UpdateSourceTrigger=PropertyChanged}"/>
+                 Text="{Binding SelectedSupplier.TaxId, UpdateSourceTrigger=PropertyChanged}"
+                 helpers:FocusBehavior.AdvanceOnEnter="True"/>
         <TextBlock Grid.Row="2" Grid.Column="2" Text="Fizetés" VerticalAlignment="Center" Margin="2"/>
         <ComboBox Grid.Row="2" Grid.Column="3" Margin="2"
                   ItemsSource="{Binding PaymentMethods}"
                   SelectedItem="{Binding SelectedPaymentMethod, UpdateSourceTrigger=PropertyChanged}"
-                  DisplayMemberPath="Name"/>
+                  DisplayMemberPath="Name"
+                  helpers:FocusBehavior.AdvanceOnEnter="True"/>
 
         <!-- Row 3 -->
         <CheckBox Grid.Row="3" Grid.Column="3" Content="Bruttó?" Margin="2"
                   HorizontalAlignment="Right"
-                  IsChecked="{Binding IsGrossCalculation, UpdateSourceTrigger=PropertyChanged}"/>
+                  IsChecked="{Binding IsGrossCalculation, UpdateSourceTrigger=PropertyChanged}"
+                  helpers:FocusBehavior.AdvanceOnEnter="True"
+                  helpers:FocusBehavior.EnterCommandOnLast="{Binding HeaderEnterCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
     </Grid>
 </UserControl>

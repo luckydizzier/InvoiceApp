@@ -25,5 +25,72 @@ namespace InvoiceApp.Helpers
                 element.Focus();
             }
         }
+
+        public static readonly DependencyProperty AdvanceOnEnterProperty =
+            DependencyProperty.RegisterAttached(
+                "AdvanceOnEnter",
+                typeof(bool),
+                typeof(FocusBehavior),
+                new PropertyMetadata(false, OnAdvanceOnEnterChanged));
+
+        public static bool GetAdvanceOnEnter(DependencyObject obj) =>
+            (bool)obj.GetValue(AdvanceOnEnterProperty);
+
+        public static void SetAdvanceOnEnter(DependencyObject obj, bool value) =>
+            obj.SetValue(AdvanceOnEnterProperty, value);
+
+        public static readonly DependencyProperty EnterCommandOnLastProperty =
+            DependencyProperty.RegisterAttached(
+                "EnterCommandOnLast",
+                typeof(ICommand),
+                typeof(FocusBehavior),
+                new PropertyMetadata(null));
+
+        public static ICommand GetEnterCommandOnLast(DependencyObject obj) =>
+            (ICommand)obj.GetValue(EnterCommandOnLastProperty);
+
+        public static void SetEnterCommandOnLast(DependencyObject obj, ICommand value) =>
+            obj.SetValue(EnterCommandOnLastProperty, value);
+
+        private static void OnAdvanceOnEnterChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is UIElement element)
+            {
+                if ((bool)e.NewValue)
+                {
+                    element.PreviewKeyDown += ElementOnPreviewKeyDown;
+                }
+                else
+                {
+                    element.PreviewKeyDown -= ElementOnPreviewKeyDown;
+                }
+            }
+        }
+
+        private static void ElementOnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key != Key.Enter)
+            {
+                return;
+            }
+
+            var current = (e.OriginalSource as UIElement) ?? (Keyboard.FocusedElement as UIElement);
+            if (current is null)
+            {
+                return;
+            }
+
+            bool moved = current.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+            if (!moved && sender is DependencyObject d)
+            {
+                var command = GetEnterCommandOnLast(d);
+                if (command?.CanExecute(null) == true)
+                {
+                    command.Execute(null);
+                }
+            }
+
+            e.Handled = true;
+        }
     }
 }
