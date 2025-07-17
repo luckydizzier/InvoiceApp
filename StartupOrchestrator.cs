@@ -16,6 +16,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 using Microsoft.Extensions.DependencyInjection;
+using FluentValidation;
+using InvoiceApp.DTOs;
+using InvoiceApp.Validators;
 using Serilog;
 
 namespace InvoiceApp
@@ -59,6 +62,9 @@ namespace InvoiceApp
             services.AddSingleton<IUnitRepository, EfUnitRepository>();
             services.AddSingleton<IProductGroupRepository, EfProductGroupRepository>();
             services.AddSingleton<ITaxRateRepository, EfTaxRateRepository>();
+
+            services.AddSingleton<IValidator<InvoiceDto>, InvoiceDtoValidator>();
+            services.AddSingleton<IValidator<PaymentMethodDto>, PaymentMethodDtoValidator>();
 
             services.AddSingleton<IChangeLogService, ChangeLogService>();
             services.AddSingleton<IInvoiceService, InvoiceService>();
