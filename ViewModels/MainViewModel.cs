@@ -12,6 +12,7 @@ namespace InvoiceApp.ViewModels
     {
         private readonly INavigationService _navigation;
         private AppState _current;
+        private string _currentStateDescription = string.Empty;
         public InvoiceViewModel InvoiceViewModel { get; }
 
         public AppState CurrentState
@@ -20,6 +21,17 @@ namespace InvoiceApp.ViewModels
             private set
             {
                 _current = value;
+                OnPropertyChanged();
+                CurrentStateDescription = value.GetDescription();
+            }
+        }
+
+        public string CurrentStateDescription
+        {
+            get => _currentStateDescription;
+            private set
+            {
+                _currentStateDescription = value;
                 OnPropertyChanged();
             }
         }
@@ -61,7 +73,8 @@ namespace InvoiceApp.ViewModels
             _navigation = navigation;
             InvoiceViewModel = invoiceViewModel;
             _current = _navigation.CurrentState;
-            _navigation.StateChanged += (_, state) => CurrentState = state;
+            _currentStateDescription = _current.GetDescription();
+            _navigation.StateChanged += OnStateChanged;
 
             BackCommand = new RelayCommand(_ => _navigation.Pop());
             NavigateUpCommand = new RelayCommand(_ => InvoiceViewModel.SelectPreviousInvoice());
@@ -133,6 +146,11 @@ namespace InvoiceApp.ViewModels
             SwitchTaxRatesCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.TaxRates));
             SwitchUnitsCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.Units));
             SwitchProductsCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.Products));
+        }
+
+        private void OnStateChanged(object? sender, AppState state)
+        {
+            CurrentState = state;
         }
     }
 }

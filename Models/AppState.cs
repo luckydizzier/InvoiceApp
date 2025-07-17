@@ -97,5 +97,30 @@ namespace InvoiceApp.Models
             AppState.ConfirmDialog => typeof(ConfirmDialog),
             _ => throw new ArgumentOutOfRangeException(nameof(state), state, null)
         };
+
+        /// <summary>
+        /// Gets a human readable description for the specified
+        /// <see cref="AppState"/> in Hungarian.
+        /// </summary>
+        /// <param name="state">The application state.</param>
+        /// <returns>The descriptive label.</returns>
+        public static string GetDescription(this AppState state) => state switch
+        {
+            AppState.MainWindow => "F\u0151ablak",
+            AppState.Dashboard => "Vez\u00e9rl\u0151pult",
+            AppState.InvoiceList => "Sz\u00e1ml\u00e1k",
+            AppState.InvoiceEditor => "Sz\u00e1mlaszerkeszt\u0151",
+            AppState.Header => "Fejl\u00e9c",
+            AppState.ItemList => "T\u00e9telek",
+            AppState.Summary => "\u00d6sszes\u00edt\u0151",
+            AppState.Products => "Term\u00e9kek",
+            AppState.ProductGroups => "Term\u00e9kcsoportok",
+            AppState.Suppliers => "Sz\u00e1ll\u00edt\u00f3k",
+            AppState.TaxRates => "\u00c1fakulcsok",
+            AppState.Units => "Egys\u00e9gek",
+            AppState.PaymentMethods => "Fizet\u00e9si m\u00f3dok",
+            AppState.ConfirmDialog => "Meger\u0151s\u00edt\u00e9s",
+            _ => state.ToString()
+        };
     }
 }

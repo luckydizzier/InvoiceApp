@@ -125,9 +125,6 @@
                         <views:InvoiceSummaryPanel />
                     </Border>
                 </Grid>
-                <StatusBar Grid.Row="2" Grid.ColumnSpan="2">
-                    <TextBlock Text="{Binding InvoiceViewModel.StatusMessage}" />
-                </StatusBar>
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="PaymentMethodsTemplate">
@@ -200,7 +197,13 @@
         <KeyBinding Key="F7" Command="{Binding ShowTaxRatesCommand}"/>
         <KeyBinding Key="F8" Command="{Binding ShowPaymentMethodsCommand}"/>
     </Window.InputBindings>
-    <ContentControl x:Name="StateRegion"
-                    Content="{Binding CurrentState}"
-                    ContentTemplateSelector="{StaticResource StateSelector}" />
+    <DockPanel>
+        <StatusBar DockPanel.Dock="Bottom">
+            <TextBlock Text="{Binding CurrentStateDescription}" Margin="0,0,10,0"/>
+            <TextBlock Text="{Binding InvoiceViewModel.StatusMessage}" />
+        </StatusBar>
+        <ContentControl x:Name="StateRegion"
+                        Content="{Binding CurrentState}"
+                        ContentTemplateSelector="{StaticResource StateSelector}" />
+    </DockPanel>
 </Window>
