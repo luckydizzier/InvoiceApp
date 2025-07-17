@@ -19,7 +19,10 @@
                   Margin="5">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Név" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Width="*" />
-                <DataGridTextColumn Header="%" Binding="{Binding Percentage, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
+                <DataGridTextColumn Header="%"
+                                    Binding="{Binding Percentage, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:F2}}"
+                                    Width="Auto"
+                                    ElementStyle="{StaticResource RightAlignedCellStyle}" />
                 <DataGridTextColumn Header="Kezdete" Binding="{Binding EffectiveFrom, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
                 <DataGridTextColumn Header="Vége" Binding="{Binding EffectiveTo, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
             </DataGrid.Columns>

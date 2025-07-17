@@ -19,7 +19,10 @@
                   Margin="5">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Név" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Width="*" />
-                <DataGridTextColumn Header="Határidő" Binding="{Binding DueInDays, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
+                <DataGridTextColumn Header="Határidő"
+                                      Binding="{Binding DueInDays, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:F2}}"
+                                      Width="Auto"
+                                      ElementStyle="{StaticResource RightAlignedCellStyle}" />
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">

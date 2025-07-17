@@ -19,7 +19,10 @@
                 <DataGridTextColumn Header="Szám" Binding="{Binding Number}" Width="Auto" />
                 <DataGridTextColumn Header="Dátum" Binding="{Binding Date, StringFormat=d}" Width="Auto" />
                 <DataGridTextColumn Header="Szállító" Binding="{Binding Supplier.Name}" Width="*" />
-                <DataGridTextColumn Header="Összeg" Binding="{Binding Amount}" Width="Auto" />
+                <DataGridTextColumn Header="Összeg"
+                                      Binding="{Binding Amount, StringFormat={}{0:F2}}"
+                                      Width="Auto"
+                                      ElementStyle="{StaticResource RightAlignedCellStyle}" />
             </DataGrid.Columns>
         </DataGrid>
 

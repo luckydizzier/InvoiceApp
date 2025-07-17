@@ -23,8 +23,14 @@
         </DataGrid.InputBindings>
         <DataGrid.Columns>
             <DataGridTextColumn Header="Leírás" Binding="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Width="2*"/>
-            <DataGridTextColumn Header="Mennyiség" Binding="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}" Width="Auto"/>
-            <DataGridTextColumn Header="Egységár" Binding="{Binding UnitPrice, UpdateSourceTrigger=PropertyChanged}" Width="Auto"/>
+            <DataGridTextColumn Header="Mennyiség"
+                               Binding="{Binding Quantity, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:F2}}"
+                               Width="Auto"
+                               ElementStyle="{StaticResource RightAlignedCellStyle}"/>
+            <DataGridTextColumn Header="Egységár"
+                               Binding="{Binding UnitPrice, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:F2}}"
+                               Width="Auto"
+                               ElementStyle="{StaticResource RightAlignedCellStyle}"/>
             <DataGridTemplateColumn Header="Termék" Width="2*">
                 <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
