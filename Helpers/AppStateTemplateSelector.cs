@@ -31,12 +31,12 @@ namespace InvoiceApp.Helpers
 
             return state switch
             {
-                AppState.PaymentMethod => PaymentMethodTemplate,
+                AppState.PaymentMethodView => PaymentMethodTemplate,
                 AppState.Supplier => SupplierTemplate,
                 AppState.ProductGroup => ProductGroupTemplate,
                 AppState.TaxRate => TaxRateTemplate,
                 AppState.Unit => UnitTemplate,
-                AppState.Product => ProductTemplate,
+                AppState.ProductView => ProductTemplate,
                 AppState.Dashboard => DashboardTemplate,
                 AppState.InvoiceList => InvoiceListTemplate,
                 AppState.InvoiceEditor => InvoiceEditorTemplate,

@@ -84,21 +84,21 @@ namespace InvoiceApp.ViewModels
             SummaryUpCommand = new RelayCommand(_ => InvoiceViewModel.SelectPreviousInvoice());
             SummaryDownCommand = new RelayCommand(_ => InvoiceViewModel.SelectNextInvoice());
             ShowInvoicesCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.MainWindow));
-            ShowPaymentMethodsCommand = new RelayCommand(_ => _navigation.Push(AppState.PaymentMethod));
+            ShowPaymentMethodsCommand = new RelayCommand(_ => _navigation.Push(AppState.PaymentMethodView));
             ShowSuppliersCommand = new RelayCommand(_ => _navigation.Push(AppState.Supplier));
             ShowProductGroupsCommand = new RelayCommand(_ => _navigation.Push(AppState.ProductGroup));
             ShowTaxRatesCommand = new RelayCommand(_ => _navigation.Push(AppState.TaxRate));
             ShowUnitsCommand = new RelayCommand(_ => _navigation.Push(AppState.Unit));
-            ShowProductsCommand = new RelayCommand(_ => _navigation.Push(AppState.Product));
+            ShowProductsCommand = new RelayCommand(_ => _navigation.Push(AppState.ProductView));
             ShowDashboardCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.Dashboard));
             ShowInvoiceListCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.InvoiceList));
             StartInvoiceEditorCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.InvoiceEditor));
-            SwitchPaymentMethodsCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.PaymentMethod));
+            SwitchPaymentMethodsCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.PaymentMethodView));
             SwitchSuppliersCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.Supplier));
             SwitchProductGroupsCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.ProductGroup));
             SwitchTaxRatesCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.TaxRate));
             SwitchUnitsCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.Unit));
-            SwitchProductsCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.Product));
+            SwitchProductsCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.ProductView));
         }
     }
 }
