@@ -19,8 +19,14 @@
                   Margin="5">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Név" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
-                <DataGridTextColumn Header="Nettó" Binding="{Binding Net, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
-                <DataGridTextColumn Header="Bruttó" Binding="{Binding Gross, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
+                <DataGridTextColumn Header="Nettó"
+                                    Binding="{Binding Net, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:F2}}"
+                                    Width="Auto"
+                                    ElementStyle="{StaticResource RightAlignedCellStyle}" />
+                <DataGridTextColumn Header="Bruttó"
+                                    Binding="{Binding Gross, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:F2}}"
+                                    Width="Auto"
+                                    ElementStyle="{StaticResource RightAlignedCellStyle}" />
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">

@@ -22,10 +22,22 @@
                 <TextBlock Text="ÁFA bontás kulcsonként" Margin="0,0,0,4"/>
                 <DataGrid ItemsSource="{Binding VatBreakdown}" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" Margin="0,0,8,0">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="ÁFA %" Binding="{Binding Rate}" Width="Auto"/>
-                        <DataGridTextColumn Header="Nettó összeg" Binding="{Binding Net}" Width="*" ElementStyle="{StaticResource RightAlignedCellStyle}"/>
-                        <DataGridTextColumn Header="ÁFA összeg" Binding="{Binding Vat}" Width="*" ElementStyle="{StaticResource RightAlignedCellStyle}"/>
-                        <DataGridTextColumn Header="Bruttó összeg" Binding="{Binding Gross}" Width="*" ElementStyle="{StaticResource RightAlignedCellStyle}"/>
+                        <DataGridTextColumn Header="ÁFA %"
+                                            Binding="{Binding Rate, StringFormat={}{0:F2}}"
+                                            Width="Auto"
+                                            ElementStyle="{StaticResource RightAlignedCellStyle}"/>
+                        <DataGridTextColumn Header="Nettó összeg"
+                                            Binding="{Binding Net, StringFormat={}{0:F2}}"
+                                            Width="*"
+                                            ElementStyle="{StaticResource RightAlignedCellStyle}"/>
+                        <DataGridTextColumn Header="ÁFA összeg"
+                                            Binding="{Binding Vat, StringFormat={}{0:F2}}"
+                                            Width="*"
+                                            ElementStyle="{StaticResource RightAlignedCellStyle}"/>
+                        <DataGridTextColumn Header="Bruttó összeg"
+                                            Binding="{Binding Gross, StringFormat={}{0:F2}}"
+                                            Width="*"
+                                            ElementStyle="{StaticResource RightAlignedCellStyle}"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </StackPanel>
@@ -40,11 +52,11 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Row="0" Grid.Column="0" Text="Összesen nettó:"/>
-                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding TotalNet}" HorizontalAlignment="Right"/>
+                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding TotalNet, StringFormat={}{0:F2}}" HorizontalAlignment="Right"/>
                 <TextBlock Grid.Row="1" Grid.Column="0" Text="Összesen ÁFA:"/>
-                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding TotalVat}" HorizontalAlignment="Right"/>
+                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding TotalVat, StringFormat={}{0:F2}}" HorizontalAlignment="Right"/>
                 <TextBlock Grid.Row="2" Grid.Column="0" Text="Összesen bruttó:"/>
-                <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding TotalGross}" HorizontalAlignment="Right"/>
+                <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding TotalGross, StringFormat={}{0:F2}}" HorizontalAlignment="Right"/>
             </Grid>
         </Grid>
         <TextBlock Text="{Binding InWords}" HorizontalAlignment="Right" Margin="0,4,0,0" TextWrapping="Wrap" FontStyle="Italic"/>
