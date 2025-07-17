@@ -56,7 +56,6 @@ namespace InvoiceApp.ViewModels
         public RelayCommand SwitchTaxRatesCommand { get; }
         public RelayCommand SwitchUnitsCommand { get; }
         public RelayCommand SwitchProductsCommand { get; }
-        public RelayCommand ShowInvoicesCommand { get; }
 
         public MainViewModel(INavigationService navigation, InvoiceViewModel invoiceViewModel)
         {
@@ -83,7 +82,6 @@ namespace InvoiceApp.ViewModels
             SummaryEscapeCommand = new RelayCommand(_ => InvoiceViewModel.CancelHeaderOrSummary());
             SummaryUpCommand = new RelayCommand(_ => InvoiceViewModel.SelectPreviousInvoice());
             SummaryDownCommand = new RelayCommand(_ => InvoiceViewModel.SelectNextInvoice());
-            ShowInvoicesCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.MainWindow));
             ShowPaymentMethodsCommand = new RelayCommand(_ => _navigation.Push(AppState.PaymentMethodView));
             ShowSuppliersCommand = new RelayCommand(_ => _navigation.Push(AppState.Supplier));
             ShowProductGroupsCommand = new RelayCommand(_ => _navigation.Push(AppState.ProductGroup));
