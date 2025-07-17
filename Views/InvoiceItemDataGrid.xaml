@@ -37,7 +37,7 @@
                 </DataGridTemplateColumn.CellTemplate>
                 <DataGridTemplateColumn.CellEditingTemplate>
                     <DataTemplate>
-                        <ComboBox ItemsSource="{Binding DataContext.Products, RelativeSource={RelativeSource AncestorType=Window}}"
+                        <ComboBox ItemsSource="{Binding DataContext.InvoiceViewModel.Products, RelativeSource={RelativeSource AncestorType=Window}}"
                                   SelectedItem="{Binding Item.Product, UpdateSourceTrigger=PropertyChanged}"
                                   DisplayMemberPath="Name"/>
                     </DataTemplate>
@@ -59,7 +59,7 @@
                 </DataGridTemplateColumn.CellTemplate>
                 <DataGridTemplateColumn.CellEditingTemplate>
                     <DataTemplate>
-                        <ComboBox ItemsSource="{Binding DataContext.TaxRates, RelativeSource={RelativeSource AncestorType=Window}}"
+                        <ComboBox ItemsSource="{Binding DataContext.InvoiceViewModel.TaxRates, RelativeSource={RelativeSource AncestorType=Window}}"
                                   SelectedItem="{Binding TaxRate, UpdateSourceTrigger=PropertyChanged}"
                                   DisplayMemberPath="Percentage"
                                   IsEditable="True"
@@ -79,7 +79,7 @@
                 <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
                         <Button Content="💾 Mentés"
-                                Command="{Binding DataContext.SaveItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                Command="{Binding DataContext.InvoiceViewModel.SaveItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                 CommandParameter="{Binding}"
                                 Style="{StaticResource IconButtonStyle}"
                                 ToolTip="Tétel mentése"/>
