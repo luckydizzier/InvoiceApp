@@ -17,6 +17,9 @@ namespace InvoiceApp.Helpers
         public DataTemplate? TaxRateTemplate { get; set; }
         public DataTemplate? UnitTemplate { get; set; }
         public DataTemplate? ProductTemplate { get; set; }
+        public DataTemplate? DashboardTemplate { get; set; }
+        public DataTemplate? InvoiceListTemplate { get; set; }
+        public DataTemplate? InvoiceEditorTemplate { get; set; }
         public DataTemplate? InvoiceHeaderTemplate { get; set; }
         public DataTemplate? InvoiceItemsTemplate { get; set; }
         public DataTemplate? InvoiceSummaryTemplate { get; set; }
@@ -34,6 +37,9 @@ namespace InvoiceApp.Helpers
                 AppState.TaxRate => TaxRateTemplate,
                 AppState.Unit => UnitTemplate,
                 AppState.Product => ProductTemplate,
+                AppState.Dashboard => DashboardTemplate,
+                AppState.InvoiceList => InvoiceListTemplate,
+                AppState.InvoiceEditor => InvoiceEditorTemplate,
                 AppState.InvoiceHeader => InvoiceHeaderTemplate,
                 AppState.InvoiceItems => InvoiceItemsTemplate,
                 AppState.InvoiceSummary => InvoiceSummaryTemplate,

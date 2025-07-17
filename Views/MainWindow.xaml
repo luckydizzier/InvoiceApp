@@ -89,6 +89,15 @@
         <DataTemplate x:Key="ProductTemplate">
             <views:ProductView />
         </DataTemplate>
+        <DataTemplate x:Key="DashboardTemplate">
+            <views:DashboardView />
+        </DataTemplate>
+        <DataTemplate x:Key="InvoiceListTemplate">
+            <views:InvoiceListView />
+        </DataTemplate>
+        <DataTemplate x:Key="InvoiceEditorTemplate">
+            <views:InvoiceEditorView />
+        </DataTemplate>
         <DataTemplate x:Key="InvoiceHeaderTemplate">
             <views:InvoiceHeaderView />
         </DataTemplate>
@@ -106,6 +115,9 @@
                                           TaxRateTemplate="{StaticResource TaxRateTemplate}"
                                           UnitTemplate="{StaticResource UnitTemplate}"
                                           ProductTemplate="{StaticResource ProductTemplate}"
+                                          DashboardTemplate="{StaticResource DashboardTemplate}"
+                                          InvoiceListTemplate="{StaticResource InvoiceListTemplate}"
+                                          InvoiceEditorTemplate="{StaticResource InvoiceEditorTemplate}"
                                           InvoiceHeaderTemplate="{StaticResource InvoiceHeaderTemplate}"
                                           InvoiceItemsTemplate="{StaticResource InvoiceItemsTemplate}"
                                           InvoiceSummaryTemplate="{StaticResource InvoiceSummaryTemplate}" />
@@ -126,5 +138,7 @@
         <KeyBinding Key="F8" Command="{Binding ShowUnitsCommand}"/>
         <KeyBinding Key="F12" Command="{Binding ShowInvoicesCommand}"/>
     </Window.InputBindings>
-    <ContentControl Content="{Binding CurrentState}" ContentTemplateSelector="{StaticResource StateSelector}" />
+    <ContentControl x:Name="StateRegion"
+                    Content="{Binding CurrentState}"
+                    ContentTemplateSelector="{StaticResource StateSelector}" />
 </Window>
