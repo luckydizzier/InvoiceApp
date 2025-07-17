@@ -4,6 +4,9 @@ using InvoiceApp.Models;
 using InvoiceApp.Repositories;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using InvoiceApp.DTOs;
+using InvoiceApp.Mappers;
+using FluentValidation;
 using Serilog;
 
 namespace InvoiceApp.Services
@@ -12,11 +15,13 @@ namespace InvoiceApp.Services
     {
         private readonly IInvoiceRepository _repository;
         private readonly IChangeLogService _logService;
+        private readonly IValidator<InvoiceDto> _validator;
 
-        public InvoiceService(IInvoiceRepository repository, IChangeLogService logService)
+        public InvoiceService(IInvoiceRepository repository, IChangeLogService logService, IValidator<InvoiceDto> validator)
         {
             _repository = repository;
             _logService = logService;
+            _validator = validator;
         }
 
         public Task<IEnumerable<Invoice>> GetAllAsync()
@@ -47,6 +52,8 @@ namespace InvoiceApp.Services
         {
             if (invoice == null) throw new ArgumentNullException(nameof(invoice));
             Log.Debug("InvoiceService.SaveAsync called for {Id}", invoice.Id);
+
+            await _validator.ValidateAndThrowAsync(invoice.ToDto());
 
             if (invoice.Id == 0)
             {
