@@ -3,8 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d"
-             d:DesignHeight="120" d:DesignWidth="400">
+            mc:Ignorable="d"
+            d:DesignHeight="120" d:DesignWidth="400">
+    <UserControl.InputBindings>
+        <KeyBinding Key="Enter" Command="{Binding HeaderEnterCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
+        <KeyBinding Key="Escape" Command="{Binding HeaderEscapeCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
+        <KeyBinding Key="Up" Command="{Binding HeaderUpCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
+        <KeyBinding Key="Down" Command="{Binding HeaderDownCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
+    </UserControl.InputBindings>
     <Grid Margin="0,0,0,8">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
