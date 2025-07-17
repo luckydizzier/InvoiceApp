@@ -79,17 +79,16 @@ namespace InvoiceApp.Helpers
             {
                 return;
             }
-
             bool moved = current.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
             if (!moved && sender is DependencyObject d)
             {
                 var command = GetEnterCommandOnLast(d);
+
                 if (command?.CanExecute(null) == true)
                 {
                     command.Execute(null);
                 }
             }
-
             e.Handled = true;
         }
     }
