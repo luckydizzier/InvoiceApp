@@ -16,7 +16,8 @@ namespace InvoiceApp.Views
                 ProductGroupCount = 3,
                 ProductCount = 5,
                 InvoiceCount = 10,
-                ItemsPerInvoice = 2,
+                ItemsPerInvoiceMin = 1,
+                ItemsPerInvoiceMax = 2,
                 ItemQuantityMin = 1m,
                 ItemQuantityMax = 5m
             };
