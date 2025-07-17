@@ -27,6 +27,22 @@
                                     Binding="{Binding Gross, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:F2}}"
                                     Width="Auto"
                                     ElementStyle="{StaticResource RightAlignedCellStyle}" />
+                <DataGridTemplateColumn Header="ÁFA %" Width="Auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding TaxRate.Percentage}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <ComboBox ItemsSource="{Binding DataContext.TaxRates, RelativeSource={RelativeSource AncestorType=Window}}"
+                                      SelectedItem="{Binding TaxRate, UpdateSourceTrigger=PropertyChanged}"
+                                      DisplayMemberPath="Percentage"
+                                      IsEditable="True"
+                                      Text="{Binding TaxRate.Percentage, UpdateSourceTrigger=PropertyChanged}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">

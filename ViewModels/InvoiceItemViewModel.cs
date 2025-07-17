@@ -14,11 +14,13 @@ namespace InvoiceApp.ViewModels
                 DateCreated = System.DateTime.Now,
                 DateUpdated = System.DateTime.Now
             };
+            _taxRatePercentage = _item.TaxRate?.Percentage ?? 0m;
         }
 
         public InvoiceItemViewModel(InvoiceItem item)
         {
             _item = item;
+            _taxRatePercentage = item.TaxRate?.Percentage ?? 0m;
         }
 
         public InvoiceItem Item => _item;
@@ -109,8 +111,28 @@ namespace InvoiceApp.ViewModels
                 {
                     _item.TaxRate = value;
                     _item.TaxRateId = value?.Id ?? 0;
+                    _taxRatePercentage = value?.Percentage ?? _taxRatePercentage;
                     OnPropertyChanged();
                     OnPropertyChanged(nameof(TaxRateId));
+                    OnPropertyChanged(nameof(TaxRatePercentage));
+                    OnPropertyChanged(nameof(VatAmount));
+                    OnPropertyChanged(nameof(GrossAmount));
+                    OnPropertyChanged(nameof(Total));
+                }
+            }
+        }
+
+        private decimal _taxRatePercentage;
+
+        public decimal TaxRatePercentage
+        {
+            get => _taxRatePercentage;
+            set
+            {
+                if (_taxRatePercentage != value)
+                {
+                    _taxRatePercentage = value;
+                    OnPropertyChanged();
                     OnPropertyChanged(nameof(VatAmount));
                     OnPropertyChanged(nameof(GrossAmount));
                     OnPropertyChanged(nameof(Total));
@@ -120,7 +142,7 @@ namespace InvoiceApp.ViewModels
 
         public decimal NetAmount => Quantity * UnitPrice;
 
-        public decimal VatAmount => IsGross ? NetAmount * (TaxRate?.Percentage ?? 0) / 100m : 0m;
+        public decimal VatAmount => IsGross ? NetAmount * TaxRatePercentage / 100m : 0m;
 
         public decimal GrossAmount => NetAmount + VatAmount;
 

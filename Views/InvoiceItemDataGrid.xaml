@@ -50,14 +50,16 @@
             <DataGridTemplateColumn Header="ÁFA %" Width="Auto">
                 <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding Item.TaxRate.Name}" />
+                        <TextBlock Text="{Binding TaxRatePercentage}" />
                     </DataTemplate>
                 </DataGridTemplateColumn.CellTemplate>
                 <DataGridTemplateColumn.CellEditingTemplate>
                     <DataTemplate>
                         <ComboBox ItemsSource="{Binding DataContext.TaxRates, RelativeSource={RelativeSource AncestorType=Window}}"
                                   SelectedItem="{Binding TaxRate, UpdateSourceTrigger=PropertyChanged}"
-                                  DisplayMemberPath="Name"/>
+                                  DisplayMemberPath="Percentage"
+                                  IsEditable="True"
+                                  Text="{Binding TaxRatePercentage, UpdateSourceTrigger=PropertyChanged}" />
                     </DataTemplate>
                 </DataGridTemplateColumn.CellEditingTemplate>
             </DataGridTemplateColumn>
