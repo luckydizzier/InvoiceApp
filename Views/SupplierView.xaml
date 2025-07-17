@@ -4,6 +4,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:InvoiceApp.ViewModels"
+             xmlns:helpers="clr-namespace:InvoiceApp.Helpers"
              mc:Ignorable="d"
              MinHeight="300" MinWidth="500">
     <UserControl.InputBindings>
@@ -17,6 +18,7 @@
         </Grid.RowDefinitions>
         <DataGrid x:Name="DataGrid"
                   ItemsSource="{Binding Suppliers}"
+                  helpers:FocusBehavior.IsFocused="True"
                   SelectedItem="{Binding SelectedSupplier}"
                   AutoGenerateColumns="False"
                   CanUserAddRows="False"
