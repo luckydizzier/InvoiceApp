@@ -69,17 +69,41 @@ namespace InvoiceApp.ViewModels
             NavigateDownCommand = new RelayCommand(_ => InvoiceViewModel.SelectNextInvoice());
             EnterCommand = new RelayCommand(_ => InvoiceViewModel.ToggleRowDetails());
             DeleteInvoiceCommand = new RelayCommand(_ => InvoiceViewModel.DeleteCurrentInvoice());
-            ItemsEnterCommand = new RelayCommand(_ => InvoiceViewModel.SaveCurrentItem());
+            ItemsEnterCommand = new RelayCommand(_ =>
+            {
+                InvoiceViewModel.SaveCurrentItem();
+                _navigation.PushSubstate(AppState.InvoiceSummary);
+            });
             ItemsDeleteCommand = new RelayCommand(_ => InvoiceViewModel.DeleteCurrentItem());
             ItemsUpCommand = new RelayCommand(_ => InvoiceViewModel.SelectPreviousItem());
             ItemsDownCommand = new RelayCommand(_ => InvoiceViewModel.SelectNextItem());
-            ItemsEscapeCommand = new RelayCommand(_ => InvoiceViewModel.CancelItemEdit());
-            HeaderEnterCommand = new RelayCommand(_ => InvoiceViewModel.SaveCurrentInvoice());
-            HeaderEscapeCommand = new RelayCommand(_ => InvoiceViewModel.CancelHeaderOrSummary());
+            ItemsEscapeCommand = new RelayCommand(_ =>
+            {
+                InvoiceViewModel.CancelItemEdit();
+                _navigation.PopSubstate();
+            });
+            HeaderEnterCommand = new RelayCommand(_ =>
+            {
+                InvoiceViewModel.SaveCurrentInvoice();
+                _navigation.PushSubstate(AppState.InvoiceItems);
+            });
+            HeaderEscapeCommand = new RelayCommand(_ =>
+            {
+                InvoiceViewModel.CancelHeaderOrSummary();
+                _navigation.PopSubstate();
+            });
             HeaderUpCommand = new RelayCommand(_ => InvoiceViewModel.SelectPreviousInvoice());
             HeaderDownCommand = new RelayCommand(_ => InvoiceViewModel.SelectNextInvoice());
-            SummaryEnterCommand = new RelayCommand(_ => InvoiceViewModel.SaveCurrentInvoice());
-            SummaryEscapeCommand = new RelayCommand(_ => InvoiceViewModel.CancelHeaderOrSummary());
+            SummaryEnterCommand = new RelayCommand(_ =>
+            {
+                InvoiceViewModel.SaveCurrentInvoice();
+                _navigation.PopSubstate();
+            });
+            SummaryEscapeCommand = new RelayCommand(_ =>
+            {
+                InvoiceViewModel.CancelHeaderOrSummary();
+                _navigation.PopSubstate();
+            });
             SummaryUpCommand = new RelayCommand(_ => InvoiceViewModel.SelectPreviousInvoice());
             SummaryDownCommand = new RelayCommand(_ => InvoiceViewModel.SelectNextInvoice());
             ShowPaymentMethodsCommand = new RelayCommand(_ => _navigation.Push(AppState.PaymentMethodView));
@@ -90,7 +114,11 @@ namespace InvoiceApp.ViewModels
             ShowProductsCommand = new RelayCommand(_ => _navigation.Push(AppState.ProductView));
             ShowDashboardCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.Dashboard));
             ShowInvoiceListCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.InvoiceList));
-            StartInvoiceEditorCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.InvoiceEditor));
+            StartInvoiceEditorCommand = new RelayCommand(_ =>
+            {
+                _navigation.SwitchRoot(AppState.InvoiceEditor);
+                _navigation.PushSubstate(AppState.InvoiceHeader);
+            });
             SwitchPaymentMethodsCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.PaymentMethodView));
             SwitchSuppliersCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.Supplier));
             SwitchProductGroupsCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.ProductGroup));
