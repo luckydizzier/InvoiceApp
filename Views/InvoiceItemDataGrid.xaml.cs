@@ -1,4 +1,6 @@
 using System.Windows.Controls;
+using System.Windows.Input;
+using InvoiceApp.Helpers;
 
 namespace InvoiceApp.Views
 {
@@ -10,5 +12,10 @@ namespace InvoiceApp.Views
         }
 
         public DataGrid DataGrid => InnerGrid;
+
+        private void DataGrid_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            DataGridFocusBehavior.OnPreviewKeyDown(sender, e);
+        }
     }
 }

@@ -22,7 +22,7 @@
                   SelectedItem="{Binding SelectedUnit}"
                   AutoGenerateColumns="False"
                   CanUserAddRows="False"
-                  PreviewKeyDown="helpers:DataGridFocusBehavior.OnPreviewKeyDown"
+                  PreviewKeyDown="DataGrid_PreviewKeyDown"
                   Margin="5">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Kód" Binding="{Binding Code, UpdateSourceTrigger=PropertyChanged}" />
