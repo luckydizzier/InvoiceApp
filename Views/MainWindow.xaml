@@ -71,22 +71,22 @@
                 </StatusBar>
             </Grid>
         </DataTemplate>
-        <DataTemplate x:Key="PaymentMethodViewTemplate">
+        <DataTemplate x:Key="PaymentMethodsTemplate">
             <views:PaymentMethodView />
         </DataTemplate>
-        <DataTemplate x:Key="SupplierTemplate">
+        <DataTemplate x:Key="SuppliersTemplate">
             <views:SupplierView />
         </DataTemplate>
-        <DataTemplate x:Key="ProductGroupTemplate">
+        <DataTemplate x:Key="ProductGroupsTemplate">
             <views:ProductGroupView />
         </DataTemplate>
-        <DataTemplate x:Key="TaxRateTemplate">
+        <DataTemplate x:Key="TaxRatesTemplate">
             <views:TaxRateView />
         </DataTemplate>
-        <DataTemplate x:Key="UnitTemplate">
+        <DataTemplate x:Key="UnitsTemplate">
             <views:UnitView />
         </DataTemplate>
-        <DataTemplate x:Key="ProductViewTemplate">
+        <DataTemplate x:Key="ProductsTemplate">
             <views:ProductView />
         </DataTemplate>
         <DataTemplate x:Key="DashboardTemplate">
@@ -98,13 +98,13 @@
         <DataTemplate x:Key="InvoiceEditorTemplate">
             <views:InvoiceEditorView />
         </DataTemplate>
-        <DataTemplate x:Key="InvoiceHeaderTemplate">
+        <DataTemplate x:Key="HeaderTemplate">
             <views:InvoiceHeaderView />
         </DataTemplate>
-        <DataTemplate x:Key="InvoiceItemsTemplate">
+        <DataTemplate x:Key="ItemListTemplate">
             <views:InvoiceItemDataGrid />
         </DataTemplate>
-        <DataTemplate x:Key="InvoiceSummaryTemplate">
+        <DataTemplate x:Key="SummaryTemplate">
             <views:InvoiceSummaryPanel />
         </DataTemplate>
         <DataTemplate x:Key="ConfirmDialogTemplate">
@@ -112,18 +112,18 @@
         </DataTemplate>
         <helpers:AppStateTemplateSelector x:Key="StateSelector"
                                           MainWindowTemplate="{StaticResource MainWindowTemplate}"
-                                          PaymentMethodViewTemplate="{StaticResource PaymentMethodViewTemplate}"
-                                          SupplierTemplate="{StaticResource SupplierTemplate}"
-                                          ProductGroupTemplate="{StaticResource ProductGroupTemplate}"
-                                          TaxRateTemplate="{StaticResource TaxRateTemplate}"
-                                          UnitTemplate="{StaticResource UnitTemplate}"
-                                          ProductViewTemplate="{StaticResource ProductViewTemplate}"
+                                          PaymentMethodsTemplate="{StaticResource PaymentMethodsTemplate}"
+                                          SuppliersTemplate="{StaticResource SuppliersTemplate}"
+                                          ProductGroupsTemplate="{StaticResource ProductGroupsTemplate}"
+                                          TaxRatesTemplate="{StaticResource TaxRatesTemplate}"
+                                          UnitsTemplate="{StaticResource UnitsTemplate}"
+                                          ProductsTemplate="{StaticResource ProductsTemplate}"
                                           DashboardTemplate="{StaticResource DashboardTemplate}"
                                           InvoiceListTemplate="{StaticResource InvoiceListTemplate}"
                                           InvoiceEditorTemplate="{StaticResource InvoiceEditorTemplate}"
-                                          InvoiceHeaderTemplate="{StaticResource InvoiceHeaderTemplate}"
-                                          InvoiceItemsTemplate="{StaticResource InvoiceItemsTemplate}"
-                                          InvoiceSummaryTemplate="{StaticResource InvoiceSummaryTemplate}"
+                                          HeaderTemplate="{StaticResource HeaderTemplate}"
+                                          ItemListTemplate="{StaticResource ItemListTemplate}"
+                                          SummaryTemplate="{StaticResource SummaryTemplate}"
                                           ConfirmDialogTemplate="{StaticResource ConfirmDialogTemplate}" />
     </Window.Resources>
     <Window.InputBindings>
@@ -135,11 +135,11 @@
         <KeyBinding Key="F1" Command="{Binding ShowDashboardCommand}"/>
         <KeyBinding Key="F2" Command="{Binding ShowInvoiceListCommand}"/>
         <KeyBinding Key="F3" Command="{Binding StartInvoiceEditorCommand}"/>
-        <KeyBinding Key="F4" Command="{Binding ShowPaymentMethodsCommand}"/>
-        <KeyBinding Key="F5" Command="{Binding ShowSuppliersCommand}"/>
-        <KeyBinding Key="F6" Command="{Binding ShowProductGroupsCommand}"/>
+        <KeyBinding Key="F4" Command="{Binding ShowProductsCommand}"/>
+        <KeyBinding Key="F5" Command="{Binding ShowProductGroupsCommand}"/>
+        <KeyBinding Key="F6" Command="{Binding ShowSuppliersCommand}"/>
         <KeyBinding Key="F7" Command="{Binding ShowTaxRatesCommand}"/>
-        <KeyBinding Key="F8" Command="{Binding ShowUnitsCommand}"/>
+        <KeyBinding Key="F8" Command="{Binding ShowPaymentMethodsCommand}"/>
     </Window.InputBindings>
     <ContentControl x:Name="StateRegion"
                     Content="{Binding CurrentState}"

@@ -11,18 +11,18 @@ namespace InvoiceApp.Helpers
     public class AppStateTemplateSelector : DataTemplateSelector
     {
         public DataTemplate? MainWindowTemplate { get; set; }
-        public DataTemplate? PaymentMethodViewTemplate { get; set; }
-        public DataTemplate? SupplierTemplate { get; set; }
-        public DataTemplate? ProductGroupTemplate { get; set; }
-        public DataTemplate? TaxRateTemplate { get; set; }
-        public DataTemplate? UnitTemplate { get; set; }
-        public DataTemplate? ProductViewTemplate { get; set; }
+        public DataTemplate? PaymentMethodsTemplate { get; set; }
+        public DataTemplate? SuppliersTemplate { get; set; }
+        public DataTemplate? ProductGroupsTemplate { get; set; }
+        public DataTemplate? TaxRatesTemplate { get; set; }
+        public DataTemplate? UnitsTemplate { get; set; }
+        public DataTemplate? ProductsTemplate { get; set; }
         public DataTemplate? DashboardTemplate { get; set; }
         public DataTemplate? InvoiceListTemplate { get; set; }
         public DataTemplate? InvoiceEditorTemplate { get; set; }
-        public DataTemplate? InvoiceHeaderTemplate { get; set; }
-        public DataTemplate? InvoiceItemsTemplate { get; set; }
-        public DataTemplate? InvoiceSummaryTemplate { get; set; }
+        public DataTemplate? HeaderTemplate { get; set; }
+        public DataTemplate? ItemListTemplate { get; set; }
+        public DataTemplate? SummaryTemplate { get; set; }
         public DataTemplate? ConfirmDialogTemplate { get; set; }
 
         public override DataTemplate? SelectTemplate(object item, DependencyObject container)
@@ -32,18 +32,18 @@ namespace InvoiceApp.Helpers
 
             return state switch
             {
-                AppState.PaymentMethodView => PaymentMethodViewTemplate,
-                AppState.Supplier => SupplierTemplate,
-                AppState.ProductGroup => ProductGroupTemplate,
-                AppState.TaxRate => TaxRateTemplate,
-                AppState.Unit => UnitTemplate,
-                AppState.ProductView => ProductViewTemplate,
+                AppState.PaymentMethods => PaymentMethodsTemplate,
+                AppState.Suppliers => SuppliersTemplate,
+                AppState.ProductGroups => ProductGroupsTemplate,
+                AppState.TaxRates => TaxRatesTemplate,
+                AppState.Units => UnitsTemplate,
+                AppState.Products => ProductsTemplate,
                 AppState.Dashboard => DashboardTemplate,
                 AppState.InvoiceList => InvoiceListTemplate,
                 AppState.InvoiceEditor => InvoiceEditorTemplate,
-                AppState.InvoiceHeader => InvoiceHeaderTemplate,
-                AppState.InvoiceItems => InvoiceItemsTemplate,
-                AppState.InvoiceSummary => InvoiceSummaryTemplate,
+                AppState.Header => HeaderTemplate,
+                AppState.ItemList => ItemListTemplate,
+                AppState.Summary => SummaryTemplate,
                 AppState.ConfirmDialog => ConfirmDialogTemplate,
                 _ => MainWindowTemplate
             };

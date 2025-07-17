@@ -30,7 +30,6 @@ namespace InvoiceApp.ViewModels
         public RelayCommand EnterCommand { get; }
         public RelayCommand DeleteInvoiceCommand { get; }
         public RelayCommand ItemsEnterCommand { get; }
-        public RelayCommand ItemsDeleteCommand { get; }
         public RelayCommand ItemsUpCommand { get; }
         public RelayCommand ItemsDownCommand { get; }
         public RelayCommand ItemsEscapeCommand { get; }
@@ -73,9 +72,8 @@ namespace InvoiceApp.ViewModels
             ItemsEnterCommand = new RelayCommand(_ =>
             {
                 InvoiceViewModel.SaveCurrentItem();
-                _navigation.PushSubstate(AppState.InvoiceSummary);
+                _navigation.PushSubstate(AppState.Summary);
             });
-            ItemsDeleteCommand = new RelayCommand(_ => InvoiceViewModel.DeleteCurrentItem());
             ItemsUpCommand = new RelayCommand(_ => InvoiceViewModel.SelectPreviousItem());
             ItemsDownCommand = new RelayCommand(_ => InvoiceViewModel.SelectNextItem());
             ItemsEscapeCommand = new RelayCommand(_ =>
@@ -91,7 +89,7 @@ namespace InvoiceApp.ViewModels
             HeaderEnterCommand = new RelayCommand(_ =>
             {
                 InvoiceViewModel.SaveCurrentInvoice();
-                _navigation.PushSubstate(AppState.InvoiceItems);
+                _navigation.PushSubstate(AppState.ItemList);
             });
             HeaderEscapeCommand = new RelayCommand(_ =>
             {
@@ -122,25 +120,25 @@ namespace InvoiceApp.ViewModels
             });
             SummaryUpCommand = new RelayCommand(_ => InvoiceViewModel.SelectPreviousInvoice());
             SummaryDownCommand = new RelayCommand(_ => InvoiceViewModel.SelectNextInvoice());
-            ShowPaymentMethodsCommand = new RelayCommand(_ => _navigation.Push(AppState.PaymentMethodView));
-            ShowSuppliersCommand = new RelayCommand(_ => _navigation.Push(AppState.Supplier));
-            ShowProductGroupsCommand = new RelayCommand(_ => _navigation.Push(AppState.ProductGroup));
-            ShowTaxRatesCommand = new RelayCommand(_ => _navigation.Push(AppState.TaxRate));
-            ShowUnitsCommand = new RelayCommand(_ => _navigation.Push(AppState.Unit));
-            ShowProductsCommand = new RelayCommand(_ => _navigation.Push(AppState.ProductView));
+            ShowPaymentMethodsCommand = new RelayCommand(_ => _navigation.Push(AppState.PaymentMethods));
+            ShowSuppliersCommand = new RelayCommand(_ => _navigation.Push(AppState.Suppliers));
+            ShowProductGroupsCommand = new RelayCommand(_ => _navigation.Push(AppState.ProductGroups));
+            ShowTaxRatesCommand = new RelayCommand(_ => _navigation.Push(AppState.TaxRates));
+            ShowUnitsCommand = new RelayCommand(_ => _navigation.Push(AppState.Units));
+            ShowProductsCommand = new RelayCommand(_ => _navigation.Push(AppState.Products));
             ShowDashboardCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.Dashboard));
             ShowInvoiceListCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.InvoiceList));
             StartInvoiceEditorCommand = new RelayCommand(_ =>
             {
                 _navigation.SwitchRoot(AppState.InvoiceEditor);
-                _navigation.PushSubstate(AppState.InvoiceHeader);
+                _navigation.PushSubstate(AppState.Header);
             });
-            SwitchPaymentMethodsCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.PaymentMethodView));
-            SwitchSuppliersCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.Supplier));
-            SwitchProductGroupsCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.ProductGroup));
-            SwitchTaxRatesCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.TaxRate));
-            SwitchUnitsCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.Unit));
-            SwitchProductsCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.ProductView));
+            SwitchPaymentMethodsCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.PaymentMethods));
+            SwitchSuppliersCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.Suppliers));
+            SwitchProductGroupsCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.ProductGroups));
+            SwitchTaxRatesCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.TaxRates));
+            SwitchUnitsCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.Units));
+            SwitchProductsCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.Products));
         }
     }
 }

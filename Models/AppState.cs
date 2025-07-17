@@ -27,39 +27,39 @@ namespace InvoiceApp.Models
         /// <summary>
         /// Invoice header information step.
         /// </summary>
-        InvoiceHeader,
+        Header,
         /// <summary>
         /// Invoice item details step.
         /// </summary>
-        InvoiceItems,
+        ItemList,
         /// <summary>
         /// Final invoice summary step.
         /// </summary>
-        InvoiceSummary,
+        Summary,
         /// <summary>
         /// View for managing products.
         /// </summary>
-        ProductView,
+        Products,
         /// <summary>
         /// View for managing product groups.
         /// </summary>
-        ProductGroup,
+        ProductGroups,
         /// <summary>
         /// View for managing suppliers.
         /// </summary>
-        Supplier,
+        Suppliers,
         /// <summary>
         /// View for managing tax rates.
         /// </summary>
-        TaxRate,
+        TaxRates,
         /// <summary>
         /// View for managing units of measure.
         /// </summary>
-        Unit,
+        Units,
         /// <summary>
         /// View for managing payment methods.
         /// </summary>
-        PaymentMethodView,
+        PaymentMethods,
         /// <summary>
         /// Confirmation dialog for user actions.
         /// </summary>
@@ -85,15 +85,15 @@ namespace InvoiceApp.Models
             AppState.Dashboard => typeof(DashboardView),
             AppState.InvoiceList => typeof(InvoiceListView),
             AppState.InvoiceEditor => typeof(InvoiceEditorView),
-            AppState.InvoiceHeader => typeof(InvoiceHeaderView),
-            AppState.InvoiceItems => typeof(InvoiceItemDataGrid),
-            AppState.InvoiceSummary => typeof(InvoiceSummaryPanel),
-            AppState.ProductView => typeof(ProductView),
-            AppState.ProductGroup => typeof(ProductGroupView),
-            AppState.Supplier => typeof(SupplierView),
-            AppState.TaxRate => typeof(TaxRateView),
-            AppState.Unit => typeof(UnitView),
-            AppState.PaymentMethodView => typeof(PaymentMethodView),
+            AppState.Header => typeof(InvoiceHeaderView),
+            AppState.ItemList => typeof(InvoiceItemDataGrid),
+            AppState.Summary => typeof(InvoiceSummaryPanel),
+            AppState.Products => typeof(ProductView),
+            AppState.ProductGroups => typeof(ProductGroupView),
+            AppState.Suppliers => typeof(SupplierView),
+            AppState.TaxRates => typeof(TaxRateView),
+            AppState.Units => typeof(UnitView),
+            AppState.PaymentMethods => typeof(PaymentMethodView),
             AppState.ConfirmDialog => typeof(ConfirmDialog),
             _ => throw new ArgumentOutOfRangeException(nameof(state), state, null)
         };
