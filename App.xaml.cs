@@ -11,6 +11,14 @@ namespace InvoiceApp
         {
             base.OnStartup(e);
             Services = StartupOrchestrator.Configure();
+            if (StartupOrchestrator.IsNewDatabase)
+            {
+                var dlg = new Views.SampleDataDialog();
+                if (dlg.ShowDialog() == true)
+                {
+                    StartupOrchestrator.PopulateSampleDataAsync(Services, dlg.Options).GetAwaiter().GetResult();
+                }
+            }
             this.DispatcherUnhandledException += (s, args) =>
             {
                 MessageBox.Show($"Váratlan hiba: {args.Exception.Message}", "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
