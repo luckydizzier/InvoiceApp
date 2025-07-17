@@ -26,7 +26,7 @@ namespace InvoiceApp.Services
             var paymentService = scope.ServiceProvider.GetRequiredService<IPaymentMethodService>();
             var logService = scope.ServiceProvider.GetRequiredService<IChangeLogService>();
 
-            var faker = new Faker("hu");
+            var faker = new Faker("en");
 
             var payment = new PaymentMethod
             {
