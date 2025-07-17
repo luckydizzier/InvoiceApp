@@ -19,13 +19,13 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="0">
-                <TextBlock Text="VAT Breakdown by Rate" Margin="0,0,0,4"/>
+                <TextBlock Text="ÁFA bontás kulcsonként" Margin="0,0,0,4"/>
                 <DataGrid ItemsSource="{Binding VatBreakdown}" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" Margin="0,0,8,0">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="VAT %" Binding="{Binding Rate}" Width="Auto"/>
-                        <DataGridTextColumn Header="Net Amount" Binding="{Binding Net}" Width="*" ElementStyle="{StaticResource RightAlignedCellStyle}"/>
-                        <DataGridTextColumn Header="VAT Amount" Binding="{Binding Vat}" Width="*" ElementStyle="{StaticResource RightAlignedCellStyle}"/>
-                        <DataGridTextColumn Header="Gross Amount" Binding="{Binding Gross}" Width="*" ElementStyle="{StaticResource RightAlignedCellStyle}"/>
+                        <DataGridTextColumn Header="ÁFA %" Binding="{Binding Rate}" Width="Auto"/>
+                        <DataGridTextColumn Header="Nettó összeg" Binding="{Binding Net}" Width="*" ElementStyle="{StaticResource RightAlignedCellStyle}"/>
+                        <DataGridTextColumn Header="ÁFA összeg" Binding="{Binding Vat}" Width="*" ElementStyle="{StaticResource RightAlignedCellStyle}"/>
+                        <DataGridTextColumn Header="Bruttó összeg" Binding="{Binding Gross}" Width="*" ElementStyle="{StaticResource RightAlignedCellStyle}"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </StackPanel>
@@ -39,11 +39,11 @@
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Grid.Row="0" Grid.Column="0" Text="Total Net:"/>
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Összesen nettó:"/>
                 <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding TotalNet}" HorizontalAlignment="Right"/>
-                <TextBlock Grid.Row="1" Grid.Column="0" Text="Total VAT:"/>
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="Összesen ÁFA:"/>
                 <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding TotalVat}" HorizontalAlignment="Right"/>
-                <TextBlock Grid.Row="2" Grid.Column="0" Text="Total Gross:"/>
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="Összesen bruttó:"/>
                 <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding TotalGross}" HorizontalAlignment="Right"/>
             </Grid>
         </Grid>

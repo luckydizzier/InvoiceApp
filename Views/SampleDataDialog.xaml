@@ -36,7 +36,7 @@
         <TextBlock Grid.Row="7" Grid.Column="0" Margin="0,0,5,10" VerticalAlignment="Center" Text="Mennyiség (max)"/>
         <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding ItemQuantityMax}"/>
         <StackPanel Grid.Row="8" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Content="OK" Width="75" Margin="5" Click="Ok_Click" IsDefault="True"/>
+            <Button Content="Rendben" Width="75" Margin="5" Click="Ok_Click" IsDefault="True"/>
             <Button Content="Mégse" Width="75" Margin="5" Click="Cancel_Click" IsCancel="True"/>
         </StackPanel>
     </Grid>

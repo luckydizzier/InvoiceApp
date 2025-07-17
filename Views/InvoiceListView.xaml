@@ -16,10 +16,10 @@
                   CanUserAddRows="False"
                   Margin="5">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Number" Binding="{Binding Number}" Width="Auto" />
-                <DataGridTextColumn Header="Date" Binding="{Binding Date, StringFormat=d}" Width="Auto" />
-                <DataGridTextColumn Header="Supplier" Binding="{Binding Supplier.Name}" Width="*" />
-                <DataGridTextColumn Header="Amount" Binding="{Binding Amount}" Width="Auto" />
+                <DataGridTextColumn Header="Szám" Binding="{Binding Number}" Width="Auto" />
+                <DataGridTextColumn Header="Dátum" Binding="{Binding Date, StringFormat=d}" Width="Auto" />
+                <DataGridTextColumn Header="Szállító" Binding="{Binding Supplier.Name}" Width="*" />
+                <DataGridTextColumn Header="Összeg" Binding="{Binding Amount}" Width="Auto" />
             </DataGrid.Columns>
         </DataGrid>
 
