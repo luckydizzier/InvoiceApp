@@ -140,7 +140,6 @@
         <KeyBinding Key="F6" Command="{Binding ShowProductGroupsCommand}"/>
         <KeyBinding Key="F7" Command="{Binding ShowTaxRatesCommand}"/>
         <KeyBinding Key="F8" Command="{Binding ShowUnitsCommand}"/>
-        <KeyBinding Key="F12" Command="{Binding ShowInvoicesCommand}"/>
     </Window.InputBindings>
     <ContentControl x:Name="StateRegion"
                     Content="{Binding CurrentState}"
