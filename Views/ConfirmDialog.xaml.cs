@@ -5,10 +5,20 @@ namespace InvoiceApp.Views
 {
     public partial class ConfirmDialog : Window
     {
-        public ConfirmDialog(string message)
+        public ConfirmDialog()
         {
             InitializeComponent();
-            MessageText.Text = message;
+        }
+
+        public ConfirmDialog(string message) : this()
+        {
+            Message = message;
+        }
+
+        public string Message
+        {
+            get => MessageText.Text;
+            set => MessageText.Text = value;
         }
 
         private void Yes_Click(object sender, RoutedEventArgs e)
