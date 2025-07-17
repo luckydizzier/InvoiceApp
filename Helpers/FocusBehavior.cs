@@ -69,21 +69,26 @@ namespace InvoiceApp.Helpers
 
         private static void ElementOnPreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key != Key.Enter || sender is not UIElement element)
+            if (e.Key != Key.Enter)
             {
                 return;
             }
 
-            bool moved = element.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
-            if (!moved)
+            var current = (e.OriginalSource as UIElement) ?? (Keyboard.FocusedElement as UIElement);
+            if (current is null)
             {
-                var command = GetEnterCommandOnLast(element);
+                return;
+            }
+            bool moved = current.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+            if (!moved && sender is DependencyObject d)
+            {
+                var command = GetEnterCommandOnLast(d);
+
                 if (command?.CanExecute(null) == true)
                 {
                     command.Execute(null);
                 }
             }
-
             e.Handled = true;
         }
     }
