@@ -81,5 +81,28 @@ namespace InvoiceApp.ViewModels
                 await _service.SaveAsync(SelectedMethod);
             }
         }
+
+        public void SelectPreviousMethod()
+        {
+            if (SelectedMethod == null)
+            {
+                if (Methods.Count > 0)
+                    SelectedMethod = Methods[0];
+                return;
+            }
+
+            var index = Methods.IndexOf(SelectedMethod);
+            if (index > 0)
+            {
+                SelectedMethod = Methods[index - 1];
+            }
+            else if (index == 0)
+            {
+                if (DialogHelper.ShowConfirmation("Új fizetési módot szeretnél létrehozni?", "Megerősítés"))
+                {
+                    AddCommand.Execute(null);
+                }
+            }
+        }
     }
 }

@@ -81,5 +81,28 @@ namespace InvoiceApp.ViewModels
                 await _service.SaveAsync(SelectedRate);
             }
         }
+
+        public void SelectPreviousRate()
+        {
+            if (SelectedRate == null)
+            {
+                if (Rates.Count > 0)
+                    SelectedRate = Rates[0];
+                return;
+            }
+
+            var index = Rates.IndexOf(SelectedRate);
+            if (index > 0)
+            {
+                SelectedRate = Rates[index - 1];
+            }
+            else if (index == 0)
+            {
+                if (DialogHelper.ShowConfirmation("Új áfakulcsot szeretnél létrehozni?", "Megerősítés"))
+                {
+                    AddCommand.Execute(null);
+                }
+            }
+        }
     }
 }

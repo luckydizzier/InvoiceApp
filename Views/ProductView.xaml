@@ -6,6 +6,10 @@
              xmlns:viewModels="clr-namespace:InvoiceApp.ViewModels"
              mc:Ignorable="d"
              MinHeight="300" MinWidth="500">
+    <UserControl.InputBindings>
+        <KeyBinding Key="Insert" Command="{Binding AddCommand}"/>
+        <KeyBinding Key="Delete" Command="{Binding DeleteCommand}"/>
+    </UserControl.InputBindings>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />

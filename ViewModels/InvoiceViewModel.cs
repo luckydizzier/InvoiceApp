@@ -725,6 +725,13 @@ namespace InvoiceApp.ViewModels
             {
                 SelectedInvoice = Invoices[index - 1];
             }
+            else if (index == 0)
+            {
+                if (DialogHelper.ShowConfirmation("Új számlát szeretnél létrehozni?", "Megerősítés"))
+                {
+                    NewInvoiceCommand.Execute(null);
+                }
+            }
         }
 
         /// <summary>
@@ -803,6 +810,13 @@ namespace InvoiceApp.ViewModels
             if (index > 0)
             {
                 SelectedItem = Items[index - 1];
+            }
+            else if (index == 0)
+            {
+                if (DialogHelper.ShowConfirmation("Új tételt szeretnél létrehozni?", "Megerősítés"))
+                {
+                    AddItemCommand.Execute(null);
+                }
             }
         }
 

@@ -20,6 +20,8 @@
             <KeyBinding Key="Up" Command="{Binding ItemsUpCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
             <KeyBinding Key="Down" Command="{Binding ItemsDownCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
             <KeyBinding Key="Escape" Command="{Binding ItemsEscapeCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
+            <KeyBinding Key="Insert" Command="{Binding InvoiceViewModel.AddItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
+            <KeyBinding Key="Delete" Command="{Binding InvoiceViewModel.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding SelectedItem}"/>
         </DataGrid.InputBindings>
         <DataGrid.Columns>
             <DataGridTemplateColumn Header="Termék" Width="2*">
