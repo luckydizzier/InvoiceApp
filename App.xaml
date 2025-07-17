@@ -50,6 +50,9 @@
                             <Trigger Property="IsSelected" Value="True">
                                 <Setter Property="Background" Value="LightBlue"/>
                             </Trigger>
+                            <Trigger Property="IsNewItem" Value="True">
+                                <Setter Property="Background" Value="LightGoldenrodYellow"/>
+                            </Trigger>
                         </Style.Triggers>
                     </Style>
                 </Setter.Value>

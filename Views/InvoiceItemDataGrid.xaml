@@ -16,6 +16,8 @@
               CanUserAddRows="True"
               RowDetailsVisibilityMode="{Binding IsRowDetailsVisible, Converter={StaticResource BoolToVisibilityConverter}}"
               PreviewKeyDown="DataGrid_PreviewKeyDown"
+              InitializingNewItem="DataGrid_InitializingNewItem"
+              LoadingRow="DataGrid_LoadingRow"
               Margin="0,0,0,4">
         <DataGrid.InputBindings>
             <KeyBinding Key="Enter" Command="{Binding ItemsEnterCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
