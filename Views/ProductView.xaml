@@ -34,13 +34,13 @@
                   Margin="5"
                   PreviewKeyDown="DataGrid_OnPreviewKeyDown">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Név" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
+                <DataGridTextColumn Header="Név" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}" Width="Auto" />
                 <DataGridTextColumn Header="Nettó"
-                                    Binding="{Binding Net, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:F2}}"
+                                    Binding="{Binding Net, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:F2}, ValidatesOnNotifyDataErrors=True}"
                                     Width="Auto"
                                     ElementStyle="{StaticResource RightAlignedCellStyle}" />
                 <DataGridTextColumn Header="Bruttó"
-                                    Binding="{Binding Gross, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:F2}}"
+                                    Binding="{Binding Gross, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:F2}, ValidatesOnNotifyDataErrors=True}"
                                     Width="Auto"
                                     ElementStyle="{StaticResource RightAlignedCellStyle}" />
                 <DataGridTemplateColumn Header="ÁFA %" Width="Auto">
@@ -52,10 +52,10 @@
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
                             <ComboBox ItemsSource="{Binding DataContext.TaxRates, RelativeSource={RelativeSource AncestorType=Window}}"
-                                      SelectedItem="{Binding TaxRate, UpdateSourceTrigger=PropertyChanged}"
+                                      SelectedItem="{Binding TaxRate, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}"
                                       DisplayMemberPath="Percentage"
                                       IsEditable="True"
-                                      Text="{Binding TaxRate.Percentage, UpdateSourceTrigger=PropertyChanged}" />
+                                      Text="{Binding TaxRate.Percentage, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
@@ -68,7 +68,7 @@
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
                             <ComboBox ItemsSource="{Binding DataContext.Units, RelativeSource={RelativeSource AncestorType=Window}}"
-                                      SelectedItem="{Binding Unit, UpdateSourceTrigger=PropertyChanged}"
+                                      SelectedItem="{Binding Unit, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}"
                                       DisplayMemberPath="Code" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
@@ -82,7 +82,7 @@
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
                             <ComboBox ItemsSource="{Binding DataContext.Groups, RelativeSource={RelativeSource AncestorType=Window}}"
-                                      SelectedItem="{Binding ProductGroup, UpdateSourceTrigger=PropertyChanged}"
+                                      SelectedItem="{Binding ProductGroup, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}"
                                       DisplayMemberPath="Name" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
