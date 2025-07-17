@@ -30,6 +30,17 @@ namespace InvoiceApp.ViewModels
         public RelayCommand DeleteInvoiceCommand { get; }
         public RelayCommand ItemsEnterCommand { get; }
         public RelayCommand ItemsDeleteCommand { get; }
+        public RelayCommand ItemsUpCommand { get; }
+        public RelayCommand ItemsDownCommand { get; }
+        public RelayCommand ItemsEscapeCommand { get; }
+        public RelayCommand HeaderEnterCommand { get; }
+        public RelayCommand HeaderEscapeCommand { get; }
+        public RelayCommand HeaderUpCommand { get; }
+        public RelayCommand HeaderDownCommand { get; }
+        public RelayCommand SummaryEnterCommand { get; }
+        public RelayCommand SummaryEscapeCommand { get; }
+        public RelayCommand SummaryUpCommand { get; }
+        public RelayCommand SummaryDownCommand { get; }
         public RelayCommand ShowPaymentMethodsCommand { get; }
         public RelayCommand ShowSuppliersCommand { get; }
         public RelayCommand ShowProductGroupsCommand { get; }
@@ -61,6 +72,17 @@ namespace InvoiceApp.ViewModels
             DeleteInvoiceCommand = new RelayCommand(_ => InvoiceViewModel.DeleteCurrentInvoice());
             ItemsEnterCommand = new RelayCommand(_ => InvoiceViewModel.SaveCurrentItem());
             ItemsDeleteCommand = new RelayCommand(_ => InvoiceViewModel.DeleteCurrentItem());
+            ItemsUpCommand = new RelayCommand(_ => InvoiceViewModel.SelectPreviousItem());
+            ItemsDownCommand = new RelayCommand(_ => InvoiceViewModel.SelectNextItem());
+            ItemsEscapeCommand = new RelayCommand(_ => InvoiceViewModel.CancelItemEdit());
+            HeaderEnterCommand = new RelayCommand(_ => InvoiceViewModel.SaveCurrentInvoice());
+            HeaderEscapeCommand = new RelayCommand(_ => InvoiceViewModel.CancelHeaderOrSummary());
+            HeaderUpCommand = new RelayCommand(_ => InvoiceViewModel.SelectPreviousInvoice());
+            HeaderDownCommand = new RelayCommand(_ => InvoiceViewModel.SelectNextInvoice());
+            SummaryEnterCommand = new RelayCommand(_ => InvoiceViewModel.SaveCurrentInvoice());
+            SummaryEscapeCommand = new RelayCommand(_ => InvoiceViewModel.CancelHeaderOrSummary());
+            SummaryUpCommand = new RelayCommand(_ => InvoiceViewModel.SelectPreviousInvoice());
+            SummaryDownCommand = new RelayCommand(_ => InvoiceViewModel.SelectNextInvoice());
             ShowInvoicesCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.MainWindow));
             ShowPaymentMethodsCommand = new RelayCommand(_ => _navigation.Push(AppState.PaymentMethod));
             ShowSuppliersCommand = new RelayCommand(_ => _navigation.Push(AppState.Supplier));
