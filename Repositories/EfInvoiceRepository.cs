@@ -15,6 +15,34 @@ namespace InvoiceApp.Repositories
         {
         }
 
+        public async Task<IEnumerable<Invoice>> GetHeadersAsync()
+        {
+            using var ctx = ContextFactory.CreateDbContext();
+            return await ctx.Invoices
+                .Include(i => i.Supplier)
+                .ToListAsync();
+        }
+
+        public async Task<Invoice?> GetDetailsAsync(int id)
+        {
+            using var ctx = ContextFactory.CreateDbContext();
+            return await ctx.Invoices
+                .Include(i => i.Supplier)
+                .Include(i => i.PaymentMethod)
+                .Include(i => i.Items)
+                    .ThenInclude(it => it.Product)
+                        .ThenInclude(p => p.Unit)
+                .Include(i => i.Items)
+                    .ThenInclude(it => it.Product)
+                        .ThenInclude(p => p.ProductGroup)
+                .Include(i => i.Items)
+                    .ThenInclude(it => it.Product)
+                        .ThenInclude(p => p.TaxRate)
+                .Include(i => i.Items)
+                    .ThenInclude(it => it.TaxRate)
+                .FirstOrDefaultAsync(i => i.Id == id);
+        }
+
         public override async Task<IEnumerable<Invoice>> GetAllAsync()
         {
             try

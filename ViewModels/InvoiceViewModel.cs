@@ -104,15 +104,20 @@ namespace InvoiceApp.ViewModels
 
                 if (_selectedInvoice != null)
                 {
+                    var detailed = _service.GetDetailsAsync(_selectedInvoice.Id).GetAwaiter().GetResult();
+                    if (detailed != null)
+                    {
+                        _selectedInvoice = detailed;
+                    }
                     _selectedInvoice.ErrorsChanged += Invoice_ErrorsChanged;
                 }
-                Header.SelectedInvoice = value;
-                Items = value != null
+                Header.SelectedInvoice = _selectedInvoice;
+                Items = _selectedInvoice != null
                     ? new ObservableCollection<InvoiceItemViewModel>(
-                        value.Items.Select(i => new InvoiceItemViewModel(i)))
+                        _selectedInvoice.Items.Select(i => new InvoiceItemViewModel(i)))
                     : new ObservableCollection<InvoiceItemViewModel>();
-                SelectedSupplier = value?.Supplier;
-                SelectedPaymentMethod = value?.PaymentMethod;
+                SelectedSupplier = _selectedInvoice?.Supplier;
+                SelectedPaymentMethod = _selectedInvoice?.PaymentMethod;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(ValidationErrors));
                 OnPropertyChanged(nameof(HasValidationErrors));
@@ -329,7 +334,7 @@ namespace InvoiceApp.ViewModels
         {
             Log.Debug("InvoiceViewModel.LoadAsync called");
             ShowStatus("Betöltés...");
-            var items = await _service.GetAllAsync();
+            var items = await _service.GetHeadersAsync();
             Invoices = new ObservableCollection<Invoice>(items);
 
             var prods = await _productService.GetAllAsync();
