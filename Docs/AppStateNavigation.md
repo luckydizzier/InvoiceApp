@@ -39,3 +39,7 @@ Global keyboard shortcuts are mapped as follows:
 | `Escape` | Go back |
 
 The invoice editor substates (`Header`, `ItemList`, `Summary`) respond only to **Enter**, **Escape** and the **arrow** keys for navigation.
+
+## Deletion confirmations
+
+Every view model that performs a delete operation must show a confirmation dialog before calling the underlying `DeleteAsync` service. Use `DialogHelper.ConfirmDeletion` with a short description of the item being deleted. This ensures users receive consistent prompts across the application.
