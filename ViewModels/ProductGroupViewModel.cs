@@ -7,7 +7,7 @@ using InvoiceApp;
 
 namespace InvoiceApp.ViewModels
 {
-    public class ProductGroupViewModel : EntityCollectionViewModel<ProductGroup>
+    public class ProductGroupViewModel : MasterDataViewModel<ProductGroup>
     {
         private readonly IProductGroupService _service;
         public ObservableCollection<ProductGroup> Groups

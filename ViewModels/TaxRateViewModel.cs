@@ -7,7 +7,7 @@ using InvoiceApp;
 
 namespace InvoiceApp.ViewModels
 {
-    public class TaxRateViewModel : EntityCollectionViewModel<TaxRate>
+    public class TaxRateViewModel : MasterDataViewModel<TaxRate>
     {
         private readonly ITaxRateService _service;
         public ObservableCollection<TaxRate> Rates
