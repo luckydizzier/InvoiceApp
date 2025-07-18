@@ -11,7 +11,7 @@ using InvoiceApp;
 
 namespace InvoiceApp.ViewModels
 {
-    public class ProductViewModel : EntityCollectionViewModel<Product>
+    public class ProductViewModel : MasterDataViewModel<Product>
     {
         private readonly IProductService _service;
         private readonly ITaxRateService _taxRateService;

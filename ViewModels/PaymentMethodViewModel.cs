@@ -7,7 +7,7 @@ using InvoiceApp;
 
 namespace InvoiceApp.ViewModels
 {
-    public class PaymentMethodViewModel : EntityCollectionViewModel<PaymentMethod>
+    public class PaymentMethodViewModel : MasterDataViewModel<PaymentMethod>
     {
         private readonly IPaymentMethodService _service;
         public ObservableCollection<PaymentMethod> Methods

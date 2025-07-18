@@ -7,7 +7,7 @@ using InvoiceApp;
 
 namespace InvoiceApp.ViewModels
 {
-    public class SupplierViewModel : EntityCollectionViewModel<Supplier>
+    public class SupplierViewModel : MasterDataViewModel<Supplier>
     {
         private readonly ISupplierService _service;
         public ObservableCollection<Supplier> Suppliers
