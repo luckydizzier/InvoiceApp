@@ -9,6 +9,8 @@ using FluentValidation;
 using Serilog;
 using Microsoft.EntityFrameworkCore;
 using InvoiceApp.Data;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace InvoiceApp.Services
 {
@@ -17,6 +19,7 @@ namespace InvoiceApp.Services
         private readonly IInvoiceRepository _repository;
         private readonly IValidator<InvoiceDto> _validator;
         private readonly IDbContextFactory<InvoiceContext> _contextFactory;
+        private readonly IChangeLogService _logService;
 
         public InvoiceService(IInvoiceRepository repository, IChangeLogService logService, IValidator<InvoiceDto> validator, IDbContextFactory<InvoiceContext> contextFactory)
             : base(repository, logService)
@@ -24,6 +27,7 @@ namespace InvoiceApp.Services
             _repository = repository;
             _validator = validator;
             _contextFactory = contextFactory;
+            _logService = logService;
         }
 
 
@@ -93,35 +97,103 @@ namespace InvoiceApp.Services
                     ctx.Invoices.Update(invoice);
                 }
 
+                var itemOps = new List<(InvoiceItem Item, string Operation)>();
                 foreach (var item in items)
                 {
                     if (item.Product != null)
                     {
-                        ctx.Attach(item.Product);
+                        if (item.Product.Id == 0)
+                        {
+                            item.Product.DateCreated = DateTime.Now;
+                            item.Product.DateUpdated = item.Product.DateCreated;
+                            item.Product.Active = true;
+                            await ctx.Products.AddAsync(item.Product);
+                        }
+                        else
+                        {
+                            ctx.Products.Update(item.Product);
+                        }
                     }
+
                     if (item.TaxRate != null)
                     {
-                        ctx.Attach(item.TaxRate);
+                        if (item.TaxRate.Id == 0)
+                        {
+                            item.TaxRate.DateCreated = DateTime.Now;
+                            item.TaxRate.DateUpdated = item.TaxRate.DateCreated;
+                            item.TaxRate.Active = true;
+                            await ctx.TaxRates.AddAsync(item.TaxRate);
+                        }
+                        else
+                        {
+                            ctx.TaxRates.Update(item.TaxRate);
+                        }
                     }
+
                     item.Invoice = invoice;
                     item.InvoiceId = invoice.Id;
 
+                    string itemOp;
                     if (item.Id == 0)
                     {
                         item.DateCreated = DateTime.Now;
                         item.DateUpdated = item.DateCreated;
                         item.Active = true;
                         await ctx.InvoiceItems.AddAsync(item);
+                        itemOp = "Add";
                     }
                     else
                     {
                         item.DateUpdated = DateTime.Now;
                         ctx.InvoiceItems.Update(item);
+                        itemOp = "Update";
                     }
+
+                    itemOps.Add((item, itemOp));
                 }
+
+                var invoiceOp = invoice.Id == 0 ? "Add" : "Update";
+                var supplierOp = invoice.Supplier != null ? (invoice.Supplier.Id == 0 ? "Add" : "Update") : string.Empty;
 
                 await ctx.SaveChangesAsync();
                 await trx.CommitAsync();
+
+                var options = new System.Text.Json.JsonSerializerOptions { ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve };
+                if (invoice.Supplier != null)
+                {
+                    await _logService.AddAsync(new ChangeLog
+                    {
+                        Entity = nameof(Supplier),
+                        Operation = supplierOp,
+                        Data = System.Text.Json.JsonSerializer.Serialize(invoice.Supplier, options),
+                        DateCreated = DateTime.Now,
+                        DateUpdated = DateTime.Now,
+                        Active = true
+                    });
+                }
+
+                await _logService.AddAsync(new ChangeLog
+                {
+                    Entity = nameof(Invoice),
+                    Operation = invoiceOp,
+                    Data = System.Text.Json.JsonSerializer.Serialize(invoice, options),
+                    DateCreated = DateTime.Now,
+                    DateUpdated = DateTime.Now,
+                    Active = true
+                });
+
+                foreach (var (it, op) in itemOps)
+                {
+                    await _logService.AddAsync(new ChangeLog
+                    {
+                        Entity = nameof(InvoiceItem),
+                        Operation = op,
+                        Data = System.Text.Json.JsonSerializer.Serialize(it, options),
+                        DateCreated = DateTime.Now,
+                        DateUpdated = DateTime.Now,
+                        Active = true
+                    });
+                }
             }
             catch
             {
