@@ -16,8 +16,13 @@ namespace InvoiceApp.Tests
 {
     internal class StubInvoiceRepository : IInvoiceRepository
     {
-        public Task<IEnumerable<Invoice>> GetAllAsync() => Task.FromResult<IEnumerable<Invoice>>(Array.Empty<Invoice>());
-        public Task<Invoice?> GetByIdAsync(int id) => Task.FromResult<Invoice?>(null);
+        public IEnumerable<Invoice> Headers { get; set; } = Array.Empty<Invoice>();
+        public Invoice? Detail { get; set; }
+
+        public Task<IEnumerable<Invoice>> GetAllAsync() => Task.FromResult<IEnumerable<Invoice>>(Headers);
+        public Task<IEnumerable<Invoice>> GetHeadersAsync() => Task.FromResult(Headers);
+        public Task<Invoice?> GetByIdAsync(int id) => Task.FromResult(Detail);
+        public Task<Invoice?> GetDetailsAsync(int id) => Task.FromResult(Detail);
         public Task AddAsync(Invoice entity) => Task.CompletedTask;
         public Task UpdateAsync(Invoice entity) => Task.CompletedTask;
         public Task DeleteAsync(int id) => Task.CompletedTask;
@@ -131,6 +136,37 @@ namespace InvoiceApp.Tests
 
             await Assert.ThrowsExceptionAsync<ValidationException>(
                 () => service.SaveInvoiceWithItemsAsync(invoice, Array.Empty<InvoiceItem>()));
+        }
+
+        [TestMethod]
+        public async Task GetHeadersAsync_ReturnsRepositoryData()
+        {
+            var repo = new StubInvoiceRepository { Headers = new[] { new Invoice { Number = "1" } } };
+            var options = new DbContextOptionsBuilder<InvoiceContext>()
+                .UseInMemoryDatabase(nameof(GetHeadersAsync_ReturnsRepositoryData))
+                .Options;
+            var factory = new PooledDbContextFactory<InvoiceContext>(options);
+            var service = new InvoiceService(repo, _logService, new InvoiceDtoValidator(), factory);
+
+            var result = await service.GetHeadersAsync();
+
+            Assert.AreEqual(1, result.Count());
+        }
+
+        [TestMethod]
+        public async Task GetDetailsAsync_ReturnsRepositoryData()
+        {
+            var repo = new StubInvoiceRepository { Detail = new Invoice { Id = 1, Number = "1" } };
+            var options = new DbContextOptionsBuilder<InvoiceContext>()
+                .UseInMemoryDatabase(nameof(GetDetailsAsync_ReturnsRepositoryData))
+                .Options;
+            var factory = new PooledDbContextFactory<InvoiceContext>(options);
+            var service = new InvoiceService(repo, _logService, new InvoiceDtoValidator(), factory);
+
+            var result = await service.GetDetailsAsync(1);
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(1, result!.Id);
         }
     }
 }

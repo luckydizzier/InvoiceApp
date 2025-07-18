@@ -17,12 +17,14 @@ namespace InvoiceApp.Tests
         public Task DeleteAsync(int id) => Task.CompletedTask;
         public IEnumerable<AppState> GetStatePath() => Enumerable.Empty<AppState>();
         public Task<IEnumerable<Invoice>> GetAllAsync() => Task.FromResult(Enumerable.Empty<Invoice>());
+        public Task<IEnumerable<Invoice>> GetHeadersAsync() => Task.FromResult(Enumerable.Empty<Invoice>());
         Task<IEnumerable<InvoiceItem>> IInvoiceItemService.GetAllAsync() => Task.FromResult(Enumerable.Empty<InvoiceItem>());
         Task<IEnumerable<Product>> IProductService.GetAllAsync() => Task.FromResult(Enumerable.Empty<Product>());
         Task<IEnumerable<TaxRate>> ITaxRateService.GetAllAsync() => Task.FromResult(Enumerable.Empty<TaxRate>());
         Task<IEnumerable<Supplier>> ISupplierService.GetAllAsync() => Task.FromResult(Enumerable.Empty<Supplier>());
         Task<IEnumerable<PaymentMethod>> IPaymentMethodService.GetAllAsync() => Task.FromResult(Enumerable.Empty<PaymentMethod>());
         public Task<Invoice?> GetByIdAsync(int id) => Task.FromResult<Invoice?>(null);
+        public Task<Invoice?> GetDetailsAsync(int id) => Task.FromResult<Invoice?>(null);
         Task<InvoiceItem?> IInvoiceItemService.GetByIdAsync(int id) => Task.FromResult<InvoiceItem?>(null);
         Task<Product?> IProductService.GetByIdAsync(int id) => Task.FromResult<Product?>(null);
         Task<TaxRate?> ITaxRateService.GetByIdAsync(int id) => Task.FromResult<TaxRate?>(null);

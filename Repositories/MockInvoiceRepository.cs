@@ -9,6 +9,10 @@ namespace InvoiceApp.Repositories
     {
         private readonly List<Invoice> _storage = new();
 
+        public Task<IEnumerable<Invoice>> GetHeadersAsync() => Task.FromResult<IEnumerable<Invoice>>(_storage);
+
+        public Task<Invoice?> GetDetailsAsync(int id) => GetByIdAsync(id);
+
         public Task<IEnumerable<Invoice>> GetAllAsync() => Task.FromResult<IEnumerable<Invoice>>(_storage);
 
         public Task<Invoice?> GetByIdAsync(int id)

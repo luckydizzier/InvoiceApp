@@ -30,6 +30,18 @@ namespace InvoiceApp.Services
             _logService = logService;
         }
 
+        public Task<IEnumerable<Invoice>> GetHeadersAsync()
+        {
+            Log.Debug("InvoiceService.GetHeadersAsync called");
+            return _repository.GetHeadersAsync();
+        }
+
+        public Task<Invoice?> GetDetailsAsync(int id)
+        {
+            Log.Debug("InvoiceService.GetDetailsAsync called for {Id}", id);
+            return _repository.GetDetailsAsync(id);
+        }
+
 
         public Task<Invoice?> GetLatestForSupplierAsync(int supplierId)
         {
