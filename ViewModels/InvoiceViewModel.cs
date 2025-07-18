@@ -22,6 +22,7 @@ namespace InvoiceApp.ViewModels
         private readonly IPaymentMethodService _paymentService;
         private readonly IChangeLogService _logService;
         private readonly SupplierViewModel _supplierViewModel;
+        private readonly INavigationService _navigation;
         private ObservableCollection<Invoice> _invoices = new();
         private ObservableCollection<InvoiceItemViewModel> _items = new();
         private ObservableCollection<Product> _products = new();
@@ -309,7 +310,8 @@ namespace InvoiceApp.ViewModels
             ISupplierService supplierService,
             IPaymentMethodService paymentService,
             IChangeLogService logService,
-            SupplierViewModel supplierViewModel)
+            SupplierViewModel supplierViewModel,
+            INavigationService navigation)
         {
             _service = service;
             _itemService = itemService;
@@ -319,6 +321,7 @@ namespace InvoiceApp.ViewModels
             _paymentService = paymentService;
             _logService = logService;
             _supplierViewModel = supplierViewModel;
+            _navigation = navigation;
 
             _statusTimer = new System.Windows.Threading.DispatcherTimer
             {
@@ -594,6 +597,8 @@ namespace InvoiceApp.ViewModels
 
             Invoices.Insert(0, invoice);
             SelectedInvoice = invoice;
+            IsInvoiceListFocused = false;
+            _navigation.PushSubstate(AppState.Header);
             Items = new ObservableCollection<InvoiceItemViewModel>();
             ShowStatus("Új számla szerkesztése");
             ((RelayCommand)SaveCommand).RaiseCanExecuteChanged();
