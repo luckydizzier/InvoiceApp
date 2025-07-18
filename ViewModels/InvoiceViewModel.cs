@@ -555,7 +555,6 @@ namespace InvoiceApp.ViewModels
                         DateCreated = DateTime.Now,
                         DateUpdated = DateTime.Now
                     };
-                    await _taxRateService.SaveAsync(rate);
                     TaxRates.Add(rate);
                 }
                 it.TaxRate = rate;
@@ -567,7 +566,6 @@ namespace InvoiceApp.ViewModels
                 {
                     it.Product.TaxRate = rate;
                     it.Product.TaxRateId = rate.Id;
-                    await _productService.SaveAsync(it.Product);
                 }
             }
 

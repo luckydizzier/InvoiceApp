@@ -26,8 +26,13 @@ namespace InvoiceApp.Tests
 
     internal class StubChangeLogService : IChangeLogService
     {
-        public Task AddAsync(ChangeLog log) => Task.CompletedTask;
-        public Task<ChangeLog?> GetLatestAsync() => Task.FromResult<ChangeLog?>(null);
+        public List<ChangeLog> Logs { get; } = new();
+        public Task AddAsync(ChangeLog log)
+        {
+            Logs.Add(log);
+            return Task.CompletedTask;
+        }
+        public Task<ChangeLog?> GetLatestAsync() => Task.FromResult(Logs.LastOrDefault());
     }
 
     internal class ThrowEnumerable<T> : IEnumerable<T>
@@ -54,13 +59,16 @@ namespace InvoiceApp.Tests
     [TestClass]
     public class InvoiceServiceTests
     {
+        private StubChangeLogService _logService = new();
+
         private InvoiceService CreateService(string dbName)
         {
             var options = new DbContextOptionsBuilder<InvoiceContext>()
                 .UseInMemoryDatabase(dbName)
                 .Options;
             var factory = new PooledDbContextFactory<InvoiceContext>(options);
-            return new InvoiceService(new StubInvoiceRepository(), new StubChangeLogService(), new InvoiceDtoValidator(), factory);
+            _logService = new StubChangeLogService();
+            return new InvoiceService(new StubInvoiceRepository(), _logService, new InvoiceDtoValidator(), factory);
         }
 
         [TestMethod]
@@ -92,6 +100,22 @@ namespace InvoiceApp.Tests
             Assert.AreEqual(0, ctx.Invoices.Count());
             Assert.AreEqual(0, ctx.InvoiceItems.Count());
             Assert.AreEqual(0, ctx.Suppliers.Count());
+        }
+
+        [TestMethod]
+        public async Task SaveInvoiceWithItemsAsync_WritesChangeLogs()
+        {
+            var service = CreateService(nameof(SaveInvoiceWithItemsAsync_WritesChangeLogs));
+            var supplier = new Supplier { Name = "Test" };
+            var invoice = new Invoice { Number = "1", Date = DateTime.Today, Supplier = supplier, PaymentMethodId = 0 };
+            var item = new InvoiceItem { Quantity = 1, UnitPrice = 10 };
+
+            await service.SaveInvoiceWithItemsAsync(invoice, new[] { item });
+
+            Assert.AreEqual(3, _logService.Logs.Count);
+            Assert.IsTrue(_logService.Logs.Any(l => l.Entity == nameof(Supplier) && l.Operation == "Add"));
+            Assert.IsTrue(_logService.Logs.Any(l => l.Entity == nameof(Invoice) && l.Operation == "Add"));
+            Assert.IsTrue(_logService.Logs.Any(l => l.Entity == nameof(InvoiceItem) && l.Operation == "Add"));
         }
     }
 }
