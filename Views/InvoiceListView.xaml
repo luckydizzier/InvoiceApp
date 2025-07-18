@@ -5,6 +5,9 @@
              xmlns:views="clr-namespace:InvoiceApp.Views"
              xmlns:helpers="clr-namespace:InvoiceApp.Helpers"
              MinHeight="300" MinWidth="500">
+    <UserControl.InputBindings>
+        <KeyBinding Key="Delete" Command="{Binding DataContext.DeleteInvoiceCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
+    </UserControl.InputBindings>
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
     </UserControl.Resources>
