@@ -6,7 +6,8 @@
         xmlns:views="clr-namespace:InvoiceApp.Views"
         xmlns:helpers="clr-namespace:InvoiceApp.Helpers"
         mc:Ignorable="d"
-        Title="Számlakezelő" MinHeight="600" MinWidth="1000">
+        Title="Számlakezelő" MinHeight="600" MinWidth="1000"
+        PreviewKeyDown="Window_PreviewKeyDown">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <DataTemplate x:Key="MainWindowTemplate">
