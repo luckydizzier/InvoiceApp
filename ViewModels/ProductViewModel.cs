@@ -195,17 +195,31 @@ namespace InvoiceApp.ViewModels
                 var rate = TaxRates.FirstOrDefault(r => r.Percentage == percent);
                 if (rate == null)
                 {
-                    rate = new TaxRate
+                    var confirmAdd = DialogHelper.ShowConfirmation(
+                        $"Nincs {percent}% áfakulcs. Új áfakulcsot szeretnél létrehozni?",
+                        "Megerősítés");
+                    if (confirmAdd)
                     {
-                        Name = $"ÁFA {percent}%",
-                        Percentage = percent,
-                        EffectiveFrom = DateTime.Today,
-                        Active = true,
-                        DateCreated = DateTime.Now,
-                        DateUpdated = DateTime.Now
-                    };
-                    await _taxRateService.SaveAsync(rate);
-                    TaxRates.Add(rate);
+                        rate = new TaxRate
+                        {
+                            Name = $"ÁFA {percent}%",
+                            Percentage = percent,
+                            EffectiveFrom = DateTime.Today,
+                            Active = true,
+                            DateCreated = DateTime.Now,
+                            DateUpdated = DateTime.Now
+                        };
+                        await _taxRateService.SaveAsync(rate);
+                        TaxRates.Add(rate);
+                    }
+                    else
+                    {
+                        rate = TaxRates.FirstOrDefault(r => r.Id == SelectedProduct.TaxRateId);
+                        if (rate != null)
+                        {
+                            SelectedProduct.TaxRate = rate;
+                        }
+                    }
                 }
                 SelectedProduct.TaxRate = rate;
                 SelectedProduct.TaxRateId = rate.Id;
