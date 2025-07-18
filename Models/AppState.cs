@@ -21,10 +21,6 @@ namespace InvoiceApp.Models
         /// </summary>
         InvoiceList,
         /// <summary>
-        /// Container for creating or editing invoices.
-        /// </summary>
-        InvoiceEditor,
-        /// <summary>
         /// Invoice header information step.
         /// </summary>
         Header,
@@ -84,7 +80,6 @@ namespace InvoiceApp.Models
             AppState.MainWindow => typeof(MainWindow),
             AppState.Dashboard => typeof(DashboardView),
             AppState.InvoiceList => typeof(InvoiceListView),
-            AppState.InvoiceEditor => typeof(InvoiceEditorView),
             AppState.Header => typeof(InvoiceHeaderView),
             AppState.ItemList => typeof(InvoiceItemDataGrid),
             AppState.Summary => typeof(InvoiceSummaryPanel),
@@ -109,7 +104,6 @@ namespace InvoiceApp.Models
             AppState.MainWindow => "F\u0151ablak",
             AppState.Dashboard => "Vez\u00e9rl\u0151pult",
             AppState.InvoiceList => "Sz\u00e1ml\u00e1k",
-            AppState.InvoiceEditor => "Sz\u00e1mlaszerkeszt\u0151",
             AppState.Header => "Fejl\u00e9c",
             AppState.ItemList => "T\u00e9telek",
             AppState.Summary => "\u00d6sszes\u00edt\u0151",

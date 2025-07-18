@@ -156,9 +156,6 @@
         <DataTemplate x:Key="InvoiceListTemplate">
             <views:InvoiceListView />
         </DataTemplate>
-        <DataTemplate x:Key="InvoiceEditorTemplate">
-            <views:InvoiceEditorView />
-        </DataTemplate>
         <DataTemplate x:Key="HeaderTemplate">
             <views:InvoiceHeaderView />
         </DataTemplate>
@@ -181,7 +178,6 @@
                                           ProductsTemplate="{StaticResource ProductsTemplate}"
                                           DashboardTemplate="{StaticResource DashboardTemplate}"
                                           InvoiceListTemplate="{StaticResource InvoiceListTemplate}"
-                                          InvoiceEditorTemplate="{StaticResource InvoiceEditorTemplate}"
                                           HeaderTemplate="{StaticResource HeaderTemplate}"
                                           ItemListTemplate="{StaticResource ItemListTemplate}"
                                           SummaryTemplate="{StaticResource SummaryTemplate}"

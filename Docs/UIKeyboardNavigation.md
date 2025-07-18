@@ -33,17 +33,6 @@ Press `Up` at the start of a list to quickly create a new entry.
 - `Escape` returns to the dashboard.
 - Pressing `Up` before the first entry prompts to create a new invoice.
 
-### InvoiceEditor (`InvoiceEditorView`)
-
-- Consists of `InvoiceHeaderView`, `InvoiceItemDataGrid` and
-  `InvoiceSummaryPanel`.
-- `Enter` advances to the next field; on the last field it moves to the next
-  editor step.
-- `Escape` cancels editing and returns to the invoice list.
-- `Ins` adds a new item while the item grid is focused.
-- `Del` removes the selected item from the grid.
-- `Up`/`Down` navigate rows in the item grid; `Left`/`Right` move within cells.
-- Pressing `Up` on the first row prompts to create a new item.
 
 ### Products (`ProductView`)
 
