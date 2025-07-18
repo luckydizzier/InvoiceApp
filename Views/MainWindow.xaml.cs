@@ -20,5 +20,25 @@ namespace InvoiceApp.Views
                 _viewModel.InvoiceViewModel.IsInvoiceListFocused = true;
             };
         }
+
+        private void Window_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == System.Windows.Input.Key.Up)
+            {
+                if (_viewModel.NavigateUpCommand.CanExecute(null))
+                {
+                    _viewModel.NavigateUpCommand.Execute(null);
+                    e.Handled = true;
+                }
+            }
+            else if (e.Key == System.Windows.Input.Key.Down)
+            {
+                if (_viewModel.NavigateDownCommand.CanExecute(null))
+                {
+                    _viewModel.NavigateDownCommand.Execute(null);
+                    e.Handled = true;
+                }
+            }
+        }
     }
 }
