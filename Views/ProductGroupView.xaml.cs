@@ -16,7 +16,11 @@ namespace InvoiceApp.Views
             InitializeComponent();
             _viewModel = ((App)Application.Current).Services.GetRequiredService<ProductGroupViewModel>();
             DataContext = _viewModel;
-            Loaded += async (s, e) => await _viewModel.LoadAsync();
+            Loaded += async (s, e) =>
+            {
+                await _viewModel.LoadAsync();
+                FocusManager.SetFocusedElement(this, DataGrid);
+            };
         }
 
         private void DataGrid_PreviewKeyDown(object sender, KeyEventArgs e)

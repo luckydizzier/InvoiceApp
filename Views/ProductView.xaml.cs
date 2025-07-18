@@ -16,7 +16,11 @@ namespace InvoiceApp.Views
             InitializeComponent();
             _viewModel = ((App)Application.Current).Services.GetRequiredService<ProductViewModel>();
             DataContext = _viewModel;
-            Loaded += async (s, e) => await _viewModel.LoadAsync();
+            Loaded += async (s, e) =>
+            {
+                await _viewModel.LoadAsync();
+                FocusManager.SetFocusedElement(this, SearchBox);
+            };
         }
 
         private void DataGrid_CellEditEnding(object? sender, DataGridCellEditEndingEventArgs e)
