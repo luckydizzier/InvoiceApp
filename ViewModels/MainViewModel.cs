@@ -74,6 +74,7 @@ namespace InvoiceApp.ViewModels
         public RelayCommand ShowTaxRatesCommand { get; }
         public RelayCommand ShowUnitsCommand { get; }
         public RelayCommand ShowProductsCommand { get; }
+        public RelayCommand ShowMainWindowCommand { get; }
         public RelayCommand ShowDashboardCommand { get; }
         public RelayCommand SwitchPaymentMethodsCommand { get; }
         public RelayCommand SwitchSuppliersCommand { get; }
@@ -165,6 +166,7 @@ namespace InvoiceApp.ViewModels
             ShowTaxRatesCommand = new RelayCommand(_ => _navigation.Push(AppState.TaxRates));
             ShowUnitsCommand = new RelayCommand(_ => _navigation.Push(AppState.Units));
             ShowProductsCommand = new RelayCommand(_ => _navigation.Push(AppState.Products));
+            ShowMainWindowCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.MainWindow));
             ShowDashboardCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.Dashboard));
             SwitchPaymentMethodsCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.PaymentMethods));
             SwitchSuppliersCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.Suppliers));
