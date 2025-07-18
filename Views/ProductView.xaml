@@ -19,7 +19,7 @@
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Margin="5" Grid.Row="0">
             <TextBlock Text="Keresés:" VerticalAlignment="Center" />
-            <TextBox Width="200" Margin="4,0,0,0"
+            <TextBox x:Name="SearchBox" Width="200" Margin="4,0,0,0"
                      Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
                      helpers:FocusBehavior.IsFocused="True" />
             <Button Content="Csoportok" Margin="8,0,0,0"

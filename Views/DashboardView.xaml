@@ -12,7 +12,7 @@
             <TextBlock Text="  Termékek: " Margin="20,0,0,0"/>
             <TextBlock Text="{Binding ProductCount}"/>
         </StackPanel>
-        <ListView ItemsSource="{Binding MenuItems}" HorizontalAlignment="Center" Width="300"
+        <ListView x:Name="MenuList" ItemsSource="{Binding MenuItems}" HorizontalAlignment="Center" Width="300"
                   helpers:FocusBehavior.IsFocused="True">
             <ListView.View>
                 <GridView>

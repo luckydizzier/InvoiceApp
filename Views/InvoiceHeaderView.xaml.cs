@@ -1,5 +1,6 @@
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using InvoiceApp.ViewModels;
 
 namespace InvoiceApp.Views
@@ -9,6 +10,7 @@ namespace InvoiceApp.Views
         public InvoiceHeaderView()
         {
             InitializeComponent();
+            Loaded += (s, e) => FocusManager.SetFocusedElement(this, SupplierBox);
         }
 
         private void SupplierBox_LostFocus(object sender, RoutedEventArgs e)
