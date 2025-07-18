@@ -40,7 +40,7 @@ namespace InvoiceApp
 
         public static bool IsNewDatabase { get; private set; }
 
-        public static IServiceProvider Configure()
+        public static async Task<IServiceProvider> Configure()
         {
             EnsureConfig();
 
@@ -92,7 +92,7 @@ namespace InvoiceApp
                 .CreateLogger();
 
             var provider = services.BuildServiceProvider();
-            InitializeDatabase(provider).GetAwaiter().GetResult();
+            await InitializeDatabase(provider);
             return provider;
         }
 

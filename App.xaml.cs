@@ -7,16 +7,16 @@ namespace InvoiceApp
     {
         public IServiceProvider Services { get; private set; } = null!;
 
-        protected override void OnStartup(StartupEventArgs e)
+        protected override async void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            Services = StartupOrchestrator.Configure();
+            Services = await StartupOrchestrator.Configure();
             if (StartupOrchestrator.IsNewDatabase)
             {
                 var dlg = new Views.SampleDataDialog();
                 if (dlg.ShowDialog() == true)
                 {
-                    StartupOrchestrator.PopulateSampleDataAsync(Services, dlg.Options).GetAwaiter().GetResult();
+                    await StartupOrchestrator.PopulateSampleDataAsync(Services, dlg.Options);
                 }
             }
             this.DispatcherUnhandledException += (s, args) =>
