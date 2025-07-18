@@ -6,6 +6,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using InvoiceApp.Models;
 using InvoiceApp.Services;
+using InvoiceApp.Helpers;
 
 namespace InvoiceApp.ViewModels
 {
@@ -277,10 +278,18 @@ namespace InvoiceApp.ViewModels
                 .GroupBy(i => i.TaxRatePercentage)
                 .Select(g =>
                 {
-                    decimal net = _isGrossFunc()
-                        ? g.Sum(x => x.Quantity * x.UnitPrice / (1m + g.Key / 100m))
-                        : g.Sum(x => x.Quantity * x.UnitPrice);
-                    decimal vat = net * g.Key / 100m;
+                    decimal net = 0m;
+                    decimal vat = 0m;
+                    foreach (var item in g)
+                    {
+                        var amounts = AmountCalculator.Calculate(
+                            item.Quantity,
+                            item.UnitPrice,
+                            g.Key,
+                            IsGross);
+                        net += amounts.Net;
+                        vat += amounts.Vat;
+                    }
                     return new VatBreakdownEntry
                     {
                         Rate = g.Key,

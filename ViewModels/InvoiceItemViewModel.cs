@@ -1,4 +1,5 @@
 using InvoiceApp.Models;
+using InvoiceApp.Helpers;
 
 namespace InvoiceApp.ViewModels
 {
@@ -43,6 +44,7 @@ namespace InvoiceApp.ViewModels
                 {
                     _isGross = value;
                     OnPropertyChanged();
+                    OnPropertyChanged(nameof(NetAmount));
                     OnPropertyChanged(nameof(VatAmount));
                     OnPropertyChanged(nameof(GrossAmount));
                     OnPropertyChanged(nameof(Total));
@@ -115,6 +117,7 @@ namespace InvoiceApp.ViewModels
                     OnPropertyChanged();
                     OnPropertyChanged(nameof(TaxRateId));
                     OnPropertyChanged(nameof(TaxRatePercentage));
+                    OnPropertyChanged(nameof(NetAmount));
                     OnPropertyChanged(nameof(VatAmount));
                     OnPropertyChanged(nameof(GrossAmount));
                     OnPropertyChanged(nameof(Total));
@@ -133,6 +136,7 @@ namespace InvoiceApp.ViewModels
                 {
                     _taxRatePercentage = value;
                     OnPropertyChanged();
+                    OnPropertyChanged(nameof(NetAmount));
                     OnPropertyChanged(nameof(VatAmount));
                     OnPropertyChanged(nameof(GrossAmount));
                     OnPropertyChanged(nameof(Total));
@@ -140,11 +144,14 @@ namespace InvoiceApp.ViewModels
             }
         }
 
-        public decimal NetAmount => Quantity * UnitPrice;
+        private AmountCalculator.Amounts Calculate() =>
+            AmountCalculator.Calculate(Quantity, UnitPrice, TaxRatePercentage, IsGross);
 
-        public decimal VatAmount => IsGross ? NetAmount * TaxRatePercentage / 100m : 0m;
+        public decimal NetAmount => Calculate().Net;
 
-        public decimal GrossAmount => NetAmount + VatAmount;
+        public decimal VatAmount => Calculate().Vat;
+
+        public decimal GrossAmount => Calculate().Gross;
 
         public decimal Total => GrossAmount;
     }
