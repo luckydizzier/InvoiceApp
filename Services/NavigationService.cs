@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using InvoiceApp.Models;
 
 namespace InvoiceApp.Services
@@ -74,6 +75,13 @@ namespace InvoiceApp.Services
             _substates.Clear();
             _history.Push(state);
             StateChanged?.Invoke(this, state);
+        }
+
+        public IEnumerable<AppState> GetStatePath()
+        {
+            var rootPath = _history.Reverse().Skip(1); // skip MainWindow
+            var subPath = _substates.Reverse();
+            return rootPath.Concat(subPath);
         }
     }
 }
