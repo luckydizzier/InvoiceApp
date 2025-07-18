@@ -25,7 +25,15 @@ namespace InvoiceApp.Views
 
         private void DataGrid_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            DataGridFocusBehavior.OnPreviewKeyDown(sender, e);
+            if (e.Key == Key.Up && sender is DataGrid grid && grid.SelectedIndex == 0)
+            {
+                ViewModel.SelectPreviousUnit();
+                e.Handled = true;
+            }
+            else
+            {
+                DataGridFocusBehavior.OnPreviewKeyDown(sender, e);
+            }
         }
 
         private void DataGrid_CellEditEnding(object? sender, DataGridCellEditEndingEventArgs e)
