@@ -3,6 +3,8 @@ using System.Linq;
 using InvoiceApp.Models;
 using InvoiceApp.Services;
 using InvoiceApp;
+using Microsoft.Extensions.DependencyInjection;
+using System.Windows;
 
 namespace InvoiceApp.ViewModels
 {
@@ -89,7 +91,16 @@ namespace InvoiceApp.ViewModels
             UpdateBreadcrumb();
             _navigation.StateChanged += OnStateChanged;
 
-            BackCommand = new RelayCommand(_ => _navigation.Pop());
+            BackCommand = new RelayCommand(_ =>
+            {
+                var active = GetActiveViewModel();
+                if (active is IHasChanges changeTracker && changeTracker.HasChanges)
+                {
+                    if (!DialogHelper.ShowConfirmation("Mentés nélkül kilép?", "Megerősítés"))
+                        return;
+                }
+                _navigation.Pop();
+            });
             NavigateUpCommand = new RelayCommand(_ => InvoiceViewModel.SelectPreviousInvoice());
             NavigateDownCommand = new RelayCommand(_ => InvoiceViewModel.SelectNextInvoice());
             EnterCommand = new RelayCommand(_ => InvoiceViewModel.ToggleRowDetails());
@@ -179,6 +190,21 @@ namespace InvoiceApp.ViewModels
             {
                 Breadcrumb = string.Join(" \u203a ", path.Select(s => s.GetDescription()));
             }
+        }
+
+        private object? GetActiveViewModel()
+        {
+            var provider = ((App)Application.Current).Services;
+            return CurrentState switch
+            {
+                AppState.PaymentMethods => provider.GetRequiredService<PaymentMethodViewModel>(),
+                AppState.Suppliers => provider.GetRequiredService<SupplierViewModel>(),
+                AppState.ProductGroups => provider.GetRequiredService<ProductGroupViewModel>(),
+                AppState.TaxRates => provider.GetRequiredService<TaxRateViewModel>(),
+                AppState.Units => provider.GetRequiredService<UnitViewModel>(),
+                AppState.Products => provider.GetRequiredService<ProductViewModel>(),
+                _ => null
+            };
         }
     }
 }

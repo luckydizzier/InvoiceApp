@@ -6,6 +6,10 @@ namespace InvoiceApp
 {
     public static class DialogHelper
     {
+        /// <summary>
+        /// Optional handler used in tests to override confirmation dialogs.
+        /// </summary>
+        public static Func<string, string, bool>? ConfirmationHandler { get; set; }
         public static bool ConfirmDeletion(string itemName)
         {
             var message = $"Biztosan törli a(z) {itemName} elemet?";
@@ -14,6 +18,10 @@ namespace InvoiceApp
 
         public static bool ShowConfirmation(string message, string title)
         {
+            if (ConfirmationHandler != null)
+            {
+                return ConfirmationHandler(message, title);
+            }
             var owner = Application.Current?.Windows
                 .OfType<Window>()
                 .FirstOrDefault(w => w.IsActive);
