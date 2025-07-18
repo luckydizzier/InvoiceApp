@@ -23,13 +23,13 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Menu Grid.Row="0" Grid.ColumnSpan="2">
-                    <MenuItem Header="_Ablakok">
-                        <MenuItem Header="_Fizetési módok" Command="{Binding ShowPaymentMethodsCommand}" />
-                        <MenuItem Header="_Szállítók" Command="{Binding ShowSuppliersCommand}" />
-                        <MenuItem Header="_Termékcsoportok" Command="{Binding ShowProductGroupsCommand}" />
-                        <MenuItem Header="_Áfakulcsok" Command="{Binding ShowTaxRatesCommand}" />
-                        <MenuItem Header="_Termékek" Command="{Binding ShowProductsCommand}" />
-                        <MenuItem Header="_Egységek" Command="{Binding ShowUnitsCommand}" />
+                    <MenuItem Header="Ablakok">
+                        <MenuItem Header="Fizetési módok" Command="{Binding ShowPaymentMethodsCommand}" />
+                        <MenuItem Header="Szállítók" Command="{Binding ShowSuppliersCommand}" />
+                        <MenuItem Header="Termékcsoportok" Command="{Binding ShowProductGroupsCommand}" />
+                        <MenuItem Header="Áfakulcsok" Command="{Binding ShowTaxRatesCommand}" />
+                        <MenuItem Header="Termékek" Command="{Binding ShowProductsCommand}" />
+                        <MenuItem Header="Egységek" Command="{Binding ShowUnitsCommand}" />
                     </MenuItem>
                 </Menu>
                 <StackPanel Grid.Row="1" Grid.Column="0" Margin="4">
