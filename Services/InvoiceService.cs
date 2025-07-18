@@ -110,6 +110,13 @@ namespace InvoiceApp.Services
                 }
 
                 var itemOps = new List<(InvoiceItem Item, string Operation)>();
+                var newProducts = new List<Product>();
+                var updateProducts = new List<Product>();
+                var newTaxRates = new List<TaxRate>();
+                var updateTaxRates = new List<TaxRate>();
+                var newItems = new List<InvoiceItem>();
+                var updateItems = new List<InvoiceItem>();
+
                 foreach (var item in items)
                 {
                     if (item.Product != null)
@@ -119,11 +126,11 @@ namespace InvoiceApp.Services
                             item.Product.DateCreated = DateTime.Now;
                             item.Product.DateUpdated = item.Product.DateCreated;
                             item.Product.Active = true;
-                            await ctx.Products.AddAsync(item.Product);
+                            newProducts.Add(item.Product);
                         }
                         else
                         {
-                            ctx.Products.Update(item.Product);
+                            updateProducts.Add(item.Product);
                         }
                     }
 
@@ -134,35 +141,41 @@ namespace InvoiceApp.Services
                             item.TaxRate.DateCreated = DateTime.Now;
                             item.TaxRate.DateUpdated = item.TaxRate.DateCreated;
                             item.TaxRate.Active = true;
-                            await ctx.TaxRates.AddAsync(item.TaxRate);
+                            newTaxRates.Add(item.TaxRate);
                         }
                         else
                         {
-                            ctx.TaxRates.Update(item.TaxRate);
+                            updateTaxRates.Add(item.TaxRate);
                         }
                     }
 
                     item.Invoice = invoice;
                     item.InvoiceId = invoice.Id;
 
-                    string itemOp;
                     if (item.Id == 0)
                     {
                         item.DateCreated = DateTime.Now;
                         item.DateUpdated = item.DateCreated;
                         item.Active = true;
-                        await ctx.InvoiceItems.AddAsync(item);
-                        itemOp = "Add";
+                        newItems.Add(item);
+                        itemOps.Add((item, "Add"));
                     }
                     else
                     {
                         item.DateUpdated = DateTime.Now;
-                        ctx.InvoiceItems.Update(item);
-                        itemOp = "Update";
+                        updateItems.Add(item);
+                        itemOps.Add((item, "Update"));
                     }
-
-                    itemOps.Add((item, itemOp));
                 }
+
+                await ctx.Products.AddRangeAsync(newProducts);
+                ctx.Products.UpdateRange(updateProducts);
+
+                await ctx.TaxRates.AddRangeAsync(newTaxRates);
+                ctx.TaxRates.UpdateRange(updateTaxRates);
+
+                await ctx.InvoiceItems.AddRangeAsync(newItems);
+                ctx.InvoiceItems.UpdateRange(updateItems);
 
                 var invoiceOp = invoice.Id == 0 ? "Add" : "Update";
                 var supplierOp = invoice.Supplier != null ? (invoice.Supplier.Id == 0 ? "Add" : "Update") : string.Empty;
