@@ -94,6 +94,30 @@ namespace InvoiceApp.Tests
         }
 
         [TestMethod]
+        public async Task SaveInvoiceWithItemsAsync_BatchInsertAndUpdate_Succeeds()
+        {
+            var service = CreateService(nameof(SaveInvoiceWithItemsAsync_BatchInsertAndUpdate_Succeeds));
+            var supplier = new Supplier { Name = "Test" };
+            var invoice = new Invoice { Number = "1", Date = DateTime.Today, Supplier = supplier, PaymentMethodId = 0 };
+            var item1 = new InvoiceItem { Quantity = 1, UnitPrice = 10 };
+            var item2 = new InvoiceItem { Quantity = 2, UnitPrice = 20 };
+            invoice.Items.Add(item1);
+            invoice.Items.Add(item2);
+            await service.SaveInvoiceWithItemsAsync(invoice, new[] { item1, item2 });
+
+            // modify existing items and save again to test batch updates
+            item1.Quantity = 3;
+            item2.Quantity = 4;
+            await service.SaveInvoiceWithItemsAsync(invoice, new[] { item1, item2 });
+
+            using var ctx = ((PooledDbContextFactory<InvoiceContext>)service.GetType().GetField("_contextFactory", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)!.GetValue(service) as IDbContextFactory<InvoiceContext>)!.CreateDbContext();
+            Assert.AreEqual(1, ctx.Invoices.Count());
+            Assert.AreEqual(2, ctx.InvoiceItems.Count());
+            Assert.AreEqual(3, ctx.InvoiceItems.First(i => i.Id == item1.Id).Quantity);
+            Assert.AreEqual(4, ctx.InvoiceItems.First(i => i.Id == item2.Id).Quantity);
+        }
+
+        [TestMethod]
         public async Task SaveInvoiceWithItemsAsync_RollsBackOnFailure()
         {
             var service = CreateService(nameof(SaveInvoiceWithItemsAsync_RollsBackOnFailure));
