@@ -8,6 +8,7 @@ using InvoiceApp.Services;
 using InvoiceApp.DTOs;
 using InvoiceApp.Repositories;
 using InvoiceApp.Validators;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -78,6 +79,7 @@ namespace InvoiceApp.Tests
             var supplier = new Supplier { Name = "Test" };
             var invoice = new Invoice { Number = "1", Date = DateTime.Today, Supplier = supplier, PaymentMethodId = 0 };
             var item = new InvoiceItem { Quantity = 1, UnitPrice = 10 };
+            invoice.Items.Add(item);
             await service.SaveInvoiceWithItemsAsync(invoice, new[] { item });
 
             using var ctx = ((PooledDbContextFactory<InvoiceContext>)service.GetType().GetField("_contextFactory", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)!.GetValue(service) as IDbContextFactory<InvoiceContext>)!.CreateDbContext();
@@ -93,6 +95,7 @@ namespace InvoiceApp.Tests
             var supplier = new Supplier { Name = "Test" };
             var invoice = new Invoice { Number = "1", Date = DateTime.Today, Supplier = supplier, PaymentMethodId = 0 };
             var items = new[] { new InvoiceItem { Quantity = 1, UnitPrice = 10 }, new InvoiceItem { Quantity = 2, UnitPrice = 20 } };
+            foreach (var it in items) invoice.Items.Add(it);
             var throwing = new ThrowEnumerable<InvoiceItem>(items, 1);
             await Assert.ThrowsExceptionAsync<Exception>(() => service.SaveInvoiceWithItemsAsync(invoice, throwing));
 
@@ -109,6 +112,7 @@ namespace InvoiceApp.Tests
             var supplier = new Supplier { Name = "Test" };
             var invoice = new Invoice { Number = "1", Date = DateTime.Today, Supplier = supplier, PaymentMethodId = 0 };
             var item = new InvoiceItem { Quantity = 1, UnitPrice = 10 };
+            invoice.Items.Add(item);
 
             await service.SaveInvoiceWithItemsAsync(invoice, new[] { item });
 
@@ -116,6 +120,17 @@ namespace InvoiceApp.Tests
             Assert.IsTrue(_logService.Logs.Any(l => l.Entity == nameof(Supplier) && l.Operation == "Add"));
             Assert.IsTrue(_logService.Logs.Any(l => l.Entity == nameof(Invoice) && l.Operation == "Add"));
             Assert.IsTrue(_logService.Logs.Any(l => l.Entity == nameof(InvoiceItem) && l.Operation == "Add"));
+        }
+
+        [TestMethod]
+        public async Task SaveInvoiceWithItemsAsync_ThrowsWhenNoItems()
+        {
+            var service = CreateService(nameof(SaveInvoiceWithItemsAsync_ThrowsWhenNoItems));
+            var supplier = new Supplier { Name = "Test" };
+            var invoice = new Invoice { Number = "1", Date = DateTime.Today, Supplier = supplier, PaymentMethodId = 0 };
+
+            await Assert.ThrowsExceptionAsync<ValidationException>(
+                () => service.SaveInvoiceWithItemsAsync(invoice, Array.Empty<InvoiceItem>()));
         }
     }
 }

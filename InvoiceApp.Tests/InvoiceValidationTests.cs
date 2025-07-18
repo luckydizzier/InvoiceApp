@@ -18,6 +18,22 @@ namespace InvoiceApp.Tests
         }
 
         [TestMethod]
+        public void InvoiceIsInvalid_WhenNoItems()
+        {
+            var invoice = new Invoice
+            {
+                Number = "1",
+                Issuer = "Test",
+                Date = System.DateTime.Today,
+                Amount = 0,
+                SupplierId = 1,
+                PaymentMethodId = 1
+            };
+
+            Assert.IsFalse(invoice.IsValid());
+        }
+
+        [TestMethod]
         public void ViewModel_PreventsSave_ForInvalidInvoice()
         {
             var vm = TestHelpers.CreateInvoiceViewModel();
