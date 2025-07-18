@@ -31,6 +31,14 @@ namespace InvoiceApp.Views
                 return;
             }
 
+            // Only allow list navigation when the invoice list is active and
+            // no row details panel is open
+            if (_viewModel.CurrentState != Models.AppState.InvoiceList ||
+                _viewModel.InvoiceViewModel.IsRowDetailsVisible)
+            {
+                return;
+            }
+
             if (e.Key == System.Windows.Input.Key.Up)
             {
                 if (_viewModel.NavigateUpCommand.CanExecute(null))
