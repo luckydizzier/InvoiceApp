@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using InvoiceApp.Data;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Linq;
 
 namespace InvoiceApp.Services
 {
@@ -158,10 +159,15 @@ namespace InvoiceApp.Services
                 await ctx.SaveChangesAsync();
                 await trx.CommitAsync();
 
-                var options = new System.Text.Json.JsonSerializerOptions { ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve };
+                var options = new System.Text.Json.JsonSerializerOptions
+                {
+                    ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve
+                };
+
+                var logs = new List<ChangeLog>();
                 if (invoice.Supplier != null)
                 {
-                    await _logService.AddAsync(new ChangeLog
+                    logs.Add(new ChangeLog
                     {
                         Entity = nameof(Supplier),
                         Operation = supplierOp,
@@ -172,7 +178,7 @@ namespace InvoiceApp.Services
                     });
                 }
 
-                await _logService.AddAsync(new ChangeLog
+                logs.Add(new ChangeLog
                 {
                     Entity = nameof(Invoice),
                     Operation = invoiceOp,
@@ -182,17 +188,19 @@ namespace InvoiceApp.Services
                     Active = true
                 });
 
-                foreach (var (it, op) in itemOps)
+                logs.AddRange(itemOps.Select(io => new ChangeLog
                 {
-                    await _logService.AddAsync(new ChangeLog
-                    {
-                        Entity = nameof(InvoiceItem),
-                        Operation = op,
-                        Data = System.Text.Json.JsonSerializer.Serialize(it, options),
-                        DateCreated = DateTime.Now,
-                        DateUpdated = DateTime.Now,
-                        Active = true
-                    });
+                    Entity = nameof(InvoiceItem),
+                    Operation = io.Operation,
+                    Data = System.Text.Json.JsonSerializer.Serialize(io.Item, options),
+                    DateCreated = DateTime.Now,
+                    DateUpdated = DateTime.Now,
+                    Active = true
+                }));
+
+                foreach (var log in logs)
+                {
+                    await _logService.AddAsync(log);
                 }
             }
             catch

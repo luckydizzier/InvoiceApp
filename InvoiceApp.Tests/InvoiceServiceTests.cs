@@ -117,5 +117,28 @@ namespace InvoiceApp.Tests
             Assert.IsTrue(_logService.Logs.Any(l => l.Entity == nameof(Invoice) && l.Operation == "Add"));
             Assert.IsTrue(_logService.Logs.Any(l => l.Entity == nameof(InvoiceItem) && l.Operation == "Add"));
         }
+
+        [TestMethod]
+        public async Task SaveInvoiceWithItemsAsync_WritesChangeLogsOnUpdate()
+        {
+            var service = CreateService(nameof(SaveInvoiceWithItemsAsync_WritesChangeLogsOnUpdate));
+            var supplier = new Supplier { Name = "Test" };
+            var invoice = new Invoice { Number = "1", Date = DateTime.Today, Supplier = supplier, PaymentMethodId = 0 };
+            var item = new InvoiceItem { Quantity = 1, UnitPrice = 10 };
+
+            await service.SaveInvoiceWithItemsAsync(invoice, new[] { item });
+
+            supplier.Name = "Updated";
+            invoice.Number = "2";
+            item.UnitPrice = 15;
+
+            await service.SaveInvoiceWithItemsAsync(invoice, new[] { item });
+
+            Assert.AreEqual(6, _logService.Logs.Count);
+            Assert.AreEqual(3, _logService.Logs.Count(l => l.Operation == "Update"));
+            Assert.IsTrue(_logService.Logs.Any(l => l.Entity == nameof(Supplier) && l.Operation == "Update"));
+            Assert.IsTrue(_logService.Logs.Any(l => l.Entity == nameof(Invoice) && l.Operation == "Update"));
+            Assert.IsTrue(_logService.Logs.Any(l => l.Entity == nameof(InvoiceItem) && l.Operation == "Update"));
+        }
     }
 }
