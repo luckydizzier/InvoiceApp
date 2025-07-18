@@ -7,7 +7,7 @@ using InvoiceApp;
 
 namespace InvoiceApp.ViewModels
 {
-    public class TaxRateViewModel : MasterDataViewModel<TaxRate>
+    public class TaxRateViewModel : MasterDataViewModel<TaxRate>, IHasChanges
     {
         private readonly ITaxRateService _service;
         public ObservableCollection<TaxRate> Rates

@@ -7,7 +7,7 @@ using InvoiceApp;
 
 namespace InvoiceApp.ViewModels
 {
-    public class UnitViewModel : MasterDataViewModel<Unit>
+    public class UnitViewModel : MasterDataViewModel<Unit>, IHasChanges
     {
         private readonly IUnitService _service;
         public ObservableCollection<Unit> Units

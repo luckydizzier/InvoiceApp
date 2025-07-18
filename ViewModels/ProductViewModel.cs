@@ -11,7 +11,7 @@ using InvoiceApp;
 
 namespace InvoiceApp.ViewModels
 {
-    public class ProductViewModel : MasterDataViewModel<Product>
+    public class ProductViewModel : MasterDataViewModel<Product>, IHasChanges
     {
         public new RelayCommand SaveCommand { get; }
         private readonly IProductService _service;

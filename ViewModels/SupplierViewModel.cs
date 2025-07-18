@@ -7,7 +7,7 @@ using InvoiceApp;
 
 namespace InvoiceApp.ViewModels
 {
-    public class SupplierViewModel : MasterDataViewModel<Supplier>
+    public class SupplierViewModel : MasterDataViewModel<Supplier>, IHasChanges
     {
         public new RelayCommand SaveCommand { get; }
         private readonly ISupplierService _service;
