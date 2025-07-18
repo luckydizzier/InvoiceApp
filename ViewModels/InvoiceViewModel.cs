@@ -539,11 +539,6 @@ namespace InvoiceApp.ViewModels
             }
 
             SelectedInvoice.Items = Items.Select(vm => vm.Item).ToList();
-            if (SelectedSupplier != null)
-            {
-                await _supplierService.SaveAsync(SelectedSupplier);
-            }
-            await _service.SaveAsync(SelectedInvoice);
 
             foreach (var vm in Items)
             {
@@ -574,8 +569,9 @@ namespace InvoiceApp.ViewModels
                     it.Product.TaxRateId = rate.Id;
                     await _productService.SaveAsync(it.Product);
                 }
-                await _itemService.SaveAsync(it);
             }
+
+            await _service.SaveInvoiceWithItemsAsync(SelectedInvoice, Items.Select(i => i.Item));
 
             ShowStatus($"Számla mentve. ({DateTime.Now:g})");
             Log.Information("Invoice {Id} saved", SelectedInvoice.Id);
