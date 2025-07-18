@@ -1,30 +1,31 @@
 # Business Rules
 
-This document summarizes the key relationships and validation logic enforced by InvoiceApp's models and validators.
+This document summarizes relationships and validation logic defined in the codebase. Source line numbers are approximate and may change over time.
 
 ## Key Relationships
 
-- **Invoice** references a `Supplier` and a `PaymentMethod` through the `SupplierId` and `PaymentMethodId` properties. Each invoice contains a list of `InvoiceItem` objects.
-- **InvoiceItem** links back to its parent invoice and references a `Product` and a `TaxRate`.
-- **Product** is associated with a `Unit`, a `ProductGroup`, and a `TaxRate`.
-- **Base** is the common ancestor for all entities, providing `Id`, `Active`, `DateCreated`, and `DateUpdated` fields.
+- **Invoice** – `SupplierId`, `PaymentMethodId` and the `Items` list are defined around lines 52–82 of [Models/Invoice.cs](../Models/Invoice.cs).
+- **InvoiceItem** – links to `Invoice`, `Product` and `TaxRate` at lines 11–18 of [Models/InvoiceItem.cs](../Models/InvoiceItem.cs).
+- **Product** – references `Unit`, `ProductGroup` and `TaxRate` between lines 21–80 of [Models/Product.cs](../Models/Product.cs).
+- **Base** – shared fields `Id`, `Active`, `DateCreated`, `DateUpdated` appear at lines 4–9 of [Models/Base.cs](../Models/Base.cs).
 
 ## Validation Rules
 
-The validators enforce several business constraints:
+The validators use FluentValidation to enforce constraints:
 
-- **Invoice** – `Number` and `Issuer` are required, `Date` cannot be the default value, `Amount` must be non‑negative, valid `SupplierId` and `PaymentMethodId` are required, and the invoice must contain at least one item.
-- **InvoiceItem** – `Quantity` must be greater than zero, `UnitPrice` non‑negative, and both `ProductId` and `TaxRateId` must be positive.
-- **Product** – `Name` is required, `Net` and `Gross` must be non‑negative, and valid `Unit`, `ProductGroup`, and `TaxRate` references are required.
-- **Supplier** – `Name` is required; when provided, `Address` and `TaxId` must not be empty.
-- **PaymentMethod** – `Name` is required and `DueInDays` cannot be negative.
-- **TaxRate** – `Name` is required, `Percentage` must be non‑negative, `EffectiveFrom` cannot be default, and `EffectiveTo` must be later than `EffectiveFrom` when supplied.
-- **Unit** – `Name` is required; if `Code` is provided it must not be empty.
+| Entity | File & lines | Main Rules |
+| ------ | ------------ | ---------- |
+| Invoice | [InvoiceDtoValidator.cs](../Validators/InvoiceDtoValidator.cs) 10–21 | Number and Issuer required, Date not default, Amount >= 0, valid SupplierId, PaymentMethodId, at least one item |
+| InvoiceItem | [InvoiceItemDtoValidator.cs](../Validators/InvoiceItemDtoValidator.cs) 10–13 | Quantity > 0, UnitPrice >= 0, ProductId > 0, TaxRateId > 0 |
+| Product | [ProductDtoValidator.cs](../Validators/ProductDtoValidator.cs) 10–16 | Name required, Net & Gross >= 0, valid UnitId, ProductGroupId, TaxRateId |
+| Supplier | [SupplierDtoValidator.cs](../Validators/SupplierDtoValidator.cs) 10–12 | Name required, Address & TaxId not empty when supplied |
+| PaymentMethod | [PaymentMethodDtoValidator.cs](../Validators/PaymentMethodDtoValidator.cs) 10–11 | Name required, DueInDays >= 0 |
+| TaxRate | [TaxRateDtoValidator.cs](../Validators/TaxRateDtoValidator.cs) 11–14 | Name required, Percentage >= 0, valid date range |
+| Unit | [UnitDtoValidator.cs](../Validators/UnitDtoValidator.cs) 10–11 | Name required, Code required when provided |
 
 ## Implicit Logic
 
 - Invoices must reference valid suppliers and payment methods and contain at least one item.
-- Items always point to a product and a tax rate; products in turn require units, tax rates and product groups.
-- All entities track creation and update timestamps along with an `Active` flag for soft deletion or state management.
-- The `AmountCalculator` helper computes net, VAT and gross amounts for invoice items and supports both net and gross calculation modes.
-
+- Items always link to a product and a tax rate; products in turn depend on units, tax rates and groups.
+- All entities record timestamps and an `Active` flag for soft deletion or state management.
+- The [AmountCalculator](../Helpers/AmountCalculator.cs) helper (lines 8–24) computes net, VAT and gross amounts for items in both net and gross modes.
