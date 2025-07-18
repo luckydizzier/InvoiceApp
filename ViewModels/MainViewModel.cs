@@ -14,6 +14,7 @@ namespace InvoiceApp.ViewModels
     public class MainViewModel : ViewModelBase
     {
         private readonly INavigationService _navigation;
+        private readonly IStatusService _statusService;
         private AppState _current;
         private string _currentStateDescription = string.Empty;
         private string _breadcrumb = string.Empty;
@@ -82,10 +83,13 @@ namespace InvoiceApp.ViewModels
         public RelayCommand SwitchUnitsCommand { get; }
         public RelayCommand SwitchProductsCommand { get; }
 
-        public MainViewModel(INavigationService navigation, InvoiceViewModel invoiceViewModel)
+        public MainViewModel(INavigationService navigation,
+                             InvoiceViewModel invoiceViewModel,
+                             IStatusService statusService)
         {
             _navigation = navigation;
             InvoiceViewModel = invoiceViewModel;
+            _statusService = statusService;
             _current = _navigation.CurrentState;
             _currentStateDescription = _current.GetDescription();
             UpdateBreadcrumb();
@@ -177,6 +181,27 @@ namespace InvoiceApp.ViewModels
             CurrentState = state;
             UpdateBreadcrumb();
             InvoiceViewModel.UpdateNavigationStatus(state);
+            UpdateStatusHint(state);
+        }
+
+        private void UpdateStatusHint(AppState state)
+        {
+            switch (state)
+            {
+                case AppState.InvoiceList:
+                case AppState.Products:
+                case AppState.ProductGroups:
+                case AppState.Suppliers:
+                case AppState.TaxRates:
+                case AppState.Units:
+                case AppState.PaymentMethods:
+                    _statusService.Show("Nyomja meg az Esc-et a visszal\u00e9p\u00e9shez");
+                    break;
+                case AppState.Dashboard:
+                case AppState.MainWindow:
+                    _statusService.Show(string.Empty);
+                    break;
+            }
         }
 
         private void UpdateBreadcrumb()
