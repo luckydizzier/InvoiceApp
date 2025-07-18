@@ -2,23 +2,23 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using InvoiceApp.ViewModels;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace InvoiceApp.Views
 {
     public partial class DashboardView : UserControl
     {
-        private readonly DashboardViewModel _viewModel;
+        private DashboardViewModel ViewModel => (DashboardViewModel)DataContext;
 
         public DashboardView()
         {
             InitializeComponent();
-            _viewModel = ((App)Application.Current).Services.GetRequiredService<DashboardViewModel>();
-            DataContext = _viewModel;
             Loaded += async (s, e) =>
             {
-                await _viewModel.LoadAsync();
-                FocusManager.SetFocusedElement(this, MenuList);
+                if (DataContext is DashboardViewModel vm)
+                {
+                    await vm.LoadAsync();
+                    FocusManager.SetFocusedElement(this, MenuList);
+                }
             };
         }
     }
