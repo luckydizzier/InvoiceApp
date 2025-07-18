@@ -10,6 +10,7 @@ namespace InvoiceApp.ViewModels
     public class PaymentMethodViewModel : MasterDataViewModel<PaymentMethod>, IHasChanges
     {
         private readonly IPaymentMethodService _service;
+        private readonly IStatusService _statusService;
         public ObservableCollection<PaymentMethod> Methods
         {
             get => Items;
@@ -22,10 +23,12 @@ namespace InvoiceApp.ViewModels
             set => SelectedItem = value;
         }
 
-        public PaymentMethodViewModel(IPaymentMethodService service)
+        public PaymentMethodViewModel(IPaymentMethodService service,
+            IStatusService statusService)
             : base(true)
         {
             _service = service;
+            _statusService = statusService;
             ClearChanges();
         }
 
@@ -48,7 +51,7 @@ namespace InvoiceApp.ViewModels
             if (!DialogHelper.ConfirmDeletion("fizetési módot"))
                 return false;
             await _service.DeleteAsync(method.Id);
-            DialogHelper.ShowInfo("Törlés sikeres.");
+            _statusService.Show("Törlés sikeres.");
             return true;
         }
 

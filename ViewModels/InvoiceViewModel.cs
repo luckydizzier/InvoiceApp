@@ -23,6 +23,7 @@ namespace InvoiceApp.ViewModels
         private readonly IChangeLogService _logService;
         private readonly SupplierViewModel _supplierViewModel;
         private readonly INavigationService _navigation;
+        private readonly IStatusService _statusService;
         private ObservableCollection<Invoice> _invoices = new();
         private Invoice? _selectedInvoice;
         private string _statusMessage = string.Empty;
@@ -56,6 +57,7 @@ namespace InvoiceApp.ViewModels
 
         private void ShowStatus(string message)
         {
+            _statusService.Show(message);
             StatusMessage = message;
             _statusTimer.Stop();
             _statusTimer.Start();
@@ -283,7 +285,8 @@ namespace InvoiceApp.ViewModels
             IPaymentMethodService paymentService,
             IChangeLogService logService,
             SupplierViewModel supplierViewModel,
-            INavigationService navigation)
+            INavigationService navigation,
+            IStatusService statusService)
         {
             _service = service;
             _itemService = itemService;
@@ -294,10 +297,11 @@ namespace InvoiceApp.ViewModels
             _logService = logService;
             _supplierViewModel = supplierViewModel;
             _navigation = navigation;
+            _statusService = statusService;
 
             Header = new HeaderViewModel(
                 _supplierViewModel,
-                ShowStatus,
+                _statusService.Show,
                 SuggestNextNumberAsync,
                 () => ((RelayCommand)SaveCommand).RaiseCanExecuteChanged(),
                 MarkDirty,
@@ -307,7 +311,7 @@ namespace InvoiceApp.ViewModels
                 _itemService,
                 _productService,
                 _taxRateService,
-                ShowStatus,
+                _statusService,
                 () => ((RelayCommand)SaveCommand).RaiseCanExecuteChanged(),
                 MarkDirty,
                 () => Header.IsGrossCalculation,

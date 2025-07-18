@@ -10,6 +10,7 @@ namespace InvoiceApp.ViewModels
     public class UnitViewModel : MasterDataViewModel<Unit>, IHasChanges
     {
         private readonly IUnitService _service;
+        private readonly IStatusService _statusService;
         public ObservableCollection<Unit> Units
         {
             get => Items;
@@ -22,10 +23,12 @@ namespace InvoiceApp.ViewModels
             set => SelectedItem = value;
         }
 
-        public UnitViewModel(IUnitService service)
+        public UnitViewModel(IUnitService service,
+            IStatusService statusService)
             : base(true)
         {
             _service = service;
+            _statusService = statusService;
             ClearChanges();
         }
 
@@ -48,7 +51,7 @@ namespace InvoiceApp.ViewModels
             if (!DialogHelper.ConfirmDeletion("mértékegységet"))
                 return false;
             await _service.DeleteAsync(unit.Id);
-            DialogHelper.ShowInfo("Törlés sikeres.");
+            _statusService.Show("Törlés sikeres.");
             return true;
         }
 
