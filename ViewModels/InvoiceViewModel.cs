@@ -720,8 +720,10 @@ namespace InvoiceApp.ViewModels
                 .GroupBy(i => i.TaxRatePercentage)
                 .Select(g =>
                 {
-                    var net = g.Sum(x => x.Quantity * x.UnitPrice);
-                    var vat = IsGrossCalculation ? net * g.Key / 100m : 0m;
+                    decimal net = IsGrossCalculation
+                        ? g.Sum(x => x.Quantity * x.UnitPrice / (1m + g.Key / 100m))
+                        : g.Sum(x => x.Quantity * x.UnitPrice);
+                    decimal vat = net * g.Key / 100m;
                     return new VatBreakdownEntry
                     {
                         Rate = g.Key,
@@ -732,7 +734,7 @@ namespace InvoiceApp.ViewModels
 
             VatBreakdown = new ObservableCollection<VatBreakdownEntry>(breakdown);
             TotalNet = VatBreakdown.Sum(v => v.Net);
-            TotalVat = IsGrossCalculation ? VatBreakdown.Sum(v => v.Vat) : 0m;
+            TotalVat = VatBreakdown.Sum(v => v.Vat);
             TotalGross = TotalNet + TotalVat;
             InWords = $"In Words: {NumberToWords((long)TotalGross)} Forint";
         }
