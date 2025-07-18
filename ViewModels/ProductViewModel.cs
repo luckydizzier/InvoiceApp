@@ -1,9 +1,9 @@
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Data;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Input;
 using System.Linq;
 using InvoiceApp.Models;
 using InvoiceApp.Services;
@@ -11,25 +11,22 @@ using InvoiceApp;
 
 namespace InvoiceApp.ViewModels
 {
-    public class ProductViewModel : ViewModelBase
+    public class ProductViewModel : EntityCollectionViewModel<Product>
     {
         private readonly IProductService _service;
         private readonly ITaxRateService _taxRateService;
         private readonly IUnitService _unitService;
         private readonly IProductGroupService _groupService;
-        private ObservableCollection<Product> _products = new();
         private ObservableCollection<TaxRate> _taxRates = new();
         private ObservableCollection<Unit> _units = new();
         private ObservableCollection<ProductGroup> _groups = new();
         private ICollectionView? _productsView;
-        private Product? _selectedProduct;
         private string _searchText = string.Empty;
-        private bool _hasChanges;
 
         public ObservableCollection<Product> Products
         {
-            get => _products;
-            set { _products = value; OnPropertyChanged(); }
+            get => Items;
+            set => Items = value;
         }
 
         public ICollectionView? ProductsView
@@ -69,63 +66,21 @@ namespace InvoiceApp.ViewModels
 
         public Product? SelectedProduct
         {
-            get => _selectedProduct;
-            set
-            {
-                _selectedProduct = value;
-                OnPropertyChanged();
-                DeleteCommand.RaiseCanExecuteChanged();
-                SaveCommand.RaiseCanExecuteChanged();
-            }
+            get => SelectedItem;
+            set => SelectedItem = value;
         }
 
-        public bool HasChanges
-        {
-            get => _hasChanges;
-            private set { _hasChanges = value; OnPropertyChanged(); }
-        }
-
-        public void MarkDirty()
-        {
-            HasChanges = true;
-            SaveCommand.RaiseCanExecuteChanged();
-        }
-
-        public void ClearChanges()
-        {
-            HasChanges = false;
-            SaveCommand.RaiseCanExecuteChanged();
-        }
-
-        public RelayCommand AddCommand { get; }
-        public RelayCommand DeleteCommand { get; }
-        public RelayCommand SaveCommand { get; }
 
         public ProductViewModel(IProductService service,
                                 ITaxRateService taxRateService,
                                 IUnitService unitService,
                                 IProductGroupService groupService)
+            : base(true)
         {
             _service = service;
             _taxRateService = taxRateService;
             _unitService = unitService;
             _groupService = groupService;
-            AddCommand = new RelayCommand(_ => AddProduct());
-            DeleteCommand = new RelayCommand(async obj =>
-            {
-                if (obj is Product product && DialogHelper.ConfirmDeletion("terméket"))
-                {
-                    await DeleteProductAsync(product);
-                    DialogHelper.ShowInfo("Törlés sikeres.");
-                }
-            }, _ => SelectedProduct != null);
-            SaveCommand = new RelayCommand(async _ =>
-            {
-                await SaveSelectedAsync();
-                ClearChanges();
-                DialogHelper.ShowInfo("Mentés kész.");
-            }, _ => SelectedProduct != null && !string.IsNullOrWhiteSpace(SelectedProduct?.Name));
-
             ClearChanges();
         }
 
@@ -154,7 +109,7 @@ namespace InvoiceApp.ViewModels
             Groups = new ObservableCollection<ProductGroup>(groups);
         }
 
-        private void AddProduct()
+        protected override Product CreateNewItem()
         {
             var product = new Product();
             var firstRate = TaxRates.FirstOrDefault();
@@ -175,66 +130,64 @@ namespace InvoiceApp.ViewModels
                 product.ProductGroup = firstGroup;
                 product.ProductGroupId = firstGroup.Id;
             }
-            Products.Add(product);
-            SelectedProduct = product;
-            MarkDirty();
+            return product;
         }
 
-        private async Task DeleteProductAsync(Product product)
+        protected override async Task<bool> DeleteItemAsync(Product product)
         {
+            if (!DialogHelper.ConfirmDeletion("terméket"))
+                return false;
             await _service.DeleteAsync(product.Id);
-            Products.Remove(product);
-            MarkDirty();
+            DialogHelper.ShowInfo("Törlés sikeres.");
+            return true;
         }
 
-        private async Task SaveSelectedAsync()
+        protected override async Task SaveItemAsync(Product product)
         {
-            if (SelectedProduct != null)
+            var percent = product.TaxRate?.Percentage ?? 0m;
+            var rate = TaxRates.FirstOrDefault(r => r.Percentage == percent);
+            if (rate == null)
             {
-                var percent = SelectedProduct.TaxRate?.Percentage ?? 0m;
-                var rate = TaxRates.FirstOrDefault(r => r.Percentage == percent);
-                if (rate == null)
+                var confirmAdd = DialogHelper.ShowConfirmation(
+                    $"Nincs {percent}% áfakulcs. Új áfakulcsot szeretnél létrehozni?",
+                    "Megerősítés");
+                if (confirmAdd)
                 {
-                    var confirmAdd = DialogHelper.ShowConfirmation(
-                        $"Nincs {percent}% áfakulcs. Új áfakulcsot szeretnél létrehozni?",
-                        "Megerősítés");
-                    if (confirmAdd)
+                    rate = new TaxRate
                     {
-                        rate = new TaxRate
-                        {
-                            Name = $"ÁFA {percent}%",
-                            Percentage = percent,
-                            EffectiveFrom = DateTime.Today,
-                            Active = true,
-                            DateCreated = DateTime.Now,
-                            DateUpdated = DateTime.Now
-                        };
-                        await _taxRateService.SaveAsync(rate);
-                        TaxRates.Add(rate);
-                    }
-                    else
+                        Name = $"ÁFA {percent}%",
+                        Percentage = percent,
+                        EffectiveFrom = DateTime.Today,
+                        Active = true,
+                        DateCreated = DateTime.Now,
+                        DateUpdated = DateTime.Now
+                    };
+                    await _taxRateService.SaveAsync(rate);
+                    TaxRates.Add(rate);
+                }
+                else
+                {
+                    rate = TaxRates.FirstOrDefault(r => r.Id == product.TaxRateId);
+                    if (rate != null)
                     {
-                        rate = TaxRates.FirstOrDefault(r => r.Id == SelectedProduct.TaxRateId);
-                        if (rate != null)
-                        {
-                            SelectedProduct.TaxRate = rate;
-                        }
+                        product.TaxRate = rate;
                     }
                 }
-                SelectedProduct.TaxRate = rate;
-                SelectedProduct.TaxRateId = rate.Id;
-                if (SelectedProduct.Unit != null)
-                {
-                    SelectedProduct.UnitId = SelectedProduct.Unit.Id;
-                }
-                if (SelectedProduct.ProductGroup != null)
-                {
-                    SelectedProduct.ProductGroupId = SelectedProduct.ProductGroup.Id;
-                }
-                SelectedProduct.Gross =
-                    Math.Round(SelectedProduct.Net * (1 + (rate.Percentage / 100m)), 2);
-                await _service.SaveAsync(SelectedProduct);
             }
+            product.TaxRate = rate;
+            product.TaxRateId = rate.Id;
+            if (product.Unit != null)
+            {
+                product.UnitId = product.Unit.Id;
+            }
+            if (product.ProductGroup != null)
+            {
+                product.ProductGroupId = product.ProductGroup.Id;
+            }
+            product.Gross =
+                Math.Round(product.Net * (1 + (rate.Percentage / 100m)), 2);
+            await _service.SaveAsync(product);
+            DialogHelper.ShowInfo("Mentés kész.");
         }
 
         public void SelectPreviousProduct()

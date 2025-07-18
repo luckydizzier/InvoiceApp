@@ -1,58 +1,31 @@
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Input;
 using InvoiceApp.Models;
 using InvoiceApp.Services;
 using InvoiceApp;
 
 namespace InvoiceApp.ViewModels
 {
-    public class PaymentMethodViewModel : ViewModelBase
+    public class PaymentMethodViewModel : EntityCollectionViewModel<PaymentMethod>
     {
         private readonly IPaymentMethodService _service;
-        private ObservableCollection<PaymentMethod> _methods = new();
-        private PaymentMethod? _selectedMethod;
-
         public ObservableCollection<PaymentMethod> Methods
         {
-            get => _methods;
-            set { _methods = value; OnPropertyChanged(); }
+            get => Items;
+            set => Items = value;
         }
 
         public PaymentMethod? SelectedMethod
         {
-            get => _selectedMethod;
-            set
-            {
-                _selectedMethod = value;
-                OnPropertyChanged();
-                DeleteCommand.RaiseCanExecuteChanged();
-                SaveCommand.RaiseCanExecuteChanged();
-            }
+            get => SelectedItem;
+            set => SelectedItem = value;
         }
 
-        public RelayCommand AddCommand { get; }
-        public RelayCommand DeleteCommand { get; }
-        public RelayCommand SaveCommand { get; }
-
         public PaymentMethodViewModel(IPaymentMethodService service)
+            : base()
         {
             _service = service;
-            AddCommand = new RelayCommand(_ => AddMethod());
-            DeleteCommand = new RelayCommand(async obj =>
-            {
-                if (obj is PaymentMethod method && DialogHelper.ConfirmDeletion("fizetési módot"))
-                {
-                    await DeleteMethodAsync(method);
-                    DialogHelper.ShowInfo("Törlés sikeres.");
-                }
-            }, _ => SelectedMethod != null);
-            SaveCommand = new RelayCommand(async _ =>
-            {
-                await SaveSelectedAsync();
-                DialogHelper.ShowInfo("Mentés kész.");
-            }, _ => SelectedMethod != null && !string.IsNullOrWhiteSpace(SelectedMethod?.Name));
         }
 
         public async Task LoadAsync()
@@ -61,26 +34,24 @@ namespace InvoiceApp.ViewModels
             Methods = new ObservableCollection<PaymentMethod>(items);
         }
 
-        private void AddMethod()
-        {
-            var method = new PaymentMethod();
-            Methods.Add(method);
-            SelectedMethod = method;
-        }
+        protected override PaymentMethod CreateNewItem() => new PaymentMethod();
 
-        private async Task DeleteMethodAsync(PaymentMethod method)
+        protected override async Task<bool> DeleteItemAsync(PaymentMethod method)
         {
+            if (!DialogHelper.ConfirmDeletion("fizetési módot"))
+                return false;
             await _service.DeleteAsync(method.Id);
-            Methods.Remove(method);
+            DialogHelper.ShowInfo("Törlés sikeres.");
+            return true;
         }
 
-        private async Task SaveSelectedAsync()
+        protected override async Task SaveItemAsync(PaymentMethod method)
         {
-            if (SelectedMethod != null)
-            {
-                await _service.SaveAsync(SelectedMethod);
-            }
+            await _service.SaveAsync(method);
+            DialogHelper.ShowInfo("Mentés kész.");
         }
+
+        protected override bool CanSaveItem(PaymentMethod? method) => method != null && !string.IsNullOrWhiteSpace(method.Name);
 
         public void SelectPreviousMethod()
         {

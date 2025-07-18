@@ -1,58 +1,31 @@
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Input;
 using InvoiceApp.Models;
 using InvoiceApp.Services;
 using InvoiceApp;
 
 namespace InvoiceApp.ViewModels
 {
-    public class UnitViewModel : ViewModelBase
+    public class UnitViewModel : EntityCollectionViewModel<Unit>
     {
         private readonly IUnitService _service;
-        private ObservableCollection<Unit> _units = new();
-        private Unit? _selectedUnit;
-
         public ObservableCollection<Unit> Units
         {
-            get => _units;
-            set { _units = value; OnPropertyChanged(); }
+            get => Items;
+            set => Items = value;
         }
 
         public Unit? SelectedUnit
         {
-            get => _selectedUnit;
-            set
-            {
-                _selectedUnit = value;
-                OnPropertyChanged();
-                DeleteCommand.RaiseCanExecuteChanged();
-                SaveCommand.RaiseCanExecuteChanged();
-            }
+            get => SelectedItem;
+            set => SelectedItem = value;
         }
 
-        public RelayCommand AddCommand { get; }
-        public RelayCommand DeleteCommand { get; }
-        public RelayCommand SaveCommand { get; }
-
         public UnitViewModel(IUnitService service)
+            : base()
         {
             _service = service;
-            AddCommand = new RelayCommand(_ => AddUnit());
-            DeleteCommand = new RelayCommand(async obj =>
-            {
-                if (obj is Unit unit && DialogHelper.ConfirmDeletion("mértékegységet"))
-                {
-                    await DeleteUnitAsync(unit);
-                    DialogHelper.ShowInfo("Törlés sikeres.");
-                }
-            }, _ => SelectedUnit != null);
-            SaveCommand = new RelayCommand(async _ =>
-            {
-                await SaveSelectedAsync();
-                DialogHelper.ShowInfo("Mentés kész.");
-            }, _ => SelectedUnit != null && !string.IsNullOrWhiteSpace(SelectedUnit?.Name));
         }
 
         public async Task LoadAsync()
@@ -61,26 +34,24 @@ namespace InvoiceApp.ViewModels
             Units = new ObservableCollection<Unit>(items);
         }
 
-        private void AddUnit()
-        {
-            var unit = new Unit();
-            Units.Add(unit);
-            SelectedUnit = unit;
-        }
+        protected override Unit CreateNewItem() => new Unit();
 
-        private async Task DeleteUnitAsync(Unit unit)
+        protected override async Task<bool> DeleteItemAsync(Unit unit)
         {
+            if (!DialogHelper.ConfirmDeletion("mértékegységet"))
+                return false;
             await _service.DeleteAsync(unit.Id);
-            Units.Remove(unit);
+            DialogHelper.ShowInfo("Törlés sikeres.");
+            return true;
         }
 
-        private async Task SaveSelectedAsync()
+        protected override async Task SaveItemAsync(Unit unit)
         {
-            if (SelectedUnit != null)
-            {
-                await _service.SaveAsync(SelectedUnit);
-            }
+            await _service.SaveAsync(unit);
+            DialogHelper.ShowInfo("Mentés kész.");
         }
+
+        protected override bool CanSaveItem(Unit? unit) => unit != null && !string.IsNullOrWhiteSpace(unit.Name);
 
         public void SelectPreviousUnit()
         {

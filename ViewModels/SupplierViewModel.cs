@@ -1,79 +1,31 @@
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Input;
 using InvoiceApp.Models;
 using InvoiceApp.Services;
 using InvoiceApp;
 
 namespace InvoiceApp.ViewModels
 {
-    public class SupplierViewModel : ViewModelBase
+    public class SupplierViewModel : EntityCollectionViewModel<Supplier>
     {
         private readonly ISupplierService _service;
-        private ObservableCollection<Supplier> _suppliers = new();
-        private Supplier? _selectedSupplier;
-        private bool _hasChanges;
-
         public ObservableCollection<Supplier> Suppliers
         {
-            get => _suppliers;
-            set { _suppliers = value; OnPropertyChanged(); }
+            get => Items;
+            set => Items = value;
         }
 
         public Supplier? SelectedSupplier
         {
-            get => _selectedSupplier;
-            set
-            {
-                _selectedSupplier = value;
-                OnPropertyChanged();
-                DeleteCommand.RaiseCanExecuteChanged();
-                SaveCommand.RaiseCanExecuteChanged();
-            }
+            get => SelectedItem;
+            set => SelectedItem = value;
         }
-
-        public bool HasChanges
-        {
-            get => _hasChanges;
-            private set { _hasChanges = value; OnPropertyChanged(); }
-        }
-
-        public void MarkDirty()
-        {
-            HasChanges = true;
-            SaveCommand.RaiseCanExecuteChanged();
-        }
-
-        public void ClearChanges()
-        {
-            HasChanges = false;
-            SaveCommand.RaiseCanExecuteChanged();
-        }
-
-        public RelayCommand AddCommand { get; }
-        public RelayCommand DeleteCommand { get; }
-        public RelayCommand SaveCommand { get; }
 
         public SupplierViewModel(ISupplierService service)
+            : base(true)
         {
             _service = service;
-            AddCommand = new RelayCommand(_ => AddSupplier());
-            DeleteCommand = new RelayCommand(async obj =>
-            {
-                if (obj is Supplier supplier && DialogHelper.ConfirmDeletion("szállítót"))
-                {
-                    await DeleteSupplierAsync(supplier);
-                    DialogHelper.ShowInfo("Törlés sikeres.");
-                }
-            }, _ => SelectedSupplier != null);
-            SaveCommand = new RelayCommand(async _ =>
-            {
-                await SaveSelectedAsync();
-                ClearChanges();
-                DialogHelper.ShowInfo("Mentés kész.");
-            }, _ => SelectedSupplier != null && !string.IsNullOrWhiteSpace(SelectedSupplier?.Name));
-
             ClearChanges();
         }
 
@@ -83,34 +35,32 @@ namespace InvoiceApp.ViewModels
             Suppliers = new ObservableCollection<Supplier>(items);
         }
 
-        public Supplier AddSupplier()
+        protected override Supplier CreateNewItem()
         {
-            var supplier = new Supplier
+            return new Supplier
             {
                 Active = true,
                 DateCreated = System.DateTime.Now,
                 DateUpdated = System.DateTime.Now
             };
-            Suppliers.Add(supplier);
-            SelectedSupplier = supplier;
-            MarkDirty();
-            return supplier;
         }
 
-        private async Task DeleteSupplierAsync(Supplier supplier)
+        protected override async Task<bool> DeleteItemAsync(Supplier supplier)
         {
+            if (!DialogHelper.ConfirmDeletion("szállítót"))
+                return false;
             await _service.DeleteAsync(supplier.Id);
-            Suppliers.Remove(supplier);
-            MarkDirty();
+            DialogHelper.ShowInfo("Törlés sikeres.");
+            return true;
         }
 
-        private async Task SaveSelectedAsync()
+        protected override async Task SaveItemAsync(Supplier supplier)
         {
-            if (SelectedSupplier != null)
-            {
-                await _service.SaveAsync(SelectedSupplier);
-            }
+            await _service.SaveAsync(supplier);
+            DialogHelper.ShowInfo("Mentés kész.");
         }
+
+        protected override bool CanSaveItem(Supplier? supplier) => supplier != null && !string.IsNullOrWhiteSpace(supplier.Name);
 
         public void SelectPreviousSupplier()
         {
