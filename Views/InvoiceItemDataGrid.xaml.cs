@@ -22,18 +22,18 @@ namespace InvoiceApp.Views
 
         private void DataGrid_InitializingNewItem(object sender, InitializingNewItemEventArgs e)
         {
-            if (DataContext is InvoiceViewModel vm && e.NewItem is InvoiceItemViewModel item)
+            if (DataContext is ItemsViewModel vm && e.NewItem is InvoiceItemViewModel item)
             {
                 var product = vm.Products.FirstOrDefault();
                 var rate = vm.TaxRates.FirstOrDefault();
 
-                item.Item.InvoiceId = vm.SelectedInvoice?.Id ?? 0;
+                item.Item.InvoiceId = vm.CurrentInvoice?.Id ?? 0;
                 item.Item.Product = product;
                 item.ProductId = product?.Id ?? 0;
                 item.Item.TaxRate = rate;
                 item.TaxRateId = rate?.Id ?? 0;
                 item.TaxRatePercentage = rate?.Percentage ?? 0m;
-                item.IsGross = vm.IsGrossCalculation;
+                item.IsGross = vm.IsGross;
             }
         }
 

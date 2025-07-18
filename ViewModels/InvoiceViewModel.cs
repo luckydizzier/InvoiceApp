@@ -24,14 +24,11 @@ namespace InvoiceApp.ViewModels
         private readonly SupplierViewModel _supplierViewModel;
         private readonly INavigationService _navigation;
         private ObservableCollection<Invoice> _invoices = new();
-        private ObservableCollection<InvoiceItemViewModel> _items = new();
-        private ObservableCollection<Product> _products = new();
-        private ObservableCollection<TaxRate> _taxRates = new();
-        private ObservableCollection<Supplier> _suppliers = new();
-        private ObservableCollection<PaymentMethod> _paymentMethods = new();
         private Invoice? _selectedInvoice;
         private string _statusMessage = string.Empty;
         private readonly System.Windows.Threading.DispatcherTimer _statusTimer;
+        public HeaderViewModel Header { get; }
+        public ItemsViewModel ItemsView { get; }
 
         public IEnumerable<string> ValidationErrors => SelectedInvoice?.GetErrors(null).OfType<string>() ?? Enumerable.Empty<string>();
 
@@ -108,6 +105,7 @@ namespace InvoiceApp.ViewModels
                 {
                     _selectedInvoice.ErrorsChanged += Invoice_ErrorsChanged;
                 }
+                Header.SelectedInvoice = value;
                 Items = value != null
                     ? new ObservableCollection<InvoiceItemViewModel>(
                         value.Items.Select(i => new InvoiceItemViewModel(i)))
@@ -124,82 +122,43 @@ namespace InvoiceApp.ViewModels
 
         public ObservableCollection<InvoiceItemViewModel> Items
         {
-            get => _items;
-            set
-            {
-                if (_items != null)
-                {
-                    foreach (var it in _items)
-                    {
-                        it.PropertyChanged -= Item_PropertyChanged;
-                    }
-                    _items.CollectionChanged -= Items_CollectionChanged;
-                }
-
-                _items = value;
-
-                foreach (var it in _items)
-                {
-                    it.PropertyChanged += Item_PropertyChanged;
-                    it.IsGross = IsGrossCalculation;
-                }
-                _items.CollectionChanged += Items_CollectionChanged;
-
-                OnPropertyChanged();
-                UpdateTotals();
-                ((RelayCommand)SaveCommand).RaiseCanExecuteChanged();
-            }
+            get => ItemsView.Items;
+            set => ItemsView.Items = value;
         }
 
         private InvoiceItemViewModel? _selectedItem;
 
         public InvoiceItemViewModel? SelectedItem
         {
-            get => _selectedItem;
-            set
-            {
-                // The DataGrid sometimes passes a {NewItemPlaceholder}; cast to
-                // ensure only real view models are accepted.
-                _selectedItem = value as InvoiceItemViewModel;
-                OnPropertyChanged();
-            }
+            get => ItemsView.SelectedItem;
+            set => ItemsView.SelectedItem = value;
         }
 
         public ObservableCollection<Product> Products
         {
-            get => _products;
-            set
-            {
-                _products = value;
-                OnPropertyChanged();
-            }
+            get => ItemsView.Products;
+            set => ItemsView.Products = value;
         }
 
         public ObservableCollection<TaxRate> TaxRates
         {
-            get => _taxRates;
-            set { _taxRates = value; OnPropertyChanged(); }
+            get => ItemsView.TaxRates;
+            set => ItemsView.TaxRates = value;
         }
 
         public ObservableCollection<Supplier> Suppliers
         {
-            get => _suppliers;
-            set { _suppliers = value; OnPropertyChanged(); }
+            get => Header.Suppliers;
+            set => Header.Suppliers = value;
         }
 
         public ObservableCollection<PaymentMethod> PaymentMethods
         {
-            get => _paymentMethods;
-            set { _paymentMethods = value; OnPropertyChanged(); }
+            get => Header.PaymentMethods;
+            set => Header.PaymentMethods = value;
         }
 
-        private ObservableCollection<VatBreakdownEntry> _vatBreakdown = new();
-        private decimal _totalNet;
-        private decimal _totalVat;
-        private decimal _totalGross;
-        private string _inWords = string.Empty;
         private bool _isInvoiceListFocused = true;
-        private bool _isRowDetailsVisible;
         private bool _hasChanges;
 
         /// <summary>
@@ -213,8 +172,8 @@ namespace InvoiceApp.ViewModels
 
         public ObservableCollection<VatBreakdownEntry> VatBreakdown
         {
-            get => _vatBreakdown;
-            set { _vatBreakdown = value; OnPropertyChanged(); }
+            get => ItemsView.VatBreakdown;
+            set => ItemsView.VatBreakdown = value;
         }
 
         private void MarkDirty()
@@ -229,26 +188,26 @@ namespace InvoiceApp.ViewModels
 
         public decimal TotalNet
         {
-            get => _totalNet;
-            set { _totalNet = value; OnPropertyChanged(); }
+            get => ItemsView.TotalNet;
+            set => ItemsView.TotalNet = value;
         }
 
         public decimal TotalVat
         {
-            get => _totalVat;
-            set { _totalVat = value; OnPropertyChanged(); }
+            get => ItemsView.TotalVat;
+            set => ItemsView.TotalVat = value;
         }
 
         public decimal TotalGross
         {
-            get => _totalGross;
-            set { _totalGross = value; OnPropertyChanged(); }
+            get => ItemsView.TotalGross;
+            set => ItemsView.TotalGross = value;
         }
 
         public string InWords
         {
-            get => _inWords;
-            set { _inWords = value; OnPropertyChanged(); }
+            get => ItemsView.InWords;
+            set => ItemsView.InWords = value;
         }
 
         public bool IsInvoiceListFocused
@@ -259,60 +218,26 @@ namespace InvoiceApp.ViewModels
 
         public bool IsRowDetailsVisible
         {
-            get => _isRowDetailsVisible;
-            set { _isRowDetailsVisible = value; OnPropertyChanged(); }
+            get => ItemsView.IsRowDetailsVisible;
+            set => ItemsView.IsRowDetailsVisible = value;
         }
 
         public Supplier? SelectedSupplier
         {
-            get => SelectedInvoice?.Supplier;
-            set
-            {
-                if (SelectedInvoice != null && SelectedInvoice.Supplier != value)
-                {
-                    SelectedInvoice.Supplier = value;
-                    SelectedInvoice.SupplierId = value?.Id ?? 0;
-                    OnPropertyChanged();
-                    _ = SuggestNextNumberAsync();
-                    ((RelayCommand)SaveCommand).RaiseCanExecuteChanged();
-                    MarkDirty();
-                }
-            }
+            get => Header.SelectedSupplier;
+            set => Header.SelectedSupplier = value;
         }
 
         public PaymentMethod? SelectedPaymentMethod
         {
-            get => SelectedInvoice?.PaymentMethod;
-            set
-            {
-                if (SelectedInvoice != null && SelectedInvoice.PaymentMethod != value)
-                {
-                    SelectedInvoice.PaymentMethod = value;
-                    SelectedInvoice.PaymentMethodId = value?.Id ?? 0;
-                    OnPropertyChanged();
-                    ((RelayCommand)SaveCommand).RaiseCanExecuteChanged();
-                    MarkDirty();
-                }
-            }
+            get => Header.SelectedPaymentMethod;
+            set => Header.SelectedPaymentMethod = value;
         }
 
         public bool IsGrossCalculation
         {
-            get => SelectedInvoice?.IsGross ?? false;
-            set
-            {
-                if (SelectedInvoice != null && SelectedInvoice.IsGross != value)
-                {
-                    SelectedInvoice.IsGross = value;
-                    OnPropertyChanged();
-                    foreach (var it in Items)
-                    {
-                        it.IsGross = value;
-                    }
-                    UpdateTotals();
-                    MarkDirty();
-                }
-            }
+            get => Header.IsGrossCalculation;
+            set => Header.IsGrossCalculation = value;
         }
 
         public ICommand AddItemCommand { get; }
@@ -345,6 +270,24 @@ namespace InvoiceApp.ViewModels
             _supplierViewModel = supplierViewModel;
             _navigation = navigation;
 
+            Header = new HeaderViewModel(
+                _supplierViewModel,
+                ShowStatus,
+                SuggestNextNumberAsync,
+                () => ((RelayCommand)SaveCommand).RaiseCanExecuteChanged(),
+                MarkDirty,
+                isGross => ItemsView.UpdateGrossMode(isGross));
+
+            ItemsView = new ItemsViewModel(
+                _itemService,
+                _productService,
+                _taxRateService,
+                ShowStatus,
+                () => ((RelayCommand)SaveCommand).RaiseCanExecuteChanged(),
+                MarkDirty,
+                () => Header.IsGrossCalculation,
+                () => SelectedInvoice);
+
             _statusTimer = new System.Windows.Threading.DispatcherTimer
             {
                 // Extended duration so users can read status updates
@@ -352,16 +295,8 @@ namespace InvoiceApp.ViewModels
             };
             _statusTimer.Tick += (s, e) => { StatusMessage = string.Empty; _statusTimer.Stop(); };
 
-            AddItemCommand = new RelayCommand(_ => AddItem());
-            RemoveItemCommand = new RelayCommand(obj =>
-            {
-                if (obj is InvoiceItemViewModel item &&
-                    DialogHelper.ConfirmDeletion("tételt"))
-                {
-                    RemoveItem(item);
-                    ShowStatus("Tétel törölve.");
-                }
-            });
+            AddItemCommand = ItemsView.AddItemCommand;
+            RemoveItemCommand = ItemsView.RemoveItemCommand;
             RemoveInvoiceCommand = new RelayCommand(obj =>
             {
                 if (obj is Invoice invoice &&
@@ -372,13 +307,7 @@ namespace InvoiceApp.ViewModels
                     ShowStatus("Számla törölve.");
                 }
             }, obj => obj is Invoice);
-            SaveItemCommand = new RelayCommand(async obj =>
-            {
-                if (obj is InvoiceItemViewModel item)
-                {
-                    await SaveItemAsync(item);
-                }
-            }, obj => obj is InvoiceItemViewModel);
+            SaveItemCommand = ItemsView.SaveItemCommand;
             SaveCommand = new RelayCommand(async _ => await SaveAsync(), _ => Validate());
             SaveAndNewCommand = new RelayCommand(async _ =>
             {
@@ -386,8 +315,8 @@ namespace InvoiceApp.ViewModels
                 await NewInvoice();
             }, _ => Validate());
             NewInvoiceCommand = new RelayCommand(async _ => await NewInvoice());
-            AddSupplierCommand = new RelayCommand(_ => AddSupplier());
-            NewItemCommand = CreateItemViewModel;
+            AddSupplierCommand = Header.AddSupplierCommand;
+            NewItemCommand = ItemsView.NewItemCommand;
 
             if (SelectedInvoice != null)
             {
@@ -449,56 +378,22 @@ namespace InvoiceApp.ViewModels
 
         private void AddItem()
         {
-            Log.Debug("InvoiceViewModel.AddItem called");
-            if (SelectedInvoice == null) return;
-            var vm = CreateItemViewModel();
-            vm.IsGross = IsGrossCalculation;
-            Items.Add(vm);
-            UpdateTotals();
-            ((RelayCommand)SaveCommand).RaiseCanExecuteChanged();
-            MarkDirty();
+            ItemsView.AddItemCommand.Execute(null);
         }
 
         private void RemoveItem(InvoiceItemViewModel item)
         {
-            Log.Debug("InvoiceViewModel.RemoveItem called for {Product}", item.Item.Product?.Name);
-            item.PropertyChanged -= Item_PropertyChanged;
-            Items.Remove(item);
-            UpdateTotals();
-            ((RelayCommand)SaveCommand).RaiseCanExecuteChanged();
-            MarkDirty();
+            ItemsView.RemoveItemCommand.Execute(item);
         }
 
         private void AddSupplier()
         {
-            var supplier = _supplierViewModel.AddSupplier();
-            Suppliers.Add(supplier);
-            SelectedSupplier = supplier;
-            ShowStatus("Új szállító hozzáadva");
+            Header.AddSupplierCommand.Execute(null);
         }
 
         public void EnsureSupplierExists(string text)
         {
-            if (string.IsNullOrWhiteSpace(text)) return;
-
-            var existing = Suppliers.FirstOrDefault(s =>
-                string.Equals(s.Name, text, StringComparison.OrdinalIgnoreCase));
-            if (existing != null)
-            {
-                SelectedSupplier = existing;
-                return;
-            }
-
-            var supplier = new Supplier
-            {
-                Name = text,
-                Active = true,
-                DateCreated = DateTime.Now,
-                DateUpdated = DateTime.Now
-            };
-            Suppliers.Add(supplier);
-            SelectedSupplier = supplier;
-            ShowStatus("Új szállító hozzáadva");
+            Header.EnsureSupplierExists(text);
         }
 
         private async Task SaveItemAsync(InvoiceItemViewModel item)
@@ -687,56 +582,18 @@ namespace InvoiceApp.ViewModels
 
         private void Items_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            if (e.NewItems != null)
-            {
-                foreach (InvoiceItemViewModel item in e.NewItems)
-                {
-                    item.PropertyChanged += Item_PropertyChanged;
-                    item.IsGross = IsGrossCalculation;
-                }
-            }
-            if (e.OldItems != null)
-            {
-                foreach (InvoiceItemViewModel item in e.OldItems)
-                {
-                    item.PropertyChanged -= Item_PropertyChanged;
-                }
-            }
-            UpdateTotals();
-            ((RelayCommand)SaveCommand).RaiseCanExecuteChanged();
-            MarkDirty();
+            ItemsView.Items.CollectionChanged -= Items_CollectionChanged;
+            ItemsView.Items.CollectionChanged += Items_CollectionChanged;
         }
 
         private void Item_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            UpdateTotals();
-            ((RelayCommand)SaveCommand).RaiseCanExecuteChanged();
-            MarkDirty();
+            ItemsView.UpdateGrossMode(Header.IsGrossCalculation);
         }
 
         private void UpdateTotals()
         {
-            var breakdown = Items
-                .GroupBy(i => i.TaxRatePercentage)
-                .Select(g =>
-                {
-                    decimal net = IsGrossCalculation
-                        ? g.Sum(x => x.Quantity * x.UnitPrice / (1m + g.Key / 100m))
-                        : g.Sum(x => x.Quantity * x.UnitPrice);
-                    decimal vat = net * g.Key / 100m;
-                    return new VatBreakdownEntry
-                    {
-                        Rate = g.Key,
-                        Net = net,
-                        Vat = vat
-                    };
-                });
-
-            VatBreakdown = new ObservableCollection<VatBreakdownEntry>(breakdown);
-            TotalNet = VatBreakdown.Sum(v => v.Net);
-            TotalVat = VatBreakdown.Sum(v => v.Vat);
-            TotalGross = TotalNet + TotalVat;
-            InWords = $"In Words: {NumberToWords((long)TotalGross)} Forint";
+            ItemsView.UpdateGrossMode(Header.IsGrossCalculation);
         }
 
         private static string NumberToWords(long number)

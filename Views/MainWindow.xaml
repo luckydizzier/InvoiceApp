@@ -98,11 +98,11 @@
                     </Border>
                     <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
                         <Button Content="➕ Tétel hozzáadása"
-                                Command="{Binding InvoiceViewModel.AddItemCommand}"
+                                Command="{Binding InvoiceViewModel.ItemsView.AddItemCommand}"
                                 Style="{StaticResource IconButtonStyle}"
                                 ToolTip="Tétel hozzáadása"/>
                         <Button Content="🗑️ Tétel törlése"
-                                Command="{Binding InvoiceViewModel.RemoveItemCommand}"
+                                Command="{Binding InvoiceViewModel.ItemsView.RemoveItemCommand}"
                                 Style="{StaticResource IconButtonStyle}"
                                 ToolTip="Tétel törlése"/>
                         <Button Content="💾 Mentés"

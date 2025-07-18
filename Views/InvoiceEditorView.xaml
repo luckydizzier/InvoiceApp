@@ -14,9 +14,9 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <views:InvoiceHeaderView Grid.Row="0" Margin="0,0,0,4" />
-        <views:InvoiceItemDataGrid Grid.Row="1" Margin="0,0,0,4" />
-        <views:InvoiceSummaryPanel Grid.Row="2" />
+        <views:InvoiceHeaderView Grid.Row="0" Margin="0,0,0,4" DataContext="{Binding Header}" />
+        <views:InvoiceItemDataGrid Grid.Row="1" Margin="0,0,0,4" DataContext="{Binding ItemsView}" />
+        <views:InvoiceSummaryPanel Grid.Row="2" DataContext="{Binding ItemsView}" />
         <Border Grid.Row="3" Background="#FFFFE0E0" Padding="4"
                 Visibility="{Binding HasValidationErrors, Converter={StaticResource BoolToVisibilityConverter}}">
             <StackPanel>

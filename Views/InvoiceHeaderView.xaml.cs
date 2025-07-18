@@ -15,7 +15,7 @@ namespace InvoiceApp.Views
 
         private void SupplierBox_LostFocus(object sender, RoutedEventArgs e)
         {
-            if (DataContext is InvoiceViewModel vm && sender is ComboBox combo)
+            if (DataContext is HeaderViewModel vm && sender is ComboBox combo)
             {
                 vm.EnsureSupplierExists(combo.Text);
             }
