@@ -44,6 +44,11 @@ namespace InvoiceApp.Services
         void SwitchRoot(AppState state);
 
         /// <summary>
+        /// Gets the current navigation path from the root window to the active state.
+        /// </summary>
+        IEnumerable<AppState> GetStatePath();
+
+        /// <summary>
         /// Raised whenever the current state changes.
         /// </summary>
         event EventHandler<AppState> StateChanged;

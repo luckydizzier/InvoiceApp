@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using InvoiceApp.Models;
 using InvoiceApp.Services;
 using InvoiceApp;
@@ -13,6 +14,7 @@ namespace InvoiceApp.ViewModels
         private readonly INavigationService _navigation;
         private AppState _current;
         private string _currentStateDescription = string.Empty;
+        private string _breadcrumb = string.Empty;
         public InvoiceViewModel InvoiceViewModel { get; }
 
         public AppState CurrentState
@@ -32,6 +34,16 @@ namespace InvoiceApp.ViewModels
             private set
             {
                 _currentStateDescription = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string Breadcrumb
+        {
+            get => _breadcrumb;
+            private set
+            {
+                _breadcrumb = value;
                 OnPropertyChanged();
             }
         }
@@ -74,6 +86,7 @@ namespace InvoiceApp.ViewModels
             InvoiceViewModel = invoiceViewModel;
             _current = _navigation.CurrentState;
             _currentStateDescription = _current.GetDescription();
+            UpdateBreadcrumb();
             _navigation.StateChanged += OnStateChanged;
 
             BackCommand = new RelayCommand(_ => _navigation.Pop());
@@ -151,6 +164,20 @@ namespace InvoiceApp.ViewModels
         private void OnStateChanged(object? sender, AppState state)
         {
             CurrentState = state;
+            UpdateBreadcrumb();
+        }
+
+        private void UpdateBreadcrumb()
+        {
+            var path = _navigation.GetStatePath().ToList();
+            if (path.Count == 0)
+            {
+                Breadcrumb = CurrentStateDescription;
+            }
+            else
+            {
+                Breadcrumb = string.Join(" \u203a ", path.Select(s => s.GetDescription()));
+            }
         }
     }
 }
