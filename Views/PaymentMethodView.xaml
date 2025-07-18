@@ -23,6 +23,7 @@
                   AutoGenerateColumns="False"
                   CanUserAddRows="False"
                   PreviewKeyDown="DataGrid_PreviewKeyDown"
+                  CellEditEnding="DataGrid_CellEditEnding"
                   Margin="5">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Név" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />

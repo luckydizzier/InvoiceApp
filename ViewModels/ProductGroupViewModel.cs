@@ -23,10 +23,17 @@ namespace InvoiceApp.ViewModels
         }
 
         public ProductGroupViewModel(IProductGroupService service)
-            : base()
+            : base(true)
         {
             _service = service;
+            ClearChanges();
         }
+
+        public bool HasChanges => base.HasChanges;
+
+        public void MarkDirty() => base.MarkDirty();
+
+        public void ClearChanges() => base.ClearChanges();
 
         public async Task LoadAsync()
         {

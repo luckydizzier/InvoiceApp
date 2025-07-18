@@ -27,5 +27,10 @@ namespace InvoiceApp.Views
         {
             DataGridFocusBehavior.OnPreviewKeyDown(sender, e);
         }
+
+        private void DataGrid_CellEditEnding(object? sender, DataGridCellEditEndingEventArgs e)
+        {
+            _viewModel.MarkDirty();
+        }
     }
 }
