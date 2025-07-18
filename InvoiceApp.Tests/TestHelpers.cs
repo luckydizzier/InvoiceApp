@@ -44,7 +44,7 @@ namespace InvoiceApp.Tests
         public void Push(AppState state) { }
         public void PushSubstate(AppState state) { }
         public void SwitchRoot(AppState state) { }
-        public bool IsValid(Invoice invoice) => invoice.IsValid();
+        public bool IsValid(Invoice invoice) => !invoice.HasErrors;
     }
 
     internal static class TestHelpers
