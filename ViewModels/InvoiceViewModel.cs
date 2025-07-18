@@ -330,17 +330,21 @@ namespace InvoiceApp.ViewModels
             AddItemCommand = new RelayCommand(_ => AddItem());
             RemoveItemCommand = new RelayCommand(obj =>
             {
-                if (obj is InvoiceItemViewModel item)
+                if (obj is InvoiceItemViewModel item &&
+                    DialogHelper.ConfirmDeletion("tételt"))
                 {
                     RemoveItem(item);
+                    ShowStatus("Tétel törölve.");
                 }
             });
             RemoveInvoiceCommand = new RelayCommand(obj =>
             {
-                if (obj is Invoice invoice)
+                if (obj is Invoice invoice &&
+                    DialogHelper.ConfirmDeletion("számlát"))
                 {
                     _service.DeleteAsync(invoice.Id).GetAwaiter().GetResult();
                     Invoices.Remove(invoice);
+                    ShowStatus("Számla törölve.");
                 }
             }, obj => obj is Invoice);
             SaveItemCommand = new RelayCommand(async obj =>
