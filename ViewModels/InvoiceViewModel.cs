@@ -64,6 +64,28 @@ namespace InvoiceApp.ViewModels
             _statusTimer.Start();
         }
 
+        /// <summary>
+        /// Updates the status message based on the active navigation state.
+        /// </summary>
+        public void UpdateNavigationStatus(AppState state)
+        {
+            string message = state switch
+            {
+                AppState.Header or AppState.ItemList or AppState.Summary
+                    => "Nyomja meg az Esc-et a visszal\u00e9p\u00e9shez",
+                _ => string.Empty
+            };
+
+            if (!string.IsNullOrEmpty(message))
+            {
+                ShowStatus(message);
+            }
+            else
+            {
+                StatusMessage = string.Empty;
+            }
+        }
+
         private void Invoice_ErrorsChanged(object? sender, System.ComponentModel.DataErrorsChangedEventArgs e)
         {
             OnPropertyChanged(nameof(ValidationErrors));
