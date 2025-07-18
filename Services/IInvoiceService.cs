@@ -12,5 +12,6 @@ namespace InvoiceApp.Services
         Task<Invoice?> GetLatestAsync();
         Task SaveAsync(Invoice invoice);
         Task DeleteAsync(int id);
+        bool IsValid(Invoice invoice);
     }
 }

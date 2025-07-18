@@ -524,7 +524,9 @@ namespace InvoiceApp.ViewModels
 
         private bool Validate()
         {
-            return SelectedInvoice?.IsValid() == true && Items.Count > 0;
+            return SelectedInvoice != null
+                && _service.IsValid(SelectedInvoice)
+                && Items.Count > 0;
         }
 
         private async Task SaveAsync()

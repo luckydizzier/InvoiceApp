@@ -115,12 +115,13 @@ namespace InvoiceApp.Models
             if (propertyName != null) Validate(propertyName);
         }
 
+        /// <summary>
+        /// Validates the invoice using <see cref="InvoiceDtoValidator"/>.
+        /// </summary>
+        /// <returns>true if the invoice passes all validation rules; otherwise false.</returns>
         public bool IsValid()
         {
-            return !string.IsNullOrWhiteSpace(Number)
-                && SupplierId != 0
-                && PaymentMethodId != 0
-                && Date != default;
+            return _validator.Validate(this.ToDto()).IsValid;
         }
     }
 }

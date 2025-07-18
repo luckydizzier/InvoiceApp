@@ -38,5 +38,10 @@ namespace InvoiceApp.Services
         {
             return _validator.ValidateAndThrowAsync(entity.ToDto());
         }
+
+        public bool IsValid(Invoice invoice)
+        {
+            return _validator.Validate(invoice.ToDto()).IsValid;
+        }
     }
 }
