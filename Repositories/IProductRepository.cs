@@ -4,12 +4,9 @@ using InvoiceApp.Models;
 
 namespace InvoiceApp.Repositories
 {
-    public interface IProductRepository
+    public interface IProductRepository : ICrudRepository<Product>
     {
         Task<IEnumerable<Product>> GetAllAsync();
         Task<Product?> GetByIdAsync(int id);
-        Task AddAsync(Product product);
-        Task UpdateAsync(Product product);
-        Task DeleteAsync(int id);
     }
 }

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text.Json;
 using System.Threading.Tasks;
 using InvoiceApp.Models;
 using InvoiceApp.Repositories;
@@ -11,16 +10,15 @@ using Serilog;
 
 namespace InvoiceApp.Services
 {
-    public class PaymentMethodService : IPaymentMethodService
+    public class PaymentMethodService : BaseService<PaymentMethod>, IPaymentMethodService
     {
         private readonly IPaymentMethodRepository _repository;
-        private readonly IChangeLogService _logService;
         private readonly IValidator<PaymentMethodDto> _validator;
 
         public PaymentMethodService(IPaymentMethodRepository repository, IChangeLogService logService, IValidator<PaymentMethodDto> validator)
+            : base(repository, logService)
         {
             _repository = repository;
-            _logService = logService;
             _validator = validator;
         }
 
@@ -36,61 +34,9 @@ namespace InvoiceApp.Services
             return _repository.GetByIdAsync(id);
         }
 
-        public async Task SaveAsync(PaymentMethod method)
+        protected override Task ValidateAsync(PaymentMethod entity)
         {
-            if (method == null) throw new ArgumentNullException(nameof(method));
-            Log.Debug("PaymentMethodService.SaveAsync called for {Id}", method.Id);
-
-            await _validator.ValidateAndThrowAsync(method.ToDto());
-
-            if (method.Id == 0)
-            {
-                method.DateCreated = DateTime.Now;
-                method.DateUpdated = method.DateCreated;
-                method.Active = true;
-                await _repository.AddAsync(method);
-                await _logService.AddAsync(new ChangeLog
-                {
-                    Entity = nameof(PaymentMethod),
-                    Operation = "Add",
-                    Data = JsonSerializer.Serialize(method),
-                    DateCreated = DateTime.Now,
-                    DateUpdated = DateTime.Now,
-                    Active = true
-                });
-                Log.Information("PaymentMethod {Id} created", method.Id);
-            }
-            else
-            {
-                method.DateUpdated = DateTime.Now;
-                await _repository.UpdateAsync(method);
-                await _logService.AddAsync(new ChangeLog
-                {
-                    Entity = nameof(PaymentMethod),
-                    Operation = "Update",
-                    Data = JsonSerializer.Serialize(method),
-                    DateCreated = DateTime.Now,
-                    DateUpdated = DateTime.Now,
-                    Active = true
-                });
-                Log.Information("PaymentMethod {Id} updated", method.Id);
-            }
-        }
-
-        public async Task DeleteAsync(int id)
-        {
-            Log.Debug("PaymentMethodService.DeleteAsync called for {Id}", id);
-            await _repository.DeleteAsync(id);
-            await _logService.AddAsync(new ChangeLog
-            {
-                Entity = nameof(PaymentMethod),
-                Operation = "Delete",
-                Data = JsonSerializer.Serialize(new { Id = id }),
-                DateCreated = DateTime.Now,
-                DateUpdated = DateTime.Now,
-                Active = true
-            });
-            Log.Information("PaymentMethod {Id} deleted", id);
+            return _validator.ValidateAndThrowAsync(entity.ToDto());
         }
     }
 }
