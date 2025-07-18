@@ -21,7 +21,9 @@
                 Visibility="{Binding HasValidationErrors, Converter={StaticResource BoolToVisibilityConverter}}">
             <StackPanel>
                 <TextBlock Text="Hibák (Alt+1-6):" FontWeight="Bold" Margin="0,0,0,4" />
-                <ItemsControl ItemsSource="{Binding ValidationErrors}" />
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <ItemsControl ItemsSource="{Binding ValidationErrors}" />
+                </ScrollViewer>
             </StackPanel>
         </Border>
     </Grid>
