@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using InvoiceApp.Models;
+using InvoiceApp.Services;
 
 namespace InvoiceApp.ViewModels
 {
