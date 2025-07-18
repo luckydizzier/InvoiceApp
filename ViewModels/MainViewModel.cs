@@ -75,7 +75,6 @@ namespace InvoiceApp.ViewModels
         public RelayCommand ShowUnitsCommand { get; }
         public RelayCommand ShowProductsCommand { get; }
         public RelayCommand ShowDashboardCommand { get; }
-        public RelayCommand ShowInvoiceListCommand { get; }
         public RelayCommand SwitchPaymentMethodsCommand { get; }
         public RelayCommand SwitchSuppliersCommand { get; }
         public RelayCommand SwitchProductGroupsCommand { get; }
@@ -167,7 +166,6 @@ namespace InvoiceApp.ViewModels
             ShowUnitsCommand = new RelayCommand(_ => _navigation.Push(AppState.Units));
             ShowProductsCommand = new RelayCommand(_ => _navigation.Push(AppState.Products));
             ShowDashboardCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.Dashboard));
-            ShowInvoiceListCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.InvoiceList));
             SwitchPaymentMethodsCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.PaymentMethods));
             SwitchSuppliersCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.Suppliers));
             SwitchProductGroupsCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.ProductGroups));
@@ -188,7 +186,6 @@ namespace InvoiceApp.ViewModels
         {
             switch (state)
             {
-                case AppState.InvoiceList:
                 case AppState.Products:
                 case AppState.ProductGroups:
                 case AppState.Suppliers:

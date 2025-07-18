@@ -18,7 +18,6 @@ namespace InvoiceApp.Helpers
         public DataTemplate? UnitsTemplate { get; set; }
         public DataTemplate? ProductsTemplate { get; set; }
         public DataTemplate? DashboardTemplate { get; set; }
-        public DataTemplate? InvoiceListTemplate { get; set; }
         public DataTemplate? HeaderTemplate { get; set; }
         public DataTemplate? ItemListTemplate { get; set; }
         public DataTemplate? SummaryTemplate { get; set; }
@@ -38,7 +37,6 @@ namespace InvoiceApp.Helpers
                 AppState.Units => UnitsTemplate,
                 AppState.Products => ProductsTemplate,
                 AppState.Dashboard => DashboardTemplate,
-                AppState.InvoiceList => InvoiceListTemplate,
                 AppState.Header => MainWindowTemplate,
                 AppState.ItemList => MainWindowTemplate,
                 AppState.Summary => MainWindowTemplate,

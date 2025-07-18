@@ -24,15 +24,6 @@ Press `Up` at the start of a list to quickly create a new entry.
 - `Enter` activates the highlighted menu option.
 - `Escape` returns to the previous view or exits the application.
 
-### InvoiceList (`InvoiceListView`)
-
-- `Up`/`Down` move between invoices.
-- `Enter` opens the selected invoice in the editor.
-- `Ins` creates a new invoice.
-- `Del` deletes the highlighted invoice.
-- `Escape` returns to the dashboard.
-- Pressing `Up` before the first entry prompts to create a new invoice.
-
 
 ### Products (`ProductView`)
 
