@@ -104,7 +104,7 @@ namespace InvoiceApp.ViewModels
 
                 if (_selectedInvoice != null)
                 {
-                    var detailed = _service.GetDetailsAsync(_selectedInvoice.Id).GetAwaiter().GetResult();
+                    var detailed = _service.GetDetailsAsync(_selectedInvoice.Id).Result;
                     if (detailed != null)
                     {
                         _selectedInvoice = detailed;
@@ -303,12 +303,12 @@ namespace InvoiceApp.ViewModels
 
             AddItemCommand = ItemsView.AddItemCommand;
             RemoveItemCommand = ItemsView.RemoveItemCommand;
-            RemoveInvoiceCommand = new RelayCommand(obj =>
+            RemoveInvoiceCommand = new AsyncRelayCommand(async obj =>
             {
                 if (obj is Invoice invoice &&
                     DialogHelper.ConfirmDeletion("számlát"))
                 {
-                    _service.DeleteAsync(invoice.Id).GetAwaiter().GetResult();
+                    await _service.DeleteAsync(invoice.Id);
                     Invoices.Remove(invoice);
                     ShowStatus("Számla törölve.");
                 }
