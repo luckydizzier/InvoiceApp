@@ -6,7 +6,5 @@ namespace InvoiceApp.Repositories
 {
     public interface ITaxRateRepository : ICrudRepository<TaxRate>
     {
-        Task<IEnumerable<TaxRate>> GetAllAsync();
-        Task<TaxRate?> GetByIdAsync(int id);
     }
 }

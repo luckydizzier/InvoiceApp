@@ -10,16 +10,28 @@ namespace InvoiceApp.Services
 {
     public abstract class BaseService<T> where T : Base
     {
-        private readonly ICrudRepository<T> _repository;
+        protected readonly ICrudRepository<T> Repository;
         private readonly IChangeLogService _logService;
 
         protected BaseService(ICrudRepository<T> repository, IChangeLogService logService)
         {
-            _repository = repository;
+            Repository = repository;
             _logService = logService;
         }
 
         protected virtual Task ValidateAsync(T entity) => Task.CompletedTask;
+
+        public virtual Task<IEnumerable<T>> GetAllAsync()
+        {
+            Log.Debug("{Service}.GetAllAsync called", GetType().Name);
+            return Repository.GetAllAsync();
+        }
+
+        public virtual Task<T?> GetByIdAsync(int id)
+        {
+            Log.Debug("{Service}.GetByIdAsync called with {Id}", GetType().Name, id);
+            return Repository.GetByIdAsync(id);
+        }
 
         public virtual async Task SaveAsync(T entity)
         {
@@ -35,7 +47,7 @@ namespace InvoiceApp.Services
                 entity.DateCreated = DateTime.Now;
                 entity.DateUpdated = entity.DateCreated;
                 entity.Active = true;
-                await _repository.AddAsync(entity);
+                await Repository.AddAsync(entity);
                 await _logService.AddAsync(new ChangeLog
                 {
                     Entity = typeof(T).Name,
@@ -50,7 +62,7 @@ namespace InvoiceApp.Services
             else
             {
                 entity.DateUpdated = DateTime.Now;
-                await _repository.UpdateAsync(entity);
+                await Repository.UpdateAsync(entity);
                 await _logService.AddAsync(new ChangeLog
                 {
                     Entity = typeof(T).Name,
@@ -67,7 +79,7 @@ namespace InvoiceApp.Services
         public virtual async Task DeleteAsync(int id)
         {
             Log.Debug("{Service}.DeleteAsync called for {Id}", typeof(T).Name, id);
-            await _repository.DeleteAsync(id);
+            await Repository.DeleteAsync(id);
             await _logService.AddAsync(new ChangeLog
             {
                 Entity = typeof(T).Name,

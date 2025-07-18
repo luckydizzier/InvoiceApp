@@ -8,20 +8,18 @@ using Serilog;
 
 namespace InvoiceApp.Repositories
 {
-    public class EfInvoiceRepository : IInvoiceRepository
+    public class EfInvoiceRepository : BaseRepository<Invoice>, IInvoiceRepository
     {
-        private readonly IDbContextFactory<InvoiceContext> _contextFactory;
-
         public EfInvoiceRepository(IDbContextFactory<InvoiceContext> contextFactory)
+            : base(contextFactory)
         {
-            _contextFactory = contextFactory;
         }
 
-        public async Task<IEnumerable<Invoice>> GetAllAsync()
+        public override async Task<IEnumerable<Invoice>> GetAllAsync()
         {
             try
             {
-                using var ctx = _contextFactory.CreateDbContext();
+                using var ctx = ContextFactory.CreateDbContext();
                 var invoices = await ctx.Invoices
                     .Include(i => i.Supplier)
                     .Include(i => i.PaymentMethod)
@@ -48,9 +46,9 @@ namespace InvoiceApp.Repositories
             }
         }
 
-        public async Task<Invoice?> GetByIdAsync(int id)
+        public override async Task<Invoice?> GetByIdAsync(int id)
         {
-            using var ctx = _contextFactory.CreateDbContext();
+            using var ctx = ContextFactory.CreateDbContext();
             var invoice = await ctx.Invoices
                 .Include(i => i.Supplier)
                 .Include(i => i.PaymentMethod)
@@ -84,7 +82,7 @@ namespace InvoiceApp.Repositories
 
         public async Task<Invoice?> GetLatestForSupplierAsync(int supplierId)
         {
-            using var ctx = _contextFactory.CreateDbContext();
+            using var ctx = ContextFactory.CreateDbContext();
             return await ctx.Invoices
                 .Where(i => i.SupplierId == supplierId)
                 .OrderByDescending(i => i.Number)
@@ -93,17 +91,17 @@ namespace InvoiceApp.Repositories
 
         public async Task<Invoice?> GetLatestAsync()
         {
-            using var ctx = _contextFactory.CreateDbContext();
+            using var ctx = ContextFactory.CreateDbContext();
             return await ctx.Invoices
                 .OrderByDescending(i => i.DateCreated)
                 .Include(i => i.Supplier)
                 .FirstOrDefaultAsync();
         }
 
-        public async Task AddAsync(Invoice invoice)
+        public override async Task AddAsync(Invoice invoice)
         {
             Log.Debug("EfInvoiceRepository.AddAsync called for {Id}", invoice.Id);
-            using var ctx = _contextFactory.CreateDbContext();
+            using var ctx = ContextFactory.CreateDbContext();
             if (invoice.Supplier != null)
             {
                 ctx.Attach(invoice.Supplier);
@@ -117,10 +115,10 @@ namespace InvoiceApp.Repositories
             Log.Information("Invoice {Id} inserted", invoice.Id);
         }
 
-        public async Task UpdateAsync(Invoice invoice)
+        public override async Task UpdateAsync(Invoice invoice)
         {
             Log.Debug("EfInvoiceRepository.UpdateAsync called for {Id}", invoice.Id);
-            using var ctx = _contextFactory.CreateDbContext();
+            using var ctx = ContextFactory.CreateDbContext();
             if (invoice.Supplier != null)
             {
                 ctx.Attach(invoice.Supplier);
@@ -134,17 +132,5 @@ namespace InvoiceApp.Repositories
             Log.Information("Invoice {Id} updated in DB", invoice.Id);
         }
 
-        public async Task DeleteAsync(int id)
-        {
-            Log.Debug("EfInvoiceRepository.DeleteAsync called for {Id}", id);
-            using var ctx = _contextFactory.CreateDbContext();
-            var entity = await ctx.Invoices.FindAsync(id);
-            if (entity != null)
-            {
-                ctx.Invoices.Remove(entity);
-                await ctx.SaveChangesAsync();
-                Log.Information("Invoice {Id} deleted from DB", id);
-            }
-        }
     }
 }

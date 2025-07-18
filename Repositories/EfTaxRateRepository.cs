@@ -7,56 +7,24 @@ using Serilog;
 
 namespace InvoiceApp.Repositories
 {
-    public class EfTaxRateRepository : ITaxRateRepository
+    public class EfTaxRateRepository : BaseRepository<TaxRate>, ITaxRateRepository
     {
-        private readonly IDbContextFactory<InvoiceContext> _contextFactory;
-
         public EfTaxRateRepository(IDbContextFactory<InvoiceContext> contextFactory)
+            : base(contextFactory)
         {
-            _contextFactory = contextFactory;
         }
 
-        public async Task<IEnumerable<TaxRate>> GetAllAsync()
+        public override async Task<IEnumerable<TaxRate>> GetAllAsync()
         {
-            using var ctx = _contextFactory.CreateDbContext();
+            using var ctx = ContextFactory.CreateDbContext();
             return await ctx.TaxRates.ToListAsync();
         }
 
-        public Task<TaxRate?> GetByIdAsync(int id)
+        public override Task<TaxRate?> GetByIdAsync(int id)
         {
-            using var ctx = _contextFactory.CreateDbContext();
+            using var ctx = ContextFactory.CreateDbContext();
             return ctx.TaxRates.FindAsync(id).AsTask();
         }
 
-        public async Task AddAsync(TaxRate rate)
-        {
-            Log.Debug("EfTaxRateRepository.AddAsync called for {Id}", rate.Id);
-            using var ctx = _contextFactory.CreateDbContext();
-            await ctx.TaxRates.AddAsync(rate);
-            await ctx.SaveChangesAsync();
-            Log.Information("TaxRate {Id} inserted", rate.Id);
-        }
-
-        public async Task UpdateAsync(TaxRate rate)
-        {
-            Log.Debug("EfTaxRateRepository.UpdateAsync called for {Id}", rate.Id);
-            using var ctx = _contextFactory.CreateDbContext();
-            ctx.TaxRates.Update(rate);
-            await ctx.SaveChangesAsync();
-            Log.Information("TaxRate {Id} updated", rate.Id);
-        }
-
-        public async Task DeleteAsync(int id)
-        {
-            Log.Debug("EfTaxRateRepository.DeleteAsync called for {Id}", id);
-            using var ctx = _contextFactory.CreateDbContext();
-            var entity = await ctx.TaxRates.FindAsync(id);
-            if (entity != null)
-            {
-                ctx.TaxRates.Remove(entity);
-                await ctx.SaveChangesAsync();
-                Log.Information("TaxRate {Id} deleted", id);
-            }
-        }
     }
 }

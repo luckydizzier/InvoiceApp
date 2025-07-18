@@ -7,18 +7,16 @@ using Serilog;
 
 namespace InvoiceApp.Repositories
 {
-    public class EfProductRepository : IProductRepository
+    public class EfProductRepository : BaseRepository<Product>, IProductRepository
     {
-        private readonly IDbContextFactory<InvoiceContext> _contextFactory;
-
         public EfProductRepository(IDbContextFactory<InvoiceContext> contextFactory)
+            : base(contextFactory)
         {
-            _contextFactory = contextFactory;
         }
 
-        public async Task<IEnumerable<Product>> GetAllAsync()
+        public override async Task<IEnumerable<Product>> GetAllAsync()
         {
-            using var ctx = _contextFactory.CreateDbContext();
+            using var ctx = ContextFactory.CreateDbContext();
             return await ctx.Products
                 .Include(p => p.Unit)
                 .Include(p => p.ProductGroup)
@@ -26,9 +24,9 @@ namespace InvoiceApp.Repositories
                 .ToListAsync();
         }
 
-        public Task<Product?> GetByIdAsync(int id)
+        public override Task<Product?> GetByIdAsync(int id)
         {
-            using var ctx = _contextFactory.CreateDbContext();
+            using var ctx = ContextFactory.CreateDbContext();
             return ctx.Products
                 .Include(p => p.Unit)
                 .Include(p => p.ProductGroup)
@@ -36,35 +34,5 @@ namespace InvoiceApp.Repositories
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
 
-        public async Task AddAsync(Product product)
-        {
-            Log.Debug("EfProductRepository.AddAsync called for {Id}", product.Id);
-            using var ctx = _contextFactory.CreateDbContext();
-            await ctx.Products.AddAsync(product);
-            await ctx.SaveChangesAsync();
-            Log.Information("Product {Id} inserted", product.Id);
-        }
-
-        public async Task UpdateAsync(Product product)
-        {
-            Log.Debug("EfProductRepository.UpdateAsync called for {Id}", product.Id);
-            using var ctx = _contextFactory.CreateDbContext();
-            ctx.Products.Update(product);
-            await ctx.SaveChangesAsync();
-            Log.Information("Product {Id} updated", product.Id);
-        }
-
-        public async Task DeleteAsync(int id)
-        {
-            Log.Debug("EfProductRepository.DeleteAsync called for {Id}", id);
-            using var ctx = _contextFactory.CreateDbContext();
-            var entity = await ctx.Products.FindAsync(id);
-            if (entity != null)
-            {
-                ctx.Products.Remove(entity);
-                await ctx.SaveChangesAsync();
-                Log.Information("Product {Id} deleted", id);
-            }
-        }
     }
 }

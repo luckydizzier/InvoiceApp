@@ -6,7 +6,5 @@ namespace InvoiceApp.Repositories
 {
     public interface IProductRepository : ICrudRepository<Product>
     {
-        Task<IEnumerable<Product>> GetAllAsync();
-        Task<Product?> GetByIdAsync(int id);
     }
 }

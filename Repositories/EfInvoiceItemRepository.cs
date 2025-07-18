@@ -7,18 +7,16 @@ using Serilog;
 
 namespace InvoiceApp.Repositories
 {
-    public class EfInvoiceItemRepository : IInvoiceItemRepository
+    public class EfInvoiceItemRepository : BaseRepository<InvoiceItem>, IInvoiceItemRepository
     {
-        private readonly IDbContextFactory<InvoiceContext> _contextFactory;
-
         public EfInvoiceItemRepository(IDbContextFactory<InvoiceContext> contextFactory)
+            : base(contextFactory)
         {
-            _contextFactory = contextFactory;
         }
 
         public async Task<IEnumerable<InvoiceItem>> GetAllAsync()
         {
-            using var ctx = _contextFactory.CreateDbContext();
+            using var ctx = ContextFactory.CreateDbContext();
             return await ctx.InvoiceItems
                 .Include(i => i.Product)
                     .ThenInclude(p => p.Unit)
@@ -32,7 +30,7 @@ namespace InvoiceApp.Repositories
 
         public Task<InvoiceItem?> GetByIdAsync(int id)
         {
-            using var ctx = _contextFactory.CreateDbContext();
+            using var ctx = ContextFactory.CreateDbContext();
             return ctx.InvoiceItems
                 .Include(i => i.Product)
                     .ThenInclude(p => p.Unit)
@@ -44,10 +42,10 @@ namespace InvoiceApp.Repositories
                 .FirstOrDefaultAsync(i => i.Id == id);
         }
 
-        public async Task AddAsync(InvoiceItem item)
+        public override async Task AddAsync(InvoiceItem item)
         {
             Log.Debug("EfInvoiceItemRepository.AddAsync called for {Id}", item.Id);
-            using var ctx = _contextFactory.CreateDbContext();
+            using var ctx = ContextFactory.CreateDbContext();
             if (item.Product != null)
             {
                 ctx.Attach(item.Product);
@@ -61,10 +59,10 @@ namespace InvoiceApp.Repositories
             Log.Information("InvoiceItem {Id} inserted", item.Id);
         }
 
-        public async Task UpdateAsync(InvoiceItem item)
+        public override async Task UpdateAsync(InvoiceItem item)
         {
             Log.Debug("EfInvoiceItemRepository.UpdateAsync called for {Id}", item.Id);
-            using var ctx = _contextFactory.CreateDbContext();
+            using var ctx = ContextFactory.CreateDbContext();
             if (item.Product != null)
             {
                 ctx.Attach(item.Product);
@@ -78,17 +76,5 @@ namespace InvoiceApp.Repositories
             Log.Information("InvoiceItem {Id} updated", item.Id);
         }
 
-        public async Task DeleteAsync(int id)
-        {
-            Log.Debug("EfInvoiceItemRepository.DeleteAsync called for {Id}", id);
-            using var ctx = _contextFactory.CreateDbContext();
-            var entity = await ctx.InvoiceItems.FindAsync(id);
-            if (entity != null)
-            {
-                ctx.InvoiceItems.Remove(entity);
-                await ctx.SaveChangesAsync();
-                Log.Information("InvoiceItem {Id} deleted", id);
-            }
-        }
     }
 }
