@@ -12,7 +12,9 @@ namespace InvoiceApp.Tests
         public void InvoiceIsInvalid_WhenRequiredFieldsMissing()
         {
             var invoice = new Invoice();
-            Assert.IsFalse(invoice.IsValid());
+            invoice.Number = "temp";
+            invoice.Number = string.Empty;
+            Assert.IsTrue(invoice.HasErrors);
         }
 
         [TestMethod]
@@ -20,6 +22,8 @@ namespace InvoiceApp.Tests
         {
             var vm = TestHelpers.CreateInvoiceViewModel();
             vm.SelectedInvoice = new Invoice();
+            vm.SelectedInvoice.Number = "temp";
+            vm.SelectedInvoice.Number = string.Empty;
             vm.Items = new ObservableCollection<InvoiceItemViewModel>
             {
                 new InvoiceItemViewModel(new InvoiceItem
