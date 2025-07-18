@@ -24,8 +24,8 @@
             <KeyBinding Key="Up" Command="{Binding ItemsUpCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
             <KeyBinding Key="Down" Command="{Binding ItemsDownCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
             <KeyBinding Key="Escape" Command="{Binding ItemsEscapeCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
-            <KeyBinding Key="Insert" Command="{Binding InvoiceViewModel.AddItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
-            <KeyBinding Key="Delete" Command="{Binding InvoiceViewModel.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding SelectedItem}"/>
+            <KeyBinding Key="Insert" Command="{Binding AddItemCommand}"/>
+            <KeyBinding Key="Delete" Command="{Binding RemoveItemCommand}" CommandParameter="{Binding SelectedItem}"/>
         </DataGrid.InputBindings>
         <DataGrid.Columns>
             <DataGridTemplateColumn Header="Termék">
@@ -36,7 +36,7 @@
                 </DataGridTemplateColumn.CellTemplate>
                 <DataGridTemplateColumn.CellEditingTemplate>
                     <DataTemplate>
-                        <ComboBox ItemsSource="{Binding DataContext.InvoiceViewModel.Products, RelativeSource={RelativeSource AncestorType=Window}}"
+                        <ComboBox ItemsSource="{Binding DataContext.Products, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                   SelectedItem="{Binding Item.Product, UpdateSourceTrigger=PropertyChanged}"
                                   DisplayMemberPath="Name"/>
                     </DataTemplate>
@@ -58,7 +58,7 @@
                 </DataGridTemplateColumn.CellTemplate>
                 <DataGridTemplateColumn.CellEditingTemplate>
                     <DataTemplate>
-                        <ComboBox ItemsSource="{Binding DataContext.InvoiceViewModel.TaxRates, RelativeSource={RelativeSource AncestorType=Window}}"
+                        <ComboBox ItemsSource="{Binding DataContext.TaxRates, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                   SelectedItem="{Binding TaxRate, UpdateSourceTrigger=PropertyChanged}"
                                   DisplayMemberPath="Percentage"
                                   IsEditable="True"
@@ -78,7 +78,7 @@
                 <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
                         <Button Content="💾 Mentés"
-                                Command="{Binding DataContext.InvoiceViewModel.SaveItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                Command="{Binding DataContext.SaveItemCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                 CommandParameter="{Binding}"
                                 Style="{StaticResource IconButtonStyle}"
                                 ToolTip="Tétel mentése"/>
