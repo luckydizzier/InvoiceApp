@@ -14,9 +14,7 @@ Users can interact with every view using only the keyboard.
 | `Up/Down` | Move between list items or form fields. |
 | `Left/Right` | Move the cursor within text fields. |
 
-When pressing `Up` while the first item in a list is selected, the application
-asks whether to create a new entry. Confirming will add a blank item to the
-list.
+Press `Up` at the start of a list to quickly create a new entry.
 
 ## AppState Specific Navigation
 
@@ -34,8 +32,6 @@ list.
 - `Del` deletes the highlighted invoice.
 - `Escape` returns to the dashboard.
 - Pressing `Up` before the first entry prompts to create a new invoice.
-- Up/Down arrows only move the list when the list is active and no row
-  details editor is visible.
 
 ### InvoiceEditor (`InvoiceEditorView`)
 

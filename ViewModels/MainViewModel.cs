@@ -165,6 +165,7 @@ namespace InvoiceApp.ViewModels
         {
             CurrentState = state;
             UpdateBreadcrumb();
+            InvoiceViewModel.UpdateNavigationStatus(state);
         }
 
         private void UpdateBreadcrumb()
