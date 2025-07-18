@@ -17,7 +17,6 @@ namespace InvoiceApp.Views
                 if (DataContext is MainViewModel vm)
                 {
                     await vm.InvoiceViewModel.LoadAsync();
-                    vm.ShowInvoiceListCommand.Execute(null);
                     vm.InvoiceViewModel.IsInvoiceListFocused = true;
                 }
             };
@@ -31,9 +30,9 @@ namespace InvoiceApp.Views
                 return;
             }
 
-            // Only allow list navigation when the invoice list is active and
+            // Only allow list navigation when the main window list is active and
             // no row details panel is open
-            if (ViewModel.CurrentState != Models.AppState.InvoiceList ||
+            if (ViewModel.CurrentState != Models.AppState.MainWindow ||
                 ViewModel.InvoiceViewModel.IsRowDetailsVisible)
             {
                 return;

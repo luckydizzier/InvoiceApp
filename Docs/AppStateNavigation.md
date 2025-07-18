@@ -8,7 +8,6 @@ This document lists the official `AppState` values used by InvoiceApp and the de
 |-------|-------------|
 | `MainWindow` | Root container window for the application. |
 | `Dashboard` | Overview screen showing recent activity. |
-| `InvoiceList` | Displays all invoices. |
 | `Header` | Editor substate for header information. |
 | `ItemList` | Editor substate for editing invoice items. |
 | `Summary` | Editor substate summarising totals. |
@@ -27,7 +26,6 @@ Global keyboard shortcuts are mapped as follows:
 | Key | Action |
 |-----|-------|
 | `F1` | Open Dashboard |
-| `F2` | Open Invoice list |
 | `F4` | Open Products view |
 | `F5` | Open Product groups |
 | `F6` | Open Suppliers |
