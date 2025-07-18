@@ -13,6 +13,7 @@ namespace InvoiceApp.ViewModels
 {
     public class ProductViewModel : MasterDataViewModel<Product>
     {
+        public new RelayCommand SaveCommand { get; }
         private readonly IProductService _service;
         private readonly ITaxRateService _taxRateService;
         private readonly IUnitService _unitService;
@@ -82,7 +83,22 @@ namespace InvoiceApp.ViewModels
             _unitService = unitService;
             _groupService = groupService;
             ClearChanges();
+            SaveCommand = new RelayCommand(async _ =>
+            {
+                if (SelectedProduct != null)
+                {
+                    await SaveItemAsync(SelectedProduct);
+                    AfterSave(SelectedProduct);
+                    ClearChanges();
+                }
+            }, _ => SelectedProduct != null && HasChanges && CanSaveItem(SelectedProduct));
         }
+
+        public bool HasChanges => base.HasChanges;
+
+        public void MarkDirty() => base.MarkDirty();
+
+        public void ClearChanges() => base.ClearChanges();
 
         public async Task LoadAsync()
         {

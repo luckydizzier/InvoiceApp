@@ -9,6 +9,7 @@ namespace InvoiceApp.ViewModels
 {
     public class SupplierViewModel : MasterDataViewModel<Supplier>
     {
+        public new RelayCommand SaveCommand { get; }
         private readonly ISupplierService _service;
         public ObservableCollection<Supplier> Suppliers
         {
@@ -27,7 +28,22 @@ namespace InvoiceApp.ViewModels
         {
             _service = service;
             ClearChanges();
+            SaveCommand = new RelayCommand(async _ =>
+            {
+                if (SelectedSupplier != null)
+                {
+                    await SaveItemAsync(SelectedSupplier);
+                    AfterSave(SelectedSupplier);
+                    ClearChanges();
+                }
+            }, _ => SelectedSupplier != null && HasChanges && CanSaveItem(SelectedSupplier));
         }
+
+        public bool HasChanges => base.HasChanges;
+
+        public void MarkDirty() => base.MarkDirty();
+
+        public void ClearChanges() => base.ClearChanges();
 
         public async Task LoadAsync()
         {
