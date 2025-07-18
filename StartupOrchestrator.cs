@@ -170,6 +170,18 @@ namespace InvoiceApp
             return cmd.ExecuteScalar() != null;
         }
 
+        private static void EnsureIndex(DbConnection conn, string table, string column)
+        {
+            var indexName = $"IX_{table}_{column}";
+            if (!IndexExists(conn, indexName))
+            {
+                using var cmd = conn.CreateCommand();
+                cmd.CommandText = $"CREATE INDEX IF NOT EXISTS {indexName} ON {table}({column});";
+                cmd.ExecuteNonQuery();
+                Log.Information($"Index {indexName} created.");
+            }
+        }
+
         private static void RepairTables(InvoiceContext ctx, string dbPath)
         {
             using var conn = ctx.Database.GetDbConnection();
@@ -184,13 +196,12 @@ namespace InvoiceApp
                     Log.Information($"Table {table} ensured.");
                 }
 
-                var indexName = $"IX_{table}_Id";
-                if (!IndexExists(conn, indexName))
+                EnsureIndex(conn, table, "Id");
+
+                if (table == "Invoices")
                 {
-                    using var cmd = conn.CreateCommand();
-                    cmd.CommandText = $"CREATE INDEX IF NOT EXISTS {indexName} ON {table}(Id);";
-                    cmd.ExecuteNonQuery();
-                    Log.Information($"Index {indexName} created.");
+                    EnsureIndex(conn, table, "SupplierId");
+                    EnsureIndex(conn, table, "Date");
                 }
             }
 
