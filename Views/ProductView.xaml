@@ -8,7 +8,6 @@
              mc:Ignorable="d"
              MinHeight="300" MinWidth="500">
     <UserControl.InputBindings>
-        <KeyBinding Key="Insert" Command="{Binding AddCommand}"/>
         <KeyBinding Key="Delete" Command="{Binding DeleteCommand}"/>
     </UserControl.InputBindings>
     <Grid>

@@ -24,7 +24,6 @@
             <KeyBinding Key="Up" Command="{Binding ItemsUpCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
             <KeyBinding Key="Down" Command="{Binding ItemsDownCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
             <KeyBinding Key="Escape" Command="{Binding ItemsEscapeCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
-            <KeyBinding Key="Insert" Command="{Binding AddItemCommand}"/>
             <KeyBinding Key="Delete" Command="{Binding RemoveItemCommand}" CommandParameter="{Binding SelectedItem}"/>
         </DataGrid.InputBindings>
         <DataGrid.Columns>
