@@ -34,6 +34,8 @@ list.
 - `Del` deletes the highlighted invoice.
 - `Escape` returns to the dashboard.
 - Pressing `Up` before the first entry prompts to create a new invoice.
+- Up/Down arrows only move the list when the list is active and no row
+  details editor is visible.
 
 ### InvoiceEditor (`InvoiceEditorView`)
 
