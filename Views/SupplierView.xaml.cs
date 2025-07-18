@@ -33,7 +33,15 @@ namespace InvoiceApp.Views
 
         private void DataGrid_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            DataGridFocusBehavior.OnPreviewKeyDown(sender, e);
+            if (e.Key == Key.Up && sender is DataGrid grid && grid.SelectedIndex == 0)
+            {
+                ViewModel.SelectPreviousSupplier();
+                e.Handled = true;
+            }
+            else
+            {
+                DataGridFocusBehavior.OnPreviewKeyDown(sender, e);
+            }
         }
     }
 }
