@@ -4,6 +4,9 @@
              xmlns:views="clr-namespace:InvoiceApp.Views"
              xmlns:helpers="clr-namespace:InvoiceApp.Helpers"
              MinHeight="300" MinWidth="500">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+    </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -27,6 +30,26 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <views:InvoiceEditorView Grid.Column="1" />
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <views:InvoiceHeaderView Grid.Row="0" Margin="0,0,0,4" DataContext="{Binding Header}" />
+            <views:InvoiceItemDataGrid Grid.Row="1" Margin="0,0,0,4" DataContext="{Binding ItemsView}" />
+            <views:InvoiceSummaryPanel Grid.Row="2" DataContext="{Binding ItemsView}" />
+            <Border Grid.Row="3" Background="#FFFFE0E0" Padding="4"
+                    Visibility="{Binding HasValidationErrors, Converter={StaticResource BoolToVisibilityConverter}}">
+                <StackPanel>
+                    <TextBlock Text="Hibák (Alt+1-6):" FontWeight="Bold" Margin="0,0,0,4" />
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <ItemsControl ItemsSource="{Binding ValidationErrors}" />
+                    </ScrollViewer>
+                </StackPanel>
+            </Border>
+        </Grid>
     </Grid>
 </UserControl>
