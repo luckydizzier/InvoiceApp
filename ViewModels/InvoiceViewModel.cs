@@ -100,30 +100,49 @@ namespace InvoiceApp.ViewModels
                     _selectedInvoice.ErrorsChanged -= Invoice_ErrorsChanged;
                 }
 
-                _selectedInvoice = value;
-
-                if (_selectedInvoice != null)
-                {
-                    var detailed = _service.GetDetailsAsync(_selectedInvoice.Id).Result;
-                    if (detailed != null)
-                    {
-                        _selectedInvoice = detailed;
-                    }
-                    _selectedInvoice.ErrorsChanged += Invoice_ErrorsChanged;
-                }
-                Header.SelectedInvoice = _selectedInvoice;
-                Items = _selectedInvoice != null
-                    ? new ObservableCollection<InvoiceItemViewModel>(
-                        _selectedInvoice.Items.Select(i => new InvoiceItemViewModel(i)))
-                    : new ObservableCollection<InvoiceItemViewModel>();
-                SelectedSupplier = _selectedInvoice?.Supplier;
-                SelectedPaymentMethod = _selectedInvoice?.PaymentMethod;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(ValidationErrors));
-                OnPropertyChanged(nameof(HasValidationErrors));
-                ((RelayCommand)SaveCommand).RaiseCanExecuteChanged();
+                _ = SetSelectedInvoiceAsync(value);
                 ClearChanges();
             }
+        }
+
+        private async Task SetSelectedInvoiceAsync(Invoice? value)
+        {
+            Invoice? invoice = value;
+
+            if (invoice != null)
+            {
+                try
+                {
+                    var detailed = await _service.GetDetailsAsync(invoice.Id);
+                    if (detailed != null)
+                    {
+                        invoice = detailed;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "Failed to load invoice details for {Id}", invoice.Id);
+                }
+            }
+
+            _selectedInvoice = invoice;
+
+            if (_selectedInvoice != null)
+            {
+                _selectedInvoice.ErrorsChanged += Invoice_ErrorsChanged;
+            }
+
+            Header.SelectedInvoice = _selectedInvoice;
+            Items = _selectedInvoice != null
+                ? new ObservableCollection<InvoiceItemViewModel>(
+                    _selectedInvoice.Items.Select(i => new InvoiceItemViewModel(i)))
+                : new ObservableCollection<InvoiceItemViewModel>();
+            SelectedSupplier = _selectedInvoice?.Supplier;
+            SelectedPaymentMethod = _selectedInvoice?.PaymentMethod;
+            OnPropertyChanged(nameof(SelectedInvoice));
+            OnPropertyChanged(nameof(ValidationErrors));
+            OnPropertyChanged(nameof(HasValidationErrors));
+            ((RelayCommand)SaveCommand).RaiseCanExecuteChanged();
         }
 
         public ObservableCollection<InvoiceItemViewModel> Items
