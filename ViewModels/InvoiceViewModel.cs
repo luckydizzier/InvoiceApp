@@ -87,6 +87,7 @@ namespace InvoiceApp.ViewModels
         {
             OnPropertyChanged(nameof(ValidationErrors));
             OnPropertyChanged(nameof(HasValidationErrors));
+            ((RelayCommand)SaveCommand).RaiseCanExecuteChanged();
         }
 
         public Invoice? SelectedInvoice
