@@ -717,6 +717,9 @@ namespace InvoiceApp.ViewModels
         /// </summary>
         public void DeleteCurrentInvoice()
         {
+            if (_navigation.CurrentState != AppState.InvoiceList)
+                return;
+
             if (SelectedInvoice != null && RemoveInvoiceCommand.CanExecute(SelectedInvoice))
             {
                 RemoveInvoiceCommand.Execute(SelectedInvoice);

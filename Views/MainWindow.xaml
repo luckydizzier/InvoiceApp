@@ -189,7 +189,6 @@
         <KeyBinding Key="Down" Command="{Binding NavigateDownCommand}"/>
         <KeyBinding Key="Enter" Command="{Binding EnterCommand}"/>
         <KeyBinding Key="Escape" Command="{Binding BackCommand}"/>
-        <KeyBinding Key="Delete" Command="{Binding DeleteInvoiceCommand}"/>
         <KeyBinding Key="Insert" Command="{Binding InvoiceViewModel.NewInvoiceCommand}"/>
         <KeyBinding Key="N" Modifiers="Control+Shift" Command="{Binding InvoiceViewModel.SaveAndNewCommand}"/>
         <KeyBinding Key="F1" Command="{Binding ShowDashboardCommand}"/>
