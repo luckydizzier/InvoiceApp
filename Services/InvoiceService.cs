@@ -21,17 +21,6 @@ namespace InvoiceApp.Services
             _validator = validator;
         }
 
-        public Task<IEnumerable<Invoice>> GetAllAsync()
-        {
-            Log.Debug("InvoiceService.GetAllAsync called");
-            return _repository.GetAllAsync();
-        }
-
-        public Task<Invoice?> GetByIdAsync(int id)
-        {
-            Log.Debug("InvoiceService.GetByIdAsync called with {Id}", id);
-            return _repository.GetByIdAsync(id);
-        }
 
         public Task<Invoice?> GetLatestForSupplierAsync(int supplierId)
         {
