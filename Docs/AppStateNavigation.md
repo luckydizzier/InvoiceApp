@@ -9,7 +9,6 @@ This document lists the official `AppState` values used by InvoiceApp and the de
 | `MainWindow` | Root container window for the application. |
 | `Dashboard` | Overview screen showing recent activity. |
 | `InvoiceList` | Displays all invoices. |
-| `InvoiceEditor` | (unused) Former container for invoice editing. |
 | `Header` | Editor substate for header information. |
 | `ItemList` | Editor substate for editing invoice items. |
 | `Summary` | Editor substate summarising totals. |
