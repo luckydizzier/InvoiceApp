@@ -1,4 +1,6 @@
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using InvoiceApp.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -23,6 +25,12 @@ namespace InvoiceApp.Views
 
         private void Window_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
+            // Ignore navigation keys when editing in text fields or combo boxes
+            if (e.OriginalSource is TextBoxBase || e.OriginalSource is ComboBox)
+            {
+                return;
+            }
+
             if (e.Key == System.Windows.Input.Key.Up)
             {
                 if (_viewModel.NavigateUpCommand.CanExecute(null))
