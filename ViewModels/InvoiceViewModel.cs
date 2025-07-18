@@ -322,7 +322,8 @@ namespace InvoiceApp.ViewModels
 
             _statusTimer = new System.Windows.Threading.DispatcherTimer
             {
-                Interval = System.TimeSpan.FromSeconds(3)
+                // Extended duration so users can read status updates
+                Interval = System.TimeSpan.FromSeconds(8)
             };
             _statusTimer.Tick += (s, e) => { StatusMessage = string.Empty; _statusTimer.Stop(); };
 
