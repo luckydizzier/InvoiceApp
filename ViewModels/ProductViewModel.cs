@@ -66,10 +66,44 @@ namespace InvoiceApp.ViewModels
             }
         }
 
+        private bool _isGrossInput;
+
+        /// <summary>
+        /// Determines whether the gross field is edited directly.
+        /// If false, the gross value is calculated from the net amount.
+        /// </summary>
+        public bool IsGrossInput
+        {
+            get => _isGrossInput;
+            set
+            {
+                if (_isGrossInput != value)
+                {
+                    _isGrossInput = value;
+                    OnPropertyChanged();
+                    if (SelectedProduct != null)
+                        UpdateAmounts(SelectedProduct);
+                }
+            }
+        }
+
         public Product? SelectedProduct
         {
             get => SelectedItem;
-            set => SelectedItem = value;
+            set
+            {
+                if (SelectedItem != null)
+                    SelectedItem.PropertyChanged -= SelectedProduct_PropertyChanged;
+
+                SelectedItem = value;
+                OnPropertyChanged();
+
+                if (SelectedItem != null)
+                {
+                    SelectedItem.PropertyChanged += SelectedProduct_PropertyChanged;
+                    UpdateAmounts(SelectedItem);
+                }
+            }
         }
 
 
@@ -161,6 +195,38 @@ namespace InvoiceApp.ViewModels
             return true;
         }
 
+        private void SelectedProduct_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (sender is Product product)
+            {
+                if ((e.PropertyName == nameof(Product.Net) && !IsGrossInput) ||
+                    (e.PropertyName == nameof(Product.Gross) && IsGrossInput) ||
+                    e.PropertyName == nameof(Product.TaxRate))
+                {
+                    UpdateAmounts(product);
+                }
+            }
+        }
+
+        private void UpdateAmounts(Product product)
+        {
+            var percent = product.TaxRate?.Percentage ?? 0m;
+            if (IsGrossInput)
+            {
+                var net = percent == 0m
+                    ? product.Gross
+                    : Math.Round(product.Gross / (1 + (percent / 100m)), 2);
+                if (product.Net != net)
+                    product.Net = net;
+            }
+            else
+            {
+                var gross = Math.Round(product.Net * (1 + (percent / 100m)), 2);
+                if (product.Gross != gross)
+                    product.Gross = gross;
+            }
+        }
+
         protected override async Task SaveItemAsync(Product product)
         {
             var percent = product.TaxRate?.Percentage ?? 0m;
@@ -203,8 +269,16 @@ namespace InvoiceApp.ViewModels
             {
                 product.ProductGroupId = product.ProductGroup.Id;
             }
-            product.Gross =
-                Math.Round(product.Net * (1 + (rate.Percentage / 100m)), 2);
+            if (IsGrossInput)
+            {
+                product.Net = rate.Percentage == 0m
+                    ? product.Gross
+                    : Math.Round(product.Gross / (1 + (rate.Percentage / 100m)), 2);
+            }
+            else
+            {
+                product.Gross = Math.Round(product.Net * (1 + (rate.Percentage / 100m)), 2);
+            }
             await _service.SaveAsync(product);
             DialogHelper.ShowInfo("Mentés kész.");
         }
