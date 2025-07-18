@@ -525,7 +525,7 @@ namespace InvoiceApp.ViewModels
         private bool Validate()
         {
             return SelectedInvoice != null
-                && _service.IsValid(SelectedInvoice)
+                && !SelectedInvoice.HasErrors
                 && Items.Count > 0;
         }
 

@@ -12,7 +12,7 @@ namespace InvoiceApp.Tests
         public void InvoiceIsInvalid_WhenRequiredFieldsMissing()
         {
             var invoice = new Invoice();
-            Assert.IsFalse(invoice.IsValid());
+            Assert.IsTrue(invoice.HasErrors);
         }
 
         [TestMethod]

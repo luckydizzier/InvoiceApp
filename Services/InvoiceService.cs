@@ -48,10 +48,6 @@ namespace InvoiceApp.Services
             return _validator.ValidateAndThrowAsync(entity.ToDto());
         }
 
-        public bool IsValid(Invoice invoice)
-        {
-            return _validator.Validate(invoice.ToDto()).IsValid;
-        }
 
         public async Task SaveInvoiceWithItemsAsync(Invoice invoice, IEnumerable<InvoiceItem> items)
         {
