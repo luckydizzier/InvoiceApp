@@ -3,23 +3,23 @@ using System.Windows;
 using System.Windows.Input;
 using InvoiceApp.Helpers;
 using InvoiceApp.ViewModels;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace InvoiceApp.Views
 {
     public partial class UnitView : UserControl
     {
-        private readonly UnitViewModel _viewModel;
+        private UnitViewModel ViewModel => (UnitViewModel)DataContext;
 
         public UnitView()
         {
             InitializeComponent();
-            _viewModel = ((App)Application.Current).Services.GetRequiredService<UnitViewModel>();
-            DataContext = _viewModel;
             Loaded += async (s, e) =>
             {
-                await _viewModel.LoadAsync();
-                FocusManager.SetFocusedElement(this, DataGrid);
+                if (DataContext is UnitViewModel vm)
+                {
+                    await vm.LoadAsync();
+                    FocusManager.SetFocusedElement(this, DataGrid);
+                }
             };
         }
 
@@ -30,7 +30,10 @@ namespace InvoiceApp.Views
 
         private void DataGrid_CellEditEnding(object? sender, DataGridCellEditEndingEventArgs e)
         {
-            _viewModel.MarkDirty();
+            if (DataContext is UnitViewModel vm)
+            {
+                vm.MarkDirty();
+            }
         }
     }
 }

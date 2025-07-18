@@ -3,23 +3,23 @@ using System.Windows;
 using System.Windows.Input;
 using InvoiceApp.Helpers;
 using InvoiceApp.ViewModels;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace InvoiceApp.Views
 {
     public partial class PaymentMethodView : UserControl
     {
-        private readonly PaymentMethodViewModel _viewModel;
+        private PaymentMethodViewModel ViewModel => (PaymentMethodViewModel)DataContext;
 
         public PaymentMethodView()
         {
             InitializeComponent();
-            _viewModel = ((App)Application.Current).Services.GetRequiredService<PaymentMethodViewModel>();
-            DataContext = _viewModel;
             Loaded += async (s, e) =>
             {
-                await _viewModel.LoadAsync();
-                FocusManager.SetFocusedElement(this, DataGrid);
+                if (DataContext is PaymentMethodViewModel vm)
+                {
+                    await vm.LoadAsync();
+                    FocusManager.SetFocusedElement(this, DataGrid);
+                }
             };
         }
 
@@ -30,7 +30,10 @@ namespace InvoiceApp.Views
 
         private void DataGrid_CellEditEnding(object? sender, DataGridCellEditEndingEventArgs e)
         {
-            _viewModel.MarkDirty();
+            if (DataContext is PaymentMethodViewModel vm)
+            {
+                vm.MarkDirty();
+            }
         }
     }
 }

@@ -2,24 +2,24 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using InvoiceApp.ViewModels;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace InvoiceApp.Views
 {
     public partial class MainWindow : Window
     {
-        private readonly MainViewModel _viewModel;
+        private MainViewModel ViewModel => (MainViewModel)DataContext;
 
         public MainWindow()
         {
             InitializeComponent();
-            _viewModel = ((App)Application.Current).Services.GetRequiredService<MainViewModel>();
-            DataContext = _viewModel;
             Loaded += async (s, e) =>
             {
-                await _viewModel.InvoiceViewModel.LoadAsync();
-                _viewModel.ShowInvoiceListCommand.Execute(null);
-                _viewModel.InvoiceViewModel.IsInvoiceListFocused = true;
+                if (DataContext is MainViewModel vm)
+                {
+                    await vm.InvoiceViewModel.LoadAsync();
+                    vm.ShowInvoiceListCommand.Execute(null);
+                    vm.InvoiceViewModel.IsInvoiceListFocused = true;
+                }
             };
         }
 
@@ -33,25 +33,25 @@ namespace InvoiceApp.Views
 
             // Only allow list navigation when the invoice list is active and
             // no row details panel is open
-            if (_viewModel.CurrentState != Models.AppState.InvoiceList ||
-                _viewModel.InvoiceViewModel.IsRowDetailsVisible)
+            if (ViewModel.CurrentState != Models.AppState.InvoiceList ||
+                ViewModel.InvoiceViewModel.IsRowDetailsVisible)
             {
                 return;
             }
 
             if (e.Key == System.Windows.Input.Key.Up)
             {
-                if (_viewModel.NavigateUpCommand.CanExecute(null))
+                if (ViewModel.NavigateUpCommand.CanExecute(null))
                 {
-                    _viewModel.NavigateUpCommand.Execute(null);
+                    ViewModel.NavigateUpCommand.Execute(null);
                     e.Handled = true;
                 }
             }
             else if (e.Key == System.Windows.Input.Key.Down)
             {
-                if (_viewModel.NavigateDownCommand.CanExecute(null))
+                if (ViewModel.NavigateDownCommand.CanExecute(null))
                 {
-                    _viewModel.NavigateDownCommand.Execute(null);
+                    ViewModel.NavigateDownCommand.Execute(null);
                     e.Handled = true;
                 }
             }
