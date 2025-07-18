@@ -5,6 +5,7 @@ using InvoiceApp.Services;
 using InvoiceApp;
 using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
+using System.Windows.Input;
 
 namespace InvoiceApp.ViewModels
 {
@@ -82,6 +83,7 @@ namespace InvoiceApp.ViewModels
         public RelayCommand SwitchTaxRatesCommand { get; }
         public RelayCommand SwitchUnitsCommand { get; }
         public RelayCommand SwitchProductsCommand { get; }
+        public ICommand StateAddCommand { get; }
 
         public MainViewModel(INavigationService navigation,
                              InvoiceViewModel invoiceViewModel,
@@ -94,6 +96,8 @@ namespace InvoiceApp.ViewModels
             _currentStateDescription = _current.GetDescription();
             UpdateBreadcrumb();
             _navigation.StateChanged += OnStateChanged;
+
+            StateAddCommand = new StateCommand(_navigation, ((App)Application.Current).Services);
 
             BackCommand = new RelayCommand(_ =>
             {
