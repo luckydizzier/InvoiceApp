@@ -18,6 +18,7 @@ namespace InvoiceApp.ViewModels
         private readonly ITaxRateService _taxRateService;
         private readonly IUnitService _unitService;
         private readonly IProductGroupService _groupService;
+        private readonly IStatusService _statusService;
         private ObservableCollection<TaxRate> _taxRates = new();
         private ObservableCollection<Unit> _units = new();
         private ObservableCollection<ProductGroup> _groups = new();
@@ -75,13 +76,15 @@ namespace InvoiceApp.ViewModels
         public ProductViewModel(IProductService service,
                                 ITaxRateService taxRateService,
                                 IUnitService unitService,
-                                IProductGroupService groupService)
+                                IProductGroupService groupService,
+                                IStatusService statusService)
             : base(true)
         {
             _service = service;
             _taxRateService = taxRateService;
             _unitService = unitService;
             _groupService = groupService;
+            _statusService = statusService;
             ClearChanges();
             SaveCommand = new RelayCommand(async _ =>
             {
@@ -154,7 +157,7 @@ namespace InvoiceApp.ViewModels
             if (!DialogHelper.ConfirmDeletion("terméket"))
                 return false;
             await _service.DeleteAsync(product.Id);
-            DialogHelper.ShowInfo("Törlés sikeres.");
+            _statusService.Show("Törlés sikeres.");
             return true;
         }
 

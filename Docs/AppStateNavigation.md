@@ -42,3 +42,5 @@ The invoice editor substates (`Header`, `ItemList`, `Summary`) respond only to *
 ## Deletion confirmations
 
 Every view model that performs a delete operation must show a confirmation dialog before calling the underlying `DeleteAsync` service. Use `DialogHelper.ConfirmDeletion` with a short description of the item being deleted. This ensures users receive consistent prompts across the application.
+
+After a successful deletion, feedback is provided via the application's status bar instead of a modal dialog.

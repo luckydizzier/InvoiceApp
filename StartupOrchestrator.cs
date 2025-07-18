@@ -75,6 +75,7 @@ namespace InvoiceApp
             services.AddSingleton<IUnitService, UnitService>();
             services.AddSingleton<IProductGroupService, ProductGroupService>();
             services.AddSingleton<ITaxRateService, TaxRateService>();
+            services.AddSingleton<IStatusService, StatusService>();
 
             services.AddSingleton<ViewModels.InvoiceViewModel>();
             services.AddSingleton<ViewModels.ProductViewModel>();

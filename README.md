@@ -25,6 +25,7 @@ A small WPF application demonstrating an MRS (Model–Repository–Service) and 
 - **EF Core Repositories** – For production use, providing robust data access.
 - **ViewModels** – Implementing INotifyPropertyChanged for UI updates.
 - **Commands** – Implementing ICommand for user interactions.
+- **Status Bar Feedback** – Success messages, such as after deletions, appear in the status bar instead of modal dialogs.
 
 ## Documentation
 Detailed navigation information can be found in

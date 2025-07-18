@@ -207,7 +207,7 @@
                    Margin="4" />
         <StatusBar DockPanel.Dock="Bottom">
             <TextBlock Text="{Binding CurrentStateDescription}" Margin="0,0,10,0"/>
-            <TextBlock Text="{Binding InvoiceViewModel.StatusMessage}" />
+            <TextBlock Text="{Binding Source={StaticResource ViewModelLocator}, Path=StatusService.Message}" />
         </StatusBar>
         <ContentControl x:Name="StateRegion"
                         Content="{Binding CurrentState}"

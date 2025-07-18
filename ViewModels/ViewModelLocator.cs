@@ -1,6 +1,7 @@
 using System;
 using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
+using InvoiceApp.Services;
 
 namespace InvoiceApp.ViewModels
 {
@@ -20,5 +21,6 @@ namespace InvoiceApp.ViewModels
         public UnitViewModel UnitViewModel => ServiceProvider.GetRequiredService<UnitViewModel>();
         public ProductGroupViewModel ProductGroupViewModel => ServiceProvider.GetRequiredService<ProductGroupViewModel>();
         public TaxRateViewModel TaxRateViewModel => ServiceProvider.GetRequiredService<TaxRateViewModel>();
+        public IStatusService StatusService => ServiceProvider.GetRequiredService<IStatusService>();
     }
 }

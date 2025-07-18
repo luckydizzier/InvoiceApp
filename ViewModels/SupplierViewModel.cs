@@ -11,6 +11,7 @@ namespace InvoiceApp.ViewModels
     {
         public new RelayCommand SaveCommand { get; }
         private readonly ISupplierService _service;
+        private readonly IStatusService _statusService;
         public ObservableCollection<Supplier> Suppliers
         {
             get => Items;
@@ -23,10 +24,12 @@ namespace InvoiceApp.ViewModels
             set => SelectedItem = value;
         }
 
-        public SupplierViewModel(ISupplierService service)
+        public SupplierViewModel(ISupplierService service,
+            IStatusService statusService)
             : base(true)
         {
             _service = service;
+            _statusService = statusService;
             ClearChanges();
             SaveCommand = new RelayCommand(async _ =>
             {
@@ -66,7 +69,7 @@ namespace InvoiceApp.ViewModels
             if (!DialogHelper.ConfirmDeletion("szállítót"))
                 return false;
             await _service.DeleteAsync(supplier.Id);
-            DialogHelper.ShowInfo("Törlés sikeres.");
+            _statusService.Show("Törlés sikeres.");
             return true;
         }
 

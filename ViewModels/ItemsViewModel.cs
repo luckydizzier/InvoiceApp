@@ -18,7 +18,7 @@ namespace InvoiceApp.ViewModels
         private readonly IInvoiceItemService _itemService;
         private readonly IProductService _productService;
         private readonly ITaxRateService _taxRateService;
-        private readonly Action<string> _showStatus;
+        private readonly IStatusService _statusService;
         private readonly Action _raiseSaveChanged;
         private readonly Action _markDirty;
         private readonly Func<bool> _isGrossFunc;
@@ -41,7 +41,7 @@ namespace InvoiceApp.ViewModels
         public ItemsViewModel(IInvoiceItemService itemService,
             IProductService productService,
             ITaxRateService taxRateService,
-            Action<string> showStatus,
+            IStatusService statusService,
             Action raiseSaveChanged,
             Action markDirty,
             Func<bool> isGrossFunc,
@@ -50,7 +50,7 @@ namespace InvoiceApp.ViewModels
             _itemService = itemService;
             _productService = productService;
             _taxRateService = taxRateService;
-            _showStatus = showStatus;
+            _statusService = statusService;
             _raiseSaveChanged = raiseSaveChanged;
             _markDirty = markDirty;
             _isGrossFunc = isGrossFunc;
@@ -62,7 +62,7 @@ namespace InvoiceApp.ViewModels
                 if (obj is InvoiceItemViewModel item && DialogHelper.ConfirmDeletion("tételt"))
                 {
                     RemoveItem(item);
-                    _showStatus("Tétel törölve.");
+                    _statusService.Show("Tétel törölve.");
                 }
             });
             SaveItemCommand = new RelayCommand(async obj =>
@@ -231,7 +231,7 @@ namespace InvoiceApp.ViewModels
             }
 
             await _itemService.SaveAsync(item.Item);
-            _showStatus($"Tétel mentve. ({DateTime.Now:g})");
+            _statusService.Show($"Tétel mentve. ({DateTime.Now:g})");
         }
 
         private void Items_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)

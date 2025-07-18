@@ -10,6 +10,7 @@ namespace InvoiceApp.ViewModels
     public class ProductGroupViewModel : MasterDataViewModel<ProductGroup>, IHasChanges
     {
         private readonly IProductGroupService _service;
+        private readonly IStatusService _statusService;
         public ObservableCollection<ProductGroup> Groups
         {
             get => Items;
@@ -22,10 +23,12 @@ namespace InvoiceApp.ViewModels
             set => SelectedItem = value;
         }
 
-        public ProductGroupViewModel(IProductGroupService service)
+        public ProductGroupViewModel(IProductGroupService service,
+            IStatusService statusService)
             : base(true)
         {
             _service = service;
+            _statusService = statusService;
             ClearChanges();
         }
 
@@ -48,7 +51,7 @@ namespace InvoiceApp.ViewModels
             if (!DialogHelper.ConfirmDeletion("termékcsoportot"))
                 return false;
             await _service.DeleteAsync(group.Id);
-            DialogHelper.ShowInfo("Törlés sikeres.");
+            _statusService.Show("Törlés sikeres.");
             return true;
         }
 
