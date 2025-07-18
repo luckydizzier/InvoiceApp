@@ -54,6 +54,12 @@ namespace InvoiceApp.ViewModels
             Suppliers = new ObservableCollection<Supplier>(items);
         }
 
+        public Supplier AddSupplier()
+        {
+            AddCommand.Execute(null);
+            return SelectedSupplier!;
+        }
+
         protected override Supplier CreateNewItem()
         {
             return new Supplier
