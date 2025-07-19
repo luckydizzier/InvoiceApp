@@ -73,4 +73,9 @@
             </DataTrigger>
         </Style.Triggers>
     </Style>
+
+    <!-- Style for aligning text to the right within DataGrid cells -->
+    <Style x:Key="RightAlignedCellStyle" TargetType="TextBlock">
+        <Setter Property="TextAlignment" Value="Right"/>
+    </Style>
 </ResourceDictionary>
