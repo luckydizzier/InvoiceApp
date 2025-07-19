@@ -15,6 +15,7 @@ namespace InvoiceApp.Services
         Task SaveAsync(Invoice invoice);
         Task SaveInvoiceWithItemsAsync(Invoice invoice, IEnumerable<InvoiceItem> items);
         Task DeleteAsync(int id);
+        Task<string> GetNextNumberAsync(int supplierId);
         bool IsValid(Invoice invoice);
     }
 }
