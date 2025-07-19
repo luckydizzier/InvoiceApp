@@ -8,6 +8,11 @@ namespace InvoiceApp
     {
         public IServiceProvider Services { get; private set; } = null!;
 
+        public App()
+        {
+            InitializeComponent();
+        }
+
         protected override async void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
