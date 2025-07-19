@@ -1,80 +1,79 @@
-User Goals
-Manage Invoices
+# User Goals
 
-View, edit, create, and delete invoices.
+This document summarises the user-facing features and planned enhancements for
+**InvoiceApp**.
 
-Keyboard shortcuts support actions such as opening the editor, adding or deleting invoices.
+## Manage Invoices
 
-Sources: App state list and navigation keys
+- View, edit, create and delete invoices.
+- Keyboard shortcuts open the editor and add or delete invoices.
+  *Source: App state list and navigation keys*
 
-Manage Products, Suppliers, and Related Data
+## Manage Products, Suppliers and Related Data
 
-Maintain product catalog, product groups, suppliers, tax rates, units, and payment methods.
+- Maintain the product catalogue, product groups, suppliers, tax rates, units
+  and payment methods.
+- Each management view supports keyboard navigation for adding, editing or
+  removing entries.
+  *Source: App state definitions and keyboard navigation guidelines*
 
-Each view includes keyboard navigation for adding, editing, or removing entries.
+## Keyboard Navigation Across the Application
 
-Sources: App state definitions and keyboard navigation guidelines
+- The entire UI is operable using only the keyboard.
+- Global shortcuts include **F1** for the dashboard and **F2** for the invoice
+  list.
+  *Source: Keyboard navigation table*
 
-Keyboard Navigation Across the Application
+## Automatic Database Setup with Sample Data
 
-Users can operate the entire UI using only the keyboard.
+- On first launch the application creates a SQLite database.
+- Users may optionally populate it with sample data.
+- Sample data generation supports custom quantity ranges for invoice items.
+  *Source: Startup description and feature list*
 
-Includes global shortcuts like F1 for Dashboard and F2 for Invoice List.
+## Logging via Serilog
 
-Sources: Keyboard navigation table
+- Logs are written to JSON files with daily rolling by default.
+- A planned task configures five rolling files of 5&nbsp;MB each.
+  *Source: Feature list and planned task for JSON logging*
 
-Automatic Database Setup with Sample Data Option
+## Search and Filter Invoices
 
-On first launch, SQLite database creation and optional sample-data population.
+- Planned ability to filter the invoice list by supplier and date range.
+  *Source: Task definition*
 
-Sources: Startup description and features list
+## Next Invoice Number Suggestion
 
-Logging via Serilog
+- When creating a new invoice the next number is automatically proposed for the
+  selected supplier.
+  *Source: Task definition*
 
-Application logs to JSON files with daily rolling by default; future tasks configure 5×5 MB rolling logs.
+## Net ↔ Gross Calculation by Tax Rate
 
-Sources: Feature list and planned task for JSON logging
+- Convert between net and gross amounts based on the selected tax rate.
+  *Source: Task definition*
 
-Search and Filter Invoices
+## Database Self‑Healing
 
-Planned ability to filter by supplier and date range in the invoice list.
+- Automatic creation, index checks and backups keep the database operational.
+  *Source: Task definition*
 
-Source: Task definition
+## Data Export and Reporting (Planned)
 
-Next Invoice Number Suggestion
+- Future features will export invoices (CSV/PDF) and analyse data.
+  *Source: Future enhancements list*
 
-When creating a new invoice, automatically propose the next number for the selected supplier.
+## Localization and Dark Mode (Planned)
 
-Source: Task definition
+- Planned support for multiple languages and a dark UI theme.
+  *Source: Future enhancements list*
 
-Net ↔ Gross Calculation by Tax Rate
+## Ongoing Improvements
 
-Calculations between net and gross amounts based on applicable tax rate.
+- UI refinements, performance optimization, expanded unit tests and better
+  documentation.
+- Success messages appear in the status bar instead of modal dialogs.
+  *Source: Future enhancements list and README*
 
-Source: Task definition
-
-Database Self‑Healing
-
-Automatic creation, index checking, and backups to keep the database operational.
-
-Source: Task definition
-
-Data Export and Reporting (Planned Enhancements)
-
-Future capabilities for exporting invoices (CSV/PDF) and analyzing data.
-
-Sources: Future enhancements list
-
-Localization and Dark Mode
-
-Plans to support multiple languages and offer a dark UI theme.
-
-Source: Future enhancements list
-
-Ongoing Improvements (UI, Performance, Testing, Documentation)
-
-Includes UI refinements, performance optimization, expanded unit tests, and better documentation.
-
-Source: Future enhancements list
-
-These goals outline the intended features and enhancements for InvoiceApp as documented in the repository.
+These goals outline the intended features and enhancements for InvoiceApp as
+documented in the repository.
