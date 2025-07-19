@@ -1,9 +1,11 @@
+using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows;
 using InvoiceApp.Models;
 using InvoiceApp.Services;
 using InvoiceApp;
+using Serilog;
 
 namespace InvoiceApp.ViewModels
 {
@@ -40,8 +42,21 @@ namespace InvoiceApp.ViewModels
 
         public async Task LoadAsync()
         {
-            var items = await _service.GetAllAsync();
-            Groups = new ObservableCollection<ProductGroup>(items);
+            try
+            {
+                IsLoading = true;
+                var items = await _service.GetAllAsync();
+                Groups = new ObservableCollection<ProductGroup>(items);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Failed to load product groups");
+                DialogHelper.ShowError("Hiba történt a termékcsoportok betöltésekor.");
+            }
+            finally
+            {
+                IsLoading = false;
+            }
         }
 
         protected override ProductGroup CreateNewItem() => new ProductGroup();

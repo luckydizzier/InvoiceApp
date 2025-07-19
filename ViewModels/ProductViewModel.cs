@@ -8,6 +8,7 @@ using System.Linq;
 using InvoiceApp.Models;
 using InvoiceApp.Services;
 using InvoiceApp;
+using Serilog;
 
 namespace InvoiceApp.ViewModels
 {
@@ -139,27 +140,40 @@ namespace InvoiceApp.ViewModels
 
         public async Task LoadAsync()
         {
-            var items = await _service.GetAllAsync();
-            Products = new ObservableCollection<Product>(items);
-            ProductsView = CollectionViewSource.GetDefaultView(Products);
-            if (ProductsView != null)
+            try
             {
-                ProductsView.Filter = obj =>
+                IsLoading = true;
+                var items = await _service.GetAllAsync();
+                Products = new ObservableCollection<Product>(items);
+                ProductsView = CollectionViewSource.GetDefaultView(Products);
+                if (ProductsView != null)
                 {
-                    if (obj is not Product p) return false;
-                    return string.IsNullOrWhiteSpace(SearchText) ||
-                           p.Name.Contains(SearchText, StringComparison.OrdinalIgnoreCase);
-                };
+                    ProductsView.Filter = obj =>
+                    {
+                        if (obj is not Product p) return false;
+                        return string.IsNullOrWhiteSpace(SearchText) ||
+                               p.Name.Contains(SearchText, StringComparison.OrdinalIgnoreCase);
+                    };
+                }
+
+                var rates = await _taxRateService.GetAllAsync();
+                TaxRates = new ObservableCollection<TaxRate>(rates);
+
+                var units = await _unitService.GetAllAsync();
+                Units = new ObservableCollection<Unit>(units);
+
+                var groups = await _groupService.GetAllAsync();
+                Groups = new ObservableCollection<ProductGroup>(groups);
             }
-
-            var rates = await _taxRateService.GetAllAsync();
-            TaxRates = new ObservableCollection<TaxRate>(rates);
-
-            var units = await _unitService.GetAllAsync();
-            Units = new ObservableCollection<Unit>(units);
-
-            var groups = await _groupService.GetAllAsync();
-            Groups = new ObservableCollection<ProductGroup>(groups);
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Failed to load products");
+                DialogHelper.ShowError("Hiba történt a termékek betöltésekor.");
+            }
+            finally
+            {
+                IsLoading = false;
+            }
         }
 
         protected override Product CreateNewItem()

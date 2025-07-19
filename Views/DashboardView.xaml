@@ -3,6 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:viewModels="clr-namespace:InvoiceApp.ViewModels"
              xmlns:helpers="clr-namespace:InvoiceApp.Helpers">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <helpers:InverseBooleanConverter x:Key="InverseBoolConverter" />
+    </UserControl.Resources>
     <StackPanel Margin="20">
         <TextBlock Text="Vezérlőpult" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,10"/>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,20">
@@ -14,7 +18,8 @@
             <TextBlock Text="{Binding ProductCount}"/>
         </StackPanel>
         <ListView x:Name="MenuList" ItemsSource="{Binding MenuItems}" HorizontalAlignment="Center" Width="300"
-                  helpers:FocusBehavior.IsFocused="True">
+                  helpers:FocusBehavior.IsFocused="True"
+                  IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolConverter}}">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Funkció" DisplayMemberBinding="{Binding Key}" Width="70"/>
@@ -28,5 +33,9 @@
                 </GridView>
             </ListView.View>
         </ListView>
+        <TextBlock Text="Betöltés..." FontWeight="Bold" FontSize="16" Background="White" Opacity="0.8"
+                   HorizontalAlignment="Center" VerticalAlignment="Center"
+                   Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"
+                   Padding="10" />
     </StackPanel>
 </UserControl>

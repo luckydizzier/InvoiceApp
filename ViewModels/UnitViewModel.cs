@@ -1,9 +1,11 @@
+using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows;
 using InvoiceApp.Models;
 using InvoiceApp.Services;
 using InvoiceApp;
+using Serilog;
 
 namespace InvoiceApp.ViewModels
 {
@@ -40,8 +42,21 @@ namespace InvoiceApp.ViewModels
 
         public async Task LoadAsync()
         {
-            var items = await _service.GetAllAsync();
-            Units = new ObservableCollection<Unit>(items);
+            try
+            {
+                IsLoading = true;
+                var items = await _service.GetAllAsync();
+                Units = new ObservableCollection<Unit>(items);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Failed to load units");
+                DialogHelper.ShowError("Hiba történt a mértékegységek betöltésekor.");
+            }
+            finally
+            {
+                IsLoading = false;
+            }
         }
 
         protected override Unit CreateNewItem() => new Unit();

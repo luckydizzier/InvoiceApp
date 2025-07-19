@@ -1,9 +1,11 @@
+using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows;
 using InvoiceApp.Models;
 using InvoiceApp.Services;
 using InvoiceApp;
+using Serilog;
 
 namespace InvoiceApp.ViewModels
 {
@@ -50,8 +52,21 @@ namespace InvoiceApp.ViewModels
 
         public async Task LoadAsync()
         {
-            var items = await _service.GetAllAsync();
-            Suppliers = new ObservableCollection<Supplier>(items);
+            try
+            {
+                IsLoading = true;
+                var items = await _service.GetAllAsync();
+                Suppliers = new ObservableCollection<Supplier>(items);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Failed to load suppliers");
+                DialogHelper.ShowError("Hiba történt a szállítók betöltésekor.");
+            }
+            finally
+            {
+                IsLoading = false;
+            }
         }
 
         public Supplier AddSupplier()
