@@ -6,7 +6,6 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using InvoiceApp.Models;
 using InvoiceApp.Services;
-using InvoiceApp.Helpers;
 
 namespace InvoiceApp.ViewModels
 {
@@ -19,6 +18,7 @@ namespace InvoiceApp.ViewModels
         private readonly IProductService _productService;
         private readonly ITaxRateService _taxRateService;
         private readonly IStatusService _statusService;
+        private readonly IInvoiceService _invoiceService;
         private readonly Action _raiseSaveChanged;
         private readonly Action _markDirty;
         private readonly Func<bool> _isGrossFunc;
@@ -41,6 +41,7 @@ namespace InvoiceApp.ViewModels
         public ItemsViewModel(IInvoiceItemService itemService,
             IProductService productService,
             ITaxRateService taxRateService,
+            IInvoiceService invoiceService,
             IStatusService statusService,
             Action raiseSaveChanged,
             Action markDirty,
@@ -50,6 +51,7 @@ namespace InvoiceApp.ViewModels
             _itemService = itemService;
             _productService = productService;
             _taxRateService = taxRateService;
+            _invoiceService = invoiceService;
             _statusService = statusService;
             _raiseSaveChanged = raiseSaveChanged;
             _markDirty = markDirty;
@@ -274,29 +276,17 @@ namespace InvoiceApp.ViewModels
 
         private void UpdateTotals()
         {
-            var breakdown = Items
-                .GroupBy(i => i.TaxRatePercentage)
-                .Select(g =>
+            var invoice = CurrentInvoice;
+            if (invoice == null) return;
+
+            var breakdown = _invoiceService.CalculateVatSummary(invoice)
+                .Select(v => new VatBreakdownEntry
                 {
-                    decimal net = 0m;
-                    decimal vat = 0m;
-                    foreach (var item in g)
-                    {
-                        var amounts = AmountCalculator.Calculate(
-                            item.Quantity,
-                            item.UnitPrice,
-                            g.Key,
-                            IsGross);
-                        net += amounts.Net;
-                        vat += amounts.Vat;
-                    }
-                    return new VatBreakdownEntry
-                    {
-                        Rate = g.Key,
-                        Net = net,
-                        Vat = vat
-                    };
+                    Rate = v.Rate,
+                    Net = v.Net,
+                    Vat = v.Vat
                 });
+
             VatBreakdown = new ObservableCollection<VatBreakdownEntry>(breakdown);
             TotalNet = VatBreakdown.Sum(v => v.Net);
             TotalVat = VatBreakdown.Sum(v => v.Vat);

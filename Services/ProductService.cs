@@ -56,6 +56,19 @@ namespace InvoiceApp.Services
                     }
                 }
             }
+
+            var rate = await ctx.TaxRates.FirstOrDefaultAsync(r => r.Id == entity.TaxRateId);
+            var percent = rate?.Percentage ?? 0m;
+            if (entity.Net == 0m && entity.Gross != 0m)
+            {
+                entity.Net = percent == 0m
+                    ? entity.Gross
+                    : Math.Round(entity.Gross / (1 + percent / 100m), 2);
+            }
+            else
+            {
+                entity.Gross = Math.Round(entity.Net * (1 + percent / 100m), 2);
+            }
         }
 
         public override async Task DeleteAsync(int id)

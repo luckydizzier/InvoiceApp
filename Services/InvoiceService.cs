@@ -82,6 +82,32 @@ namespace InvoiceApp.Services
             return _repository.GetLatestAsync();
         }
 
+        public IEnumerable<VatSummary> CalculateVatSummary(Invoice invoice)
+        {
+            if (invoice.Items == null) return Enumerable.Empty<VatSummary>();
+
+            var groups = invoice.Items
+                .GroupBy(i => i.TaxRate!.Percentage)
+                .Select(g =>
+                {
+                    decimal net = 0m;
+                    decimal vat = 0m;
+                    foreach (var item in g)
+                    {
+                        var amounts = Helpers.AmountCalculator.Calculate(
+                            item.Quantity,
+                            item.UnitPrice,
+                            g.Key,
+                            invoice.IsGross);
+                        net += amounts.Net;
+                        vat += amounts.Vat;
+                    }
+                    return new VatSummary { Rate = g.Key, Net = net, Vat = vat };
+                });
+
+            return groups.ToList();
+        }
+
         protected override async Task ValidateAsync(Invoice entity)
         {
             await _validator.ValidateAndThrowAsync(entity.ToDto());
@@ -104,7 +130,8 @@ namespace InvoiceApp.Services
                 throw new BusinessRuleViolationException("Invoice must contain at least one item.");
             }
 
-            entity.Amount = entity.Items.Sum(i => i.Quantity * i.UnitPrice * (1 + i.TaxRate!.Percentage / 100m));
+            var breakdown = CalculateVatSummary(entity);
+            entity.Amount = breakdown.Sum(v => v.Gross);
         }
 
         public bool IsValid(Invoice invoice)
