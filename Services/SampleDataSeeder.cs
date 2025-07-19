@@ -154,16 +154,15 @@ namespace InvoiceApp.Services
                     DateCreated = DateTime.Now,
                     DateUpdated = DateTime.Now
                 };
-                await invoiceService.SaveAsync(inv);
-                decimal amount = 0m;
+
+                var items = new List<InvoiceItem>();
                 var itemCount = faker.Random.Int(options.ItemsPerInvoiceMin, options.ItemsPerInvoiceMax);
                 for (int j = 0; j < itemCount; j++)
                 {
                     var product = faker.PickRandom(products);
                     var qty = faker.Random.Decimal(options.ItemQuantityMin, options.ItemQuantityMax);
-                    await itemService.SaveAsync(new InvoiceItem
+                    var item = new InvoiceItem
                     {
-                        InvoiceId = inv.Id,
                         ProductId = product.Id,
                         TaxRateId = product.TaxRateId,
                         Quantity = qty,
@@ -171,11 +170,12 @@ namespace InvoiceApp.Services
                         Active = true,
                         DateCreated = DateTime.Now,
                         DateUpdated = DateTime.Now
-                    });
-                    amount += qty * product.Gross;
+                    };
+                    items.Add(item);
                 }
-                inv.Amount = amount;
-                await invoiceService.SaveAsync(inv);
+
+                inv.Items = items;
+                await invoiceService.SaveInvoiceWithItemsAsync(inv, items);
             }
         }
     }
