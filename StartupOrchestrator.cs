@@ -99,7 +99,6 @@ namespace InvoiceApp
                 .CreateLogger();
 
             var provider = services.BuildServiceProvider();
-            await InitializeDatabase(provider);
             return provider;
         }
 
@@ -215,7 +214,7 @@ namespace InvoiceApp
             conn.Close();
         }
 
-        private static async Task InitializeDatabase(IServiceProvider provider)
+        public static async Task InitializeDatabaseAsync(IServiceProvider provider)
         {
             using var scope = provider.CreateScope();
             var factory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<InvoiceContext>>();
@@ -246,6 +245,17 @@ namespace InvoiceApp
             RepairTables(ctx, dbPath);
 
             IsNewDatabase = isNew;
+        }
+
+        public static bool DatabaseFileExists(IServiceProvider provider)
+        {
+            using var scope = provider.CreateScope();
+            var factory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<InvoiceContext>>();
+            using var ctx = factory.CreateDbContext();
+
+            var builder = new SqliteConnectionStringBuilder(ctx.Database.GetDbConnection().ConnectionString);
+            var dbPath = Path.GetFullPath(builder.DataSource);
+            return File.Exists(dbPath);
         }
 
         public static async Task PopulateSampleDataAsync(IServiceProvider provider, SampleDataOptions options)
