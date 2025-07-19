@@ -81,5 +81,20 @@ namespace InvoiceApp.Tests
             return new InvoiceViewModel(stub, stub, stub, stub, stub, stub, stub,
                 new SupplierViewModel(stub), stub);
         }
+
+        public static ItemsViewModel CreateItemsViewModel(Invoice invoice)
+        {
+            var stub = new StubService<object>();
+            return new ItemsViewModel(
+                stub,
+                stub,
+                stub,
+                stub,
+                new StatusService(),
+                () => { },
+                () => { },
+                () => invoice.IsGross,
+                () => invoice);
+        }
     }
 }
