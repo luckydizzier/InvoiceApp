@@ -65,6 +65,12 @@ namespace InvoiceApp
 
             services.AddSingleton<IValidator<InvoiceDto>, InvoiceDtoValidator>();
             services.AddSingleton<IValidator<PaymentMethodDto>, PaymentMethodDtoValidator>();
+            services.AddSingleton<IValidator<ProductDto>, ProductDtoValidator>();
+            services.AddSingleton<IValidator<ProductGroupDto>, ProductGroupDtoValidator>();
+            services.AddSingleton<IValidator<TaxRateDto>, TaxRateDtoValidator>();
+            services.AddSingleton<IValidator<InvoiceItemDto>, InvoiceItemDtoValidator>();
+            services.AddSingleton<IValidator<UnitDto>, UnitDtoValidator>();
+            services.AddSingleton<IValidator<SupplierDto>, SupplierDtoValidator>();
 
             services.AddSingleton<IChangeLogService, ChangeLogService>();
             services.AddSingleton<IInvoiceService, InvoiceService>();

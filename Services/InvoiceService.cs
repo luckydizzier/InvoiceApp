@@ -50,6 +50,32 @@ namespace InvoiceApp.Services
             return _repository.GetLatestForSupplierAsync(supplierId);
         }
 
+        public async Task<string> GetNextNumberAsync(int supplierId)
+        {
+            Log.Debug("InvoiceService.GetNextNumberAsync called with {SupplierId}", supplierId);
+            var latest = await GetLatestForSupplierAsync(supplierId);
+            return IncrementNumber(latest?.Number);
+        }
+
+        private static string IncrementNumber(string? lastNumber)
+        {
+            if (string.IsNullOrWhiteSpace(lastNumber)) return "1";
+
+            var digits = new string(lastNumber.Reverse().TakeWhile(char.IsDigit).Reverse().ToArray());
+            if (digits.Length > 0 && int.TryParse(digits, out var n))
+            {
+                var prefix = lastNumber.Substring(0, lastNumber.Length - digits.Length);
+                return prefix + (n + 1).ToString($"D{digits.Length}");
+            }
+
+            if (int.TryParse(lastNumber, out var value))
+            {
+                return (value + 1).ToString();
+            }
+
+            return lastNumber;
+        }
+
         public Task<Invoice?> GetLatestAsync()
         {
             Log.Debug("InvoiceService.GetLatestAsync called");

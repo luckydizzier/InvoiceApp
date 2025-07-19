@@ -488,33 +488,15 @@ namespace InvoiceApp.ViewModels
                 return;
             }
 
-            var latest = await _service.GetLatestForSupplierAsync(SelectedInvoice.SupplierId);
-            if (latest != null)
+            var next = await _service.GetNextNumberAsync(SelectedInvoice.SupplierId);
+            if (!string.IsNullOrEmpty(next))
             {
-                SelectedInvoice.Number = IncrementNumber(latest.Number);
+                SelectedInvoice.Number = next;
                 OnPropertyChanged(nameof(SelectedInvoice));
                 Log.Information("Suggested invoice number {Number}", SelectedInvoice.Number);
             }
         }
 
-        private static string IncrementNumber(string lastNumber)
-        {
-            if (string.IsNullOrWhiteSpace(lastNumber)) return "1";
-
-            var digits = new string(lastNumber.Reverse().TakeWhile(char.IsDigit).Reverse().ToArray());
-            if (digits.Length > 0 && int.TryParse(digits, out var n))
-            {
-                var prefix = lastNumber.Substring(0, lastNumber.Length - digits.Length);
-                return prefix + (n + 1).ToString($"D{digits.Length}");
-            }
-
-            if (int.TryParse(lastNumber, out var value))
-            {
-                return (value + 1).ToString();
-            }
-
-            return lastNumber;
-        }
 
         public async Task NewInvoice()
         {
@@ -529,9 +511,9 @@ namespace InvoiceApp.ViewModels
             {
                 invoice.Supplier = latest.Supplier;
                 invoice.SupplierId = latest.SupplierId;
-                invoice.Number = IncrementNumber(latest.Number);
                 invoice.PaymentMethod = latest.PaymentMethod;
                 invoice.PaymentMethodId = latest.PaymentMethodId;
+                invoice.Number = await _service.GetNextNumberAsync(invoice.SupplierId);
             }
             else
             {
