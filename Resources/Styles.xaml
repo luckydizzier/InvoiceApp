@@ -1,0 +1,32 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Merge Fonts.xaml -->
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="Fonts.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+
+    <!-- Base style for all controls -->
+    <Style TargetType="Control">
+        <Setter Property="FontFamily" Value="{StaticResource AppFontFamily}" />
+        <Setter Property="FontSize" Value="{StaticResource AppFontSize}" />
+    </Style>
+
+    <!-- Explicit style for TextBlock (covers most text) -->
+    <Style TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource AppFontFamily}" />
+        <Setter Property="FontSize" Value="{StaticResource AppFontSize}" />
+    </Style>
+
+    <!-- Explicit style for Label -->
+    <Style TargetType="Label">
+        <Setter Property="FontFamily" Value="{StaticResource AppFontFamily}" />
+        <Setter Property="FontSize" Value="{StaticResource AppFontSize}" />
+    </Style>
+
+    <!-- Explicit style for Button -->
+    <Style TargetType="Button">
+        <Setter Property="FontFamily" Value="{StaticResource AppFontFamily}" />
+        <Setter Property="FontSize" Value="{StaticResource AppFontSize}" />
+    </Style>
+</ResourceDictionary>

@@ -33,5 +33,9 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Resource Include="Resources\Fonts\IBMPlexMono-*.ttf" />
+  </ItemGroup>
+
 </Project>
 

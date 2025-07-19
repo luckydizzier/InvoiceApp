@@ -1,0 +1,12 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:System="clr-namespace:System;assembly=mscorlib">
+
+    <!-- IBM Plex Mono font family (embedded resource) -->
+    <FontFamily x:Key="AppFontFamily">
+        ./Resources/#IBM Plex Mono
+    </FontFamily>
+
+    <!-- Base font size -->
+    <System:Double x:Key="AppFontSize">16</System:Double>
+</ResourceDictionary>
