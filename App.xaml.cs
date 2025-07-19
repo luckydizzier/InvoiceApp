@@ -55,6 +55,7 @@ namespace InvoiceApp
             await locator.DashboardViewModel.LoadAsync();
 
             var main = new Views.MainWindow();
+            MainWindow = main;
             main.Show();
         }
 
