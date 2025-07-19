@@ -355,32 +355,45 @@ namespace InvoiceApp.ViewModels
         public async Task LoadAsync()
         {
             Log.Debug("InvoiceViewModel.LoadAsync called");
-            ShowStatus("Betöltés...");
-            var items = await _service.GetHeadersAsync();
-            Invoices = new ObservableCollection<Invoice>(items);
-
-            var prods = await _productService.GetAllAsync();
-            Products = new ObservableCollection<Product>(prods);
-
-            var rates = await _taxRateService.GetAllAsync();
-            TaxRates = new ObservableCollection<TaxRate>(rates);
-
-            var sups = await _supplierService.GetAllAsync();
-            Suppliers = new ObservableCollection<Supplier>(sups);
-
-            var pays = await _paymentService.GetAllAsync();
-            PaymentMethods = new ObservableCollection<PaymentMethod>(pays);
-
-            var log = await _logService.GetLatestAsync();
-            if (log != null)
+            try
             {
-                ShowStatus($"Utolsó esemény: {log.Operation} ({log.DateCreated:g})");
+                IsLoading = true;
+                ShowStatus("Betöltés...");
+                var items = await _service.GetHeadersAsync();
+                Invoices = new ObservableCollection<Invoice>(items);
+
+                var prods = await _productService.GetAllAsync();
+                Products = new ObservableCollection<Product>(prods);
+
+                var rates = await _taxRateService.GetAllAsync();
+                TaxRates = new ObservableCollection<TaxRate>(rates);
+
+                var sups = await _supplierService.GetAllAsync();
+                Suppliers = new ObservableCollection<Supplier>(sups);
+
+                var pays = await _paymentService.GetAllAsync();
+                PaymentMethods = new ObservableCollection<PaymentMethod>(pays);
+
+                var log = await _logService.GetLatestAsync();
+                if (log != null)
+                {
+                    ShowStatus($"Utolsó esemény: {log.Operation} ({log.DateCreated:g})");
+                }
+                else
+                {
+                    ShowStatus(Invoices.Count == 0 ? "Üres lista." : $"{Invoices.Count} számla betöltve.");
+                }
+                ClearChanges();
             }
-            else
+            catch (Exception ex)
             {
-                ShowStatus(Invoices.Count == 0 ? "Üres lista." : $"{Invoices.Count} számla betöltve.");
+                Log.Error(ex, "Failed to load invoices");
+                DialogHelper.ShowError("Hiba történt a számlák betöltésekor.");
             }
-            ClearChanges();
+            finally
+            {
+                IsLoading = false;
+            }
         }
 
         public InvoiceItemViewModel CreateItemViewModel()

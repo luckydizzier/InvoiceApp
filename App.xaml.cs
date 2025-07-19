@@ -1,5 +1,6 @@
 using System;
 using System.Windows;
+using InvoiceApp.ViewModels;
 
 namespace InvoiceApp
 {
@@ -37,6 +38,16 @@ namespace InvoiceApp
             {
                 await StartupOrchestrator.InitializeDatabaseAsync(Services);
             }
+
+            var locator = new ViewModels.ViewModelLocator();
+            await locator.PaymentMethodViewModel.LoadAsync();
+            await locator.SupplierViewModel.LoadAsync();
+            await locator.UnitViewModel.LoadAsync();
+            await locator.ProductGroupViewModel.LoadAsync();
+            await locator.TaxRateViewModel.LoadAsync();
+            await locator.ProductViewModel.LoadAsync();
+            await locator.InvoiceViewModel.LoadAsync();
+            await locator.DashboardViewModel.LoadAsync();
 
             var main = new Views.MainWindow();
             main.Show();

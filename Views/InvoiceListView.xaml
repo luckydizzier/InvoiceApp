@@ -10,6 +10,7 @@
     </UserControl.InputBindings>
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <helpers:InverseBooleanConverter x:Key="InverseBoolConverter" />
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -20,6 +21,7 @@
         <DataGrid x:Name="InvoicesGrid"
                   ItemsSource="{Binding Invoices}"
                   helpers:FocusBehavior.IsFocused="True"
+                  IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolConverter}}"
                   SelectedItem="{Binding SelectedInvoice}"
                   AutoGenerateColumns="False"
                   CanUserAddRows="False"
@@ -33,6 +35,10 @@
                                       ElementStyle="{StaticResource RightAlignedCellStyle}" />
             </DataGrid.Columns>
         </DataGrid>
+        <TextBlock Text="Betöltés..." FontWeight="Bold" FontSize="16" Background="White" Opacity="0.8"
+                   HorizontalAlignment="Center" VerticalAlignment="Center"
+                   Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"
+                   Grid.ColumnSpan="2" Padding="10" />
 
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>

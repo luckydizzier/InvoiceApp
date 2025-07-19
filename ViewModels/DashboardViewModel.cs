@@ -1,7 +1,9 @@
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using InvoiceApp.Services;
+using Serilog;
 
 namespace InvoiceApp.ViewModels
 {
@@ -46,12 +48,25 @@ namespace InvoiceApp.ViewModels
 
         public async Task LoadAsync()
         {
-            var invoices = await _invoiceService.GetAllAsync();
-            var products = await _productService.GetAllAsync();
-            var suppliers = await _supplierService.GetAllAsync();
-            InvoiceCount = invoices.Count();
-            ProductCount = products.Count();
-            SupplierCount = suppliers.Count();
+            try
+            {
+                IsLoading = true;
+                var invoices = await _invoiceService.GetAllAsync();
+                var products = await _productService.GetAllAsync();
+                var suppliers = await _supplierService.GetAllAsync();
+                InvoiceCount = invoices.Count();
+                ProductCount = products.Count();
+                SupplierCount = suppliers.Count();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Failed to load dashboard data");
+                DialogHelper.ShowError("Hiba történt a vezérlőpult betöltésekor.");
+            }
+            finally
+            {
+                IsLoading = false;
+            }
         }
     }
 }

@@ -37,5 +37,10 @@ namespace InvoiceApp
         {
             MessageBox.Show(message, "Információ", MessageBoxButton.OK, MessageBoxImage.Information);
         }
+
+        public static void ShowError(string message)
+        {
+            MessageBox.Show(message, "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
     }
 }
