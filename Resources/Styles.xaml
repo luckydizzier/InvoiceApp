@@ -29,4 +29,48 @@
         <Setter Property="FontFamily" Value="{StaticResource AppFontFamily}" />
         <Setter Property="FontSize" Value="{StaticResource AppFontSize}" />
     </Style>
+
+    <!-- Highlighted border styles for MainWindow sections -->
+    <Style x:Key="HeaderBorderStyle" TargetType="Border">
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding CurrentState}" Value="Header">
+                <Setter Property="BorderBrush" Value="DodgerBlue" />
+                <Setter Property="BorderThickness" Value="2" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="ItemListBorderStyle" TargetType="Border">
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding CurrentState}" Value="ItemList">
+                <Setter Property="BorderBrush" Value="DodgerBlue" />
+                <Setter Property="BorderThickness" Value="2" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="SummaryBorderStyle" TargetType="Border">
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding CurrentState}" Value="Summary">
+                <Setter Property="BorderBrush" Value="DodgerBlue" />
+                <Setter Property="BorderThickness" Value="2" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- TextBlock hint shown in ProductView -->
+    <Style x:Key="GrossInputHintStyle" TargetType="TextBlock">
+        <Setter Property="Text" Value="Bruttó érték számított" />
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsGrossInput}" Value="True">
+                <Setter Property="Text" Value="Bruttó érték szerkeszthető" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
 </ResourceDictionary>

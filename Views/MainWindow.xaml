@@ -60,19 +60,7 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <Border Grid.Row="0" Margin="0,0,0,4">
-                        <Border.Style>
-                            <Style TargetType="Border">
-                                <Setter Property="BorderThickness" Value="0"/>
-                                <Setter Property="BorderBrush" Value="Transparent"/>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding CurrentState}" Value="Header">
-                                        <Setter Property="BorderBrush" Value="DodgerBlue"/>
-                                        <Setter Property="BorderThickness" Value="2"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Border.Style>
+                    <Border Grid.Row="0" Margin="0,0,0,4" Style="{StaticResource HeaderBorderStyle}">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
                             <views:InvoiceHeaderView />
                             <Button Content="➕ Szállító"
@@ -82,19 +70,7 @@
                                     ToolTip="Szállító hozzáadása" />
                         </StackPanel>
                     </Border>
-                    <Border Grid.Row="1" Margin="0,0,0,4">
-                        <Border.Style>
-                            <Style TargetType="Border">
-                                <Setter Property="BorderThickness" Value="0"/>
-                                <Setter Property="BorderBrush" Value="Transparent"/>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding CurrentState}" Value="ItemList">
-                                        <Setter Property="BorderBrush" Value="DodgerBlue"/>
-                                        <Setter Property="BorderThickness" Value="2"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Border.Style>
+                    <Border Grid.Row="1" Margin="0,0,0,4" Style="{StaticResource ItemListBorderStyle}">
                         <views:InvoiceItemDataGrid x:Name="ItemsGrid" />
                     </Border>
                     <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
@@ -115,19 +91,7 @@
                                 Style="{StaticResource IconButtonStyle}"
                                 ToolTip="Mentés és új számla"/>
                     </StackPanel>
-                    <Border Grid.Row="3">
-                        <Border.Style>
-                            <Style TargetType="Border">
-                                <Setter Property="BorderThickness" Value="0"/>
-                                <Setter Property="BorderBrush" Value="Transparent"/>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding CurrentState}" Value="Summary">
-                                        <Setter Property="BorderBrush" Value="DodgerBlue"/>
-                                        <Setter Property="BorderThickness" Value="2"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Border.Style>
+                    <Border Grid.Row="3" Style="{StaticResource SummaryBorderStyle}">
                         <views:InvoiceSummaryPanel />
                     </Border>
                 </Grid>
