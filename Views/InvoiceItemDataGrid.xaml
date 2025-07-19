@@ -79,7 +79,6 @@
                         <Button Content="💾 Mentés"
                                 Command="{Binding DataContext.SaveItemCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                 CommandParameter="{Binding}"
-                                Style="{StaticResource IconButtonStyle}"
                                 ToolTip="Tétel mentése"/>
                     </DataTemplate>
                 </DataGridTemplateColumn.CellTemplate>
