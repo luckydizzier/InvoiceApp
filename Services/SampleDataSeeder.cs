@@ -6,6 +6,7 @@ using Bogus;
 using InvoiceApp.Models;
 using InvoiceApp.Repositories;
 using InvoiceApp.Services;
+using InvoiceApp.Helpers;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace InvoiceApp.Services
@@ -17,7 +18,6 @@ namespace InvoiceApp.Services
             using var scope = provider.CreateScope();
 
             var invoiceService = scope.ServiceProvider.GetRequiredService<IInvoiceService>();
-            var itemService = scope.ServiceProvider.GetRequiredService<IInvoiceItemService>();
             var productService = scope.ServiceProvider.GetRequiredService<IProductService>();
             var unitRepo = scope.ServiceProvider.GetRequiredService<IUnitRepository>();
             var groupRepo = scope.ServiceProvider.GetRequiredService<IProductGroupRepository>();
@@ -150,6 +150,7 @@ namespace InvoiceApp.Services
                     Supplier = supplier,
                     PaymentMethodId = payment.Id,
                     PaymentMethod = payment,
+                    IsGross = true,
                     Active = true,
                     DateCreated = DateTime.Now,
                     DateUpdated = DateTime.Now
@@ -163,8 +164,12 @@ namespace InvoiceApp.Services
                     var qty = faker.Random.Decimal(options.ItemQuantityMin, options.ItemQuantityMax);
                     var item = new InvoiceItem
                     {
+                        InvoiceId = inv.Id,
+                        Invoice = inv,
                         ProductId = product.Id,
+                        Product = product,
                         TaxRateId = product.TaxRateId,
+                        TaxRate = tax,
                         Quantity = qty,
                         UnitPrice = product.Gross,
                         Active = true,
@@ -175,6 +180,9 @@ namespace InvoiceApp.Services
                 }
 
                 inv.Items = items;
+                inv.Amount = items.Sum(it =>
+                    AmountCalculator.Calculate(it.Quantity, it.UnitPrice, it.TaxRate!.Percentage, inv.IsGross).Gross);
+
                 await invoiceService.SaveInvoiceWithItemsAsync(inv, items);
             }
         }
