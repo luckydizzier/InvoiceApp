@@ -12,6 +12,7 @@ namespace InvoiceApp.Services
         Task<Invoice?> GetDetailsAsync(int id);
         Task<Invoice?> GetLatestForSupplierAsync(int supplierId);
         Task<Invoice?> GetLatestAsync();
+        Task<string> GetNextInvoiceNumberAsync(int supplierId);
         Task SaveAsync(Invoice invoice);
         Task SaveInvoiceWithItemsAsync(Invoice invoice, IEnumerable<InvoiceItem> items);
         Task DeleteAsync(int id);
