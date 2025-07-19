@@ -6,6 +6,7 @@ using InvoiceApp.Repositories;
 using InvoiceApp.DTOs;
 using InvoiceApp.Mappers;
 using FluentValidation;
+using System.Linq;
 using Serilog;
 using Microsoft.EntityFrameworkCore;
 using InvoiceApp.Data;
@@ -55,9 +56,60 @@ namespace InvoiceApp.Services
             return _repository.GetLatestAsync();
         }
 
-        protected override Task ValidateAsync(Invoice entity)
+        public async Task<string> GetNextInvoiceNumberAsync(int supplierId)
         {
-            return _validator.ValidateAndThrowAsync(entity.ToDto());
+            using var ctx = _contextFactory.CreateDbContext();
+            var lastNumber = await ctx.Invoices
+                .Where(i => i.SupplierId == supplierId)
+                .OrderByDescending(i => i.Id)
+                .Select(i => i.Number)
+                .FirstOrDefaultAsync();
+
+            return IncrementNumber(lastNumber);
+        }
+
+        private static string IncrementNumber(string? lastNumber)
+        {
+            if (string.IsNullOrWhiteSpace(lastNumber)) return "1";
+
+            var digits = new string(lastNumber.Reverse().TakeWhile(char.IsDigit).Reverse().ToArray());
+            if (digits.Length > 0 && int.TryParse(digits, out var n))
+            {
+                var prefix = lastNumber[..^digits.Length];
+                return prefix + (n + 1).ToString($"D{digits.Length}");
+            }
+
+            if (int.TryParse(lastNumber, out var value))
+            {
+                return (value + 1).ToString();
+            }
+
+            return lastNumber;
+        }
+
+        protected override async Task ValidateAsync(Invoice entity)
+        {
+            await _validator.ValidateAndThrowAsync(entity.ToDto());
+
+            using var ctx = _contextFactory.CreateDbContext();
+
+            if (entity.Date > DateTime.Now)
+            {
+                throw new BusinessRuleViolationException("Invoice date cannot be in the future.");
+            }
+
+            var numberExists = await ctx.Invoices.AnyAsync(i => i.Id != entity.Id && i.SupplierId == entity.SupplierId && i.Number == entity.Number);
+            if (numberExists)
+            {
+                throw new BusinessRuleViolationException($"Invoice number '{entity.Number}' already exists for this supplier.");
+            }
+
+            if (entity.Items == null || entity.Items.Count == 0)
+            {
+                throw new BusinessRuleViolationException("Invoice must contain at least one item.");
+            }
+
+            entity.Amount = entity.Items.Sum(i => i.Quantity * i.UnitPrice * (1 + i.TaxRate!.Percentage / 100m));
         }
 
         public bool IsValid(Invoice invoice)
