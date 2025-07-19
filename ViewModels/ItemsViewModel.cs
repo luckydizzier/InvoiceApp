@@ -279,6 +279,8 @@ namespace InvoiceApp.ViewModels
             var invoice = CurrentInvoice;
             if (invoice == null) return;
 
+            // Use current Items when calculating totals
+            invoice.Items = Items.Select(vm => vm.Item).ToList();
             var breakdown = _invoiceService.CalculateVatSummary(invoice)
                 .Select(v => new VatBreakdownEntry
                 {
