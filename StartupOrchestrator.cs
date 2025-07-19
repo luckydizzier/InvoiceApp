@@ -236,11 +236,11 @@ namespace InvoiceApp
 
             if (ctx.Database.GetMigrations().Any())
             {
-                ctx.Database.Migrate();
+                await ctx.Database.MigrateAsync();
             }
             else
             {
-                ctx.Database.EnsureCreated();
+                await ctx.Database.EnsureCreatedAsync();
             }
 
             RepairTables(ctx, dbPath);

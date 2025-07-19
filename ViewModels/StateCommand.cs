@@ -21,7 +21,7 @@ namespace InvoiceApp.ViewModels
             _provider = provider;
         }
 
-        public event EventHandler? CanExecuteChanged;
+        public event EventHandler? CanExecuteChanged { add { } remove { } }
 
         public bool CanExecute(object? parameter) => true;
 

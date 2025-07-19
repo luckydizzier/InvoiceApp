@@ -131,11 +131,11 @@ namespace InvoiceApp.ViewModels
             }, _ => SelectedProduct != null && HasChanges && CanSaveItem(SelectedProduct));
         }
 
-        public bool HasChanges => base.HasChanges;
+        public new bool HasChanges => base.HasChanges;
 
-        public void MarkDirty() => base.MarkDirty();
+        public new void MarkDirty() => base.MarkDirty();
 
-        public void ClearChanges() => base.ClearChanges();
+        public new void ClearChanges() => base.ClearChanges();
 
         public async Task LoadAsync()
         {
