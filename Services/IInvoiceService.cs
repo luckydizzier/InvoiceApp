@@ -17,5 +17,6 @@ namespace InvoiceApp.Services
         Task DeleteAsync(int id);
         Task<string> GetNextNumberAsync(int supplierId);
         bool IsValid(Invoice invoice);
+        IEnumerable<VatSummary> CalculateVatSummary(Invoice invoice);
     }
 }

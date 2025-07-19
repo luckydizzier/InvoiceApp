@@ -311,6 +311,7 @@ namespace InvoiceApp.ViewModels
                 _itemService,
                 _productService,
                 _taxRateService,
+                _service,
                 _statusService,
                 () => ((RelayCommand)SaveCommand).RaiseCanExecuteChanged(),
                 MarkDirty,

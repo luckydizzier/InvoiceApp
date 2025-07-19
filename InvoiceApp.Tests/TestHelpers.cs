@@ -47,6 +47,30 @@ namespace InvoiceApp.Tests
         public void PushSubstate(AppState state) { }
         public void SwitchRoot(AppState state) { }
         public bool IsValid(Invoice invoice) => !invoice.HasErrors;
+
+        public IEnumerable<VatSummary> CalculateVatSummary(Invoice invoice)
+        {
+            if (invoice.Items == null) return Enumerable.Empty<VatSummary>();
+
+            return invoice.Items
+                .GroupBy(i => i.TaxRate?.Percentage ?? 0m)
+                .Select(g =>
+                {
+                    decimal net = 0m;
+                    decimal vat = 0m;
+                    foreach (var item in g)
+                    {
+                        var amounts = InvoiceApp.Helpers.AmountCalculator.Calculate(
+                            item.Quantity,
+                            item.UnitPrice,
+                            g.Key,
+                            invoice.IsGross);
+                        net += amounts.Net;
+                        vat += amounts.Vat;
+                    }
+                    return new VatSummary { Rate = g.Key, Net = net, Vat = vat };
+                });
+        }
     }
 
     internal static class TestHelpers
