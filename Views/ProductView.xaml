@@ -32,18 +32,7 @@
             <CheckBox Content="Bruttó?" Margin="8,0,0,0"
                       IsChecked="{Binding IsGrossInput}"
                       ToolTip="Bejelölve a bruttó érték szerkeszthető, egyébként számított." />
-            <TextBlock Margin="8,0,0,0">
-                <TextBlock.Style>
-                    <Style TargetType="TextBlock">
-                        <Setter Property="Text" Value="Bruttó érték számított" />
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsGrossInput}" Value="True">
-                                <Setter Property="Text" Value="Bruttó érték szerkeszthető" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBlock.Style>
-            </TextBlock>
+            <TextBlock Margin="8,0,0,0" Style="{StaticResource GrossInputHintStyle}" />
         </StackPanel>
         <DataGrid x:Name="DataGrid"
                   Grid.Row="1"
