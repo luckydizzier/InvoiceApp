@@ -153,8 +153,6 @@ namespace InvoiceApp.ViewModels
             set => ItemsView.Items = value;
         }
 
-        private InvoiceItemViewModel? _selectedItem;
-
         public InvoiceItemViewModel? SelectedItem
         {
             get => ItemsView.SelectedItem;

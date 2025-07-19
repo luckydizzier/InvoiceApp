@@ -14,30 +14,30 @@ namespace InvoiceApp.Repositories
         {
         }
 
-        public async Task<IEnumerable<InvoiceItem>> GetAllAsync()
+        public override async Task<IEnumerable<InvoiceItem>> GetAllAsync()
         {
             using var ctx = ContextFactory.CreateDbContext();
             return await ctx.InvoiceItems
-                .Include(i => i.Product)
-                    .ThenInclude(p => p.Unit)
-                .Include(i => i.Product)
-                    .ThenInclude(p => p.ProductGroup)
-                .Include(i => i.Product)
-                    .ThenInclude(p => p.TaxRate)
+                .Include(i => i.Product!)
+                    .ThenInclude(p => p!.Unit)
+                .Include(i => i.Product!)
+                    .ThenInclude(p => p!.ProductGroup)
+                .Include(i => i.Product!)
+                    .ThenInclude(p => p!.TaxRate)
                 .Include(i => i.TaxRate)
                 .ToListAsync();
         }
 
-        public Task<InvoiceItem?> GetByIdAsync(int id)
+        public override Task<InvoiceItem?> GetByIdAsync(int id)
         {
             using var ctx = ContextFactory.CreateDbContext();
             return ctx.InvoiceItems
-                .Include(i => i.Product)
-                    .ThenInclude(p => p.Unit)
-                .Include(i => i.Product)
-                    .ThenInclude(p => p.ProductGroup)
-                .Include(i => i.Product)
-                    .ThenInclude(p => p.TaxRate)
+                .Include(i => i.Product!)
+                    .ThenInclude(p => p!.Unit)
+                .Include(i => i.Product!)
+                    .ThenInclude(p => p!.ProductGroup)
+                .Include(i => i.Product!)
+                    .ThenInclude(p => p!.TaxRate)
                 .Include(i => i.TaxRate)
                 .FirstOrDefaultAsync(i => i.Id == id);
         }
