@@ -10,6 +10,7 @@ using InvoiceApp.Services;
 using InvoiceApp.DTOs;
 using InvoiceApp.Mappers;
 using InvoiceApp;
+using InvoiceApp.Resources;
 using Serilog;
 
 namespace InvoiceApp.ViewModels
@@ -392,7 +393,7 @@ namespace InvoiceApp.ViewModels
             catch (Exception ex)
             {
                 Log.Error(ex, "Failed to load invoices");
-                DialogHelper.ShowError("Hiba történt a számlák betöltésekor.");
+                DialogHelper.ShowError(Resources.Strings.InvoiceLoadError);
             }
             finally
             {

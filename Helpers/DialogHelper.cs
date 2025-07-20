@@ -1,6 +1,7 @@
 using System.Windows;
 using System.Linq;
 using InvoiceApp.Views;
+using InvoiceApp.Resources;
 
 namespace InvoiceApp
 {
@@ -12,8 +13,8 @@ namespace InvoiceApp
         public static Func<string, string, bool>? ConfirmationHandler { get; set; }
         public static bool ConfirmDeletion(string itemName)
         {
-            var message = $"Biztosan törli a(z) {itemName} elemet?";
-            return ShowConfirmation(message, "Megerősítés");
+            var message = string.Format(Resources.Strings.ConfirmDeletionFormat, itemName);
+            return ShowConfirmation(message, Resources.Strings.ConfirmationTitle);
         }
 
         public static bool ShowConfirmation(string message, string title)
@@ -35,7 +36,7 @@ namespace InvoiceApp
 
         public static void ShowError(string message)
         {
-            MessageBox.Show(message, "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show(message, Resources.Strings.ErrorTitle, MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 }

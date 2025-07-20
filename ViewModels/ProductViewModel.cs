@@ -8,6 +8,7 @@ using System.Linq;
 using InvoiceApp.Models;
 using InvoiceApp.Services;
 using InvoiceApp;
+using InvoiceApp.Resources;
 using Serilog;
 
 namespace InvoiceApp.ViewModels
@@ -168,7 +169,7 @@ namespace InvoiceApp.ViewModels
             catch (Exception ex)
             {
                 Log.Error(ex, "Failed to load products");
-                DialogHelper.ShowError("Hiba történt a termékek betöltésekor.");
+                DialogHelper.ShowError(Resources.Strings.ProductLoadError);
             }
             finally
             {

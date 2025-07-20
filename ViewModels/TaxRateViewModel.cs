@@ -5,6 +5,7 @@ using System.Windows;
 using InvoiceApp.Models;
 using InvoiceApp.Services;
 using InvoiceApp;
+using InvoiceApp.Resources;
 using Serilog;
 
 namespace InvoiceApp.ViewModels
@@ -51,7 +52,7 @@ namespace InvoiceApp.ViewModels
             catch (Exception ex)
             {
                 Log.Error(ex, "Failed to load tax rates");
-                DialogHelper.ShowError("Hiba történt az áfakulcsok betöltésekor.");
+                DialogHelper.ShowError(Resources.Strings.TaxRateLoadError);
             }
             finally
             {

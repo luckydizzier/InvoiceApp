@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using InvoiceApp.Services;
+using InvoiceApp.Resources;
 using Serilog;
 
 namespace InvoiceApp.ViewModels
@@ -61,7 +62,7 @@ namespace InvoiceApp.ViewModels
             catch (Exception ex)
             {
                 Log.Error(ex, "Failed to load dashboard data");
-                DialogHelper.ShowError("Hiba történt a vezérlőpult betöltésekor.");
+                DialogHelper.ShowError(Resources.Strings.DashboardLoadError);
             }
             finally
             {
