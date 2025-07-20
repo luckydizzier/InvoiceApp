@@ -1,9 +1,9 @@
 <UserControl x:Class="InvoiceApp.Views.InvoiceListView" DataContext="{Binding Source={StaticResource ViewModelLocator}, Path=InvoiceViewModel}"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:viewModels="clr-namespace:InvoiceApp.ViewModels"
+             xmlns:viewModels="clr-namespace:InvoiceApp.ViewModels;assembly=InvoiceApp"
              xmlns:views="clr-namespace:InvoiceApp.Views"
-             xmlns:helpers="clr-namespace:InvoiceApp.Helpers"
+             xmlns:helpers="clr-namespace:InvoiceApp.Helpers;assembly=InvoiceApp"
              MinHeight="300" MinWidth="500">
     <UserControl.InputBindings>
         <KeyBinding Key="Delete" Command="{Binding DataContext.DeleteInvoiceCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
