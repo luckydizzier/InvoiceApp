@@ -1,4 +1,4 @@
-using InvoiceApp.Models;
+using InvoiceApp.Domain;
 using InvoiceApp.DTOs;
 using System;
 using System.Linq;

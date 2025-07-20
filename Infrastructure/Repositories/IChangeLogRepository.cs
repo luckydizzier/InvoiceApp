@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
-using InvoiceApp.Models;
-using InvoiceApp.Data;
+using InvoiceApp.Domain;
+using InvoiceApp.Infrastructure.Data;
 
-namespace InvoiceApp.Repositories
+namespace InvoiceApp.Infrastructure.Repositories
 {
     public interface IChangeLogRepository
     {

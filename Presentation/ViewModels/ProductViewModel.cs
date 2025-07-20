@@ -5,7 +5,7 @@ using System.Windows.Data;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Linq;
-using InvoiceApp.Models;
+using InvoiceApp.Domain;
 using InvoiceApp.Services;
 using InvoiceApp;
 using InvoiceApp.Resources;

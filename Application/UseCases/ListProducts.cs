@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using InvoiceApp.Models;
+using InvoiceApp.Domain;
 using InvoiceApp.Services;
 
 namespace InvoiceApp.Application.UseCases

@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
-using InvoiceApp.Models;
-using InvoiceApp.Repositories;
-using InvoiceApp.Data;
+using InvoiceApp.Domain;
+using InvoiceApp.Infrastructure.Repositories;
+using InvoiceApp.Infrastructure.Data;
 using Serilog;
 
 namespace InvoiceApp.Services

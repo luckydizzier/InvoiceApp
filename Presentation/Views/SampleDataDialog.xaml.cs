@@ -1,5 +1,5 @@
 using System.Windows;
-using InvoiceApp.Models;
+using InvoiceApp.Domain;
 using Serilog;
 
 namespace InvoiceApp.Views

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using InvoiceApp.Models;
+using InvoiceApp.Domain;
 using InvoiceApp.Services;
 
 namespace InvoiceApp.ViewModels

@@ -1,8 +1,9 @@
 using System;
 using System.Linq;
-using InvoiceApp.Models;
+using InvoiceApp.Domain;
 using InvoiceApp.Services;
 using InvoiceApp;
+using InvoiceApp.Shared;
 using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
 using System.Windows.Input;

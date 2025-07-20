@@ -1,4 +1,4 @@
-using InvoiceApp.Models;
+using InvoiceApp.Domain;
 using InvoiceApp.Helpers;
 
 namespace InvoiceApp.ViewModels

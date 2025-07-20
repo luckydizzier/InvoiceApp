@@ -1,5 +1,5 @@
 using System.Collections.ObjectModel;
-using InvoiceApp.Models;
+using InvoiceApp.Domain;
 using InvoiceApp.ViewModels;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

@@ -2,8 +2,8 @@ using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using InvoiceApp.Models;
-using InvoiceApp.Repositories;
+using InvoiceApp.Domain;
+using InvoiceApp.Infrastructure.Repositories;
 using Serilog;
 
 namespace InvoiceApp.Services

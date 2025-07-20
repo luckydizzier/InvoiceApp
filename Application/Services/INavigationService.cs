@@ -1,5 +1,5 @@
 using System;
-using InvoiceApp.Models;
+using InvoiceApp.Shared;
 
 namespace InvoiceApp.Services
 {
