@@ -27,7 +27,7 @@ namespace InvoiceApp.Repositories
         {
             Log.Debug("EfPaymentMethodRepository.GetByIdAsync called with {Id}", id);
             using var ctx = ContextFactory.CreateDbContext();
-            var entity = await ctx.PaymentMethods.FindAsync(id).AsTask();
+            var entity = await ctx.PaymentMethods.FindAsync(id);
             Log.Debug(entity != null ? "EfPaymentMethodRepository.GetByIdAsync found {Id}" : "EfPaymentMethodRepository.GetByIdAsync no entity for {Id}", entity?.Id ?? id);
             return entity;
         }
