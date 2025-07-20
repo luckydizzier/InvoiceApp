@@ -1,8 +1,8 @@
 <UserControl x:Class="InvoiceApp.Views.DashboardView" DataContext="{Binding Source={StaticResource ViewModelLocator}, Path=DashboardViewModel}"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:viewModels="clr-namespace:InvoiceApp.ViewModels;assembly=InvoiceApp"
-             xmlns:helpers="clr-namespace:InvoiceApp.Helpers;assembly=InvoiceApp">
+             xmlns:viewModels="clr-namespace:InvoiceApp.ViewModels"
+             xmlns:helpers="clr-namespace:InvoiceApp.Helpers">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <helpers:InverseBooleanConverter x:Key="InverseBooleanConverter" />
