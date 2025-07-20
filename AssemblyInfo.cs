@@ -1,6 +1,4 @@
 using System.Windows;
-using System.Runtime.Versioning;
-
 [assembly: ThemeInfo(
     ResourceDictionaryLocation.None,            //where theme specific resource dictionaries are located
                                                 //(used if a resource is not found in the page,
@@ -9,5 +7,3 @@ using System.Runtime.Versioning;
                                                 //(used if a resource is not found in the page,
                                                 // app, or any theme specific resource dictionaries)
 )]
-
-[assembly: SupportedOSPlatform("windows7.0")]
