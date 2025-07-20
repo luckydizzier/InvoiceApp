@@ -26,6 +26,24 @@ namespace InvoiceApp.Mappers
             };
         }
 
+        public static InvoiceDisplayDto ToDisplayDto(this Invoice entity)
+        {
+            if (entity == null) throw new ArgumentNullException(nameof(entity));
+
+            return new InvoiceDisplayDto
+            {
+                Id = entity.Id,
+                Number = entity.Number,
+                Issuer = entity.Issuer,
+                Date = entity.Date,
+                Amount = entity.Amount,
+                Supplier = entity.Supplier?.ToDto(),
+                PaymentMethod = entity.PaymentMethod?.ToDto(),
+                IsGross = entity.IsGross,
+                Items = entity.Items?.Select(i => i.ToDto()).ToList() ?? new List<InvoiceItemDto>()
+            };
+        }
+
         public static InvoiceItemDto ToDto(this InvoiceItem entity)
         {
             if (entity == null) throw new ArgumentNullException(nameof(entity));
@@ -82,6 +100,26 @@ namespace InvoiceApp.Mappers
                 Amount = dto.Amount,
                 SupplierId = dto.SupplierId,
                 PaymentMethodId = dto.PaymentMethodId,
+                IsGross = dto.IsGross,
+                Items = dto.Items?.Select(i => i.ToEntity()).ToList() ?? new List<InvoiceItem>()
+            };
+        }
+
+        public static Invoice ToEntity(this InvoiceDisplayDto dto)
+        {
+            if (dto == null) throw new ArgumentNullException(nameof(dto));
+
+            return new Invoice
+            {
+                Id = dto.Id,
+                Number = dto.Number,
+                Issuer = dto.Issuer,
+                Date = dto.Date,
+                Amount = dto.Amount,
+                SupplierId = dto.SupplierId,
+                Supplier = dto.Supplier?.ToEntity(),
+                PaymentMethodId = dto.PaymentMethodId,
+                PaymentMethod = dto.PaymentMethod?.ToEntity(),
                 IsGross = dto.IsGross,
                 Items = dto.Items?.Select(i => i.ToEntity()).ToList() ?? new List<InvoiceItem>()
             };

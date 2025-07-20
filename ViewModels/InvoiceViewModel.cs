@@ -7,6 +7,8 @@ using System.Linq;
 using System.ComponentModel;
 using InvoiceApp.Models;
 using InvoiceApp.Services;
+using InvoiceApp.DTOs;
+using InvoiceApp.Mappers;
 using InvoiceApp;
 using Serilog;
 
@@ -24,8 +26,9 @@ namespace InvoiceApp.ViewModels
         private readonly SupplierViewModel _supplierViewModel;
         private readonly INavigationService _navigation;
         private readonly IStatusService _statusService;
-        private ObservableCollection<Invoice> _invoices = new();
-        private Invoice? _selectedInvoice;
+        private ObservableCollection<InvoiceDisplayDto> _invoices = new();
+        private InvoiceDisplayDto? _selectedInvoice;
+        private Invoice? _selectedInvoiceEntity;
         private string _statusMessage = string.Empty;
         private readonly System.Windows.Threading.DispatcherTimer _statusTimer;
         public HeaderViewModel Header { get; }
@@ -35,7 +38,7 @@ namespace InvoiceApp.ViewModels
 
         public bool HasValidationErrors => ValidationErrors.Any();
 
-        public ObservableCollection<Invoice> Invoices
+        public ObservableCollection<InvoiceDisplayDto> Invoices
         {
             get => _invoices;
             set
@@ -92,7 +95,7 @@ namespace InvoiceApp.ViewModels
             ((RelayCommand)SaveCommand).RaiseCanExecuteChanged();
         }
 
-        public Invoice? SelectedInvoice
+        public InvoiceDisplayDto? SelectedInvoice
         {
             get => _selectedInvoice;
             set
@@ -107,9 +110,9 @@ namespace InvoiceApp.ViewModels
             }
         }
 
-        private async Task SetSelectedInvoiceAsync(Invoice? value)
+        private async Task SetSelectedInvoiceAsync(InvoiceDisplayDto? value)
         {
-            Invoice? invoice = value;
+            Invoice? invoice = value?.ToEntity();
 
             if (invoice != null)
             {
@@ -127,7 +130,8 @@ namespace InvoiceApp.ViewModels
                 }
             }
 
-            _selectedInvoice = invoice;
+            _selectedInvoiceEntity = invoice;
+            _selectedInvoice = invoice?.ToDisplayDto();
 
             if (_selectedInvoice != null)
             {
@@ -135,12 +139,12 @@ namespace InvoiceApp.ViewModels
             }
 
             Header.SelectedInvoice = _selectedInvoice;
-            Items = _selectedInvoice != null
+            Items = _selectedInvoiceEntity != null
                 ? new ObservableCollection<InvoiceItemViewModel>(
-                    _selectedInvoice.Items.Select(i => new InvoiceItemViewModel(i)))
+                    _selectedInvoiceEntity.Items.Select(i => new InvoiceItemViewModel(i)))
                 : new ObservableCollection<InvoiceItemViewModel>();
-            SelectedSupplier = _selectedInvoice?.Supplier;
-            SelectedPaymentMethod = _selectedInvoice?.PaymentMethod;
+            SelectedSupplier = _selectedInvoiceEntity?.Supplier;
+            SelectedPaymentMethod = _selectedInvoiceEntity?.PaymentMethod;
             OnPropertyChanged(nameof(SelectedInvoice));
             OnPropertyChanged(nameof(ValidationErrors));
             OnPropertyChanged(nameof(HasValidationErrors));
@@ -314,7 +318,7 @@ namespace InvoiceApp.ViewModels
                 () => ((RelayCommand)SaveCommand).RaiseCanExecuteChanged(),
                 MarkDirty,
                 () => Header.IsGrossCalculation,
-                () => SelectedInvoice);
+                () => _selectedInvoiceEntity);
 
             _statusTimer = new System.Windows.Threading.DispatcherTimer
             {
@@ -327,14 +331,14 @@ namespace InvoiceApp.ViewModels
             RemoveItemCommand = ItemsView.RemoveItemCommand;
             RemoveInvoiceCommand = new AsyncRelayCommand(async obj =>
             {
-                if (obj is Invoice invoice &&
+                if (obj is InvoiceDisplayDto dto &&
                     DialogHelper.ConfirmDeletion("számlát"))
                 {
-                    await _service.DeleteAsync(invoice.Id);
-                    Invoices.Remove(invoice);
+                    await _service.DeleteAsync(dto.Id);
+                    Invoices.Remove(dto);
                     ShowStatus("Számla törölve.");
                 }
-            }, obj => obj is Invoice);
+            }, obj => obj is InvoiceDisplayDto);
             SaveItemCommand = ItemsView.SaveItemCommand;
             SaveCommand = new RelayCommand(async _ => await SaveAsync(), _ => Validate());
             SaveAndNewCommand = new RelayCommand(async _ =>
@@ -360,7 +364,7 @@ namespace InvoiceApp.ViewModels
                 IsLoading = true;
                 ShowStatus("Betöltés...");
                 var items = await _service.GetHeadersAsync();
-                Invoices = new ObservableCollection<Invoice>(items);
+                Invoices = new ObservableCollection<InvoiceDisplayDto>(items.Select(i => i.ToDisplayDto()));
 
                 var prods = await _productService.GetAllAsync();
                 Products = new ObservableCollection<Product>(prods);
@@ -402,7 +406,7 @@ namespace InvoiceApp.ViewModels
             var firstRate = TaxRates.FirstOrDefault();
             var newItem = new InvoiceItem
             {
-                InvoiceId = SelectedInvoice?.Id ?? 0,
+                InvoiceId = _selectedInvoiceEntity?.Id ?? 0,
                 Quantity = 1,
                 Product = firstProduct,
                 ProductId = firstProduct?.Id ?? 0,
@@ -512,7 +516,7 @@ namespace InvoiceApp.ViewModels
 
         public async Task NewInvoice()
         {
-            var invoice = new Invoice
+            var invoice = new InvoiceDisplayDto
             {
                 Date = DateTime.Today,
                 IsGross = false
@@ -521,18 +525,16 @@ namespace InvoiceApp.ViewModels
             var latest = await _service.GetLatestAsync();
             if (latest != null)
             {
-                invoice.Supplier = latest.Supplier;
-                invoice.SupplierId = latest.SupplierId;
-                invoice.PaymentMethod = latest.PaymentMethod;
-                invoice.PaymentMethodId = latest.PaymentMethodId;
+                invoice.Supplier = latest.Supplier?.ToDto();
+                invoice.PaymentMethod = latest.PaymentMethod?.ToDto();
                 invoice.Number = await _service.GetNextNumberAsync(invoice.SupplierId);
             }
             else
             {
-                invoice.Supplier = Suppliers.FirstOrDefault();
-                invoice.SupplierId = invoice.Supplier?.Id ?? 0;
-                invoice.PaymentMethod = PaymentMethods.FirstOrDefault();
-                invoice.PaymentMethodId = invoice.PaymentMethod?.Id ?? 0;
+                var s = Suppliers.FirstOrDefault();
+                if (s != null) invoice.Supplier = s.ToDto();
+                var p = PaymentMethods.FirstOrDefault();
+                if (p != null) invoice.PaymentMethod = p.ToDto();
             }
 
             Invoices.Insert(0, invoice);
@@ -591,7 +593,12 @@ namespace InvoiceApp.ViewModels
                 }
             }
 
-            await _service.SaveInvoiceWithItemsAsync(SelectedInvoice, Items.Select(i => i.Item));
+            _selectedInvoiceEntity = SelectedInvoice?.ToEntity();
+            if (_selectedInvoiceEntity != null)
+            {
+                await _service.SaveInvoiceWithItemsAsync(_selectedInvoiceEntity, Items.Select(i => i.Item));
+                SelectedInvoice = _selectedInvoiceEntity.ToDisplayDto();
+            }
 
             ShowStatus($"Számla mentve. ({DateTime.Now:g})");
             Log.Information("Invoice {Id} saved", SelectedInvoice.Id);
