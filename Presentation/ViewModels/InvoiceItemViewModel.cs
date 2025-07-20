@@ -1,7 +1,7 @@
 using InvoiceApp.Domain;
-using InvoiceApp.Helpers;
+using InvoiceApp.Shared.Helpers;
 
-namespace InvoiceApp.ViewModels
+namespace InvoiceApp.Presentation.ViewModels
 {
     public class InvoiceItemViewModel : ViewModelBase
     {

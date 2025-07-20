@@ -1,11 +1,11 @@
 using System.Windows.Controls;
 using System.Windows;
 using System.Windows.Input;
-using InvoiceApp.Helpers;
-using InvoiceApp.ViewModels;
+using InvoiceApp.Shared.Helpers;
+using InvoiceApp.Presentation.ViewModels;
 using Serilog;
 
-namespace InvoiceApp.Views
+namespace InvoiceApp.Presentation.Views
 {
     public partial class TaxRateView : UserControl
     {

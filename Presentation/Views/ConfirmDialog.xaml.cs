@@ -1,8 +1,8 @@
 using System.Windows;
-using InvoiceApp.ViewModels;
+using InvoiceApp.Presentation.ViewModels;
 using Serilog;
 
-namespace InvoiceApp.Views
+namespace InvoiceApp.Presentation.Views
 {
     public partial class ConfirmDialog : Window
     {

@@ -1,10 +1,10 @@
 using InvoiceApp.Domain;
-using InvoiceApp.DTOs;
+using InvoiceApp.Application.DTOs;
 using System;
 using System.Linq;
 using System.Collections.Generic;
 
-namespace InvoiceApp.Mappers
+namespace InvoiceApp.Application.Mappers
 {
     public static class EntityToDtoMapper
     {

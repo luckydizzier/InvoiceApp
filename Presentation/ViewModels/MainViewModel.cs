@@ -1,14 +1,14 @@
 using System;
 using System.Linq;
 using InvoiceApp.Domain;
-using InvoiceApp.Services;
+using InvoiceApp.Application.Services;
 using InvoiceApp;
 using InvoiceApp.Shared;
 using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
 using System.Windows.Input;
 
-namespace InvoiceApp.ViewModels
+namespace InvoiceApp.Presentation.ViewModels
 {
     /// <summary>
     /// Root view model providing application level navigation commands.

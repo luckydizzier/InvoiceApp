@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-namespace InvoiceApp.DTOs
+namespace InvoiceApp.Application.DTOs
 {
     public class InvoiceDto
     {

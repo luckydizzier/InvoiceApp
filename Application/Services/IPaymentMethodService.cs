@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using InvoiceApp.Domain;
 
-namespace InvoiceApp.Services
+namespace InvoiceApp.Application.Services
 {
     public interface IPaymentMethodService
     {

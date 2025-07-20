@@ -1,8 +1,8 @@
 using System;
 using FluentValidation;
-using InvoiceApp.DTOs;
+using InvoiceApp.Application.DTOs;
 
-namespace InvoiceApp.Validators
+namespace InvoiceApp.Application.Validators
 {
     public class ChangeLogDtoValidator : AbstractValidator<ChangeLogDto>
     {

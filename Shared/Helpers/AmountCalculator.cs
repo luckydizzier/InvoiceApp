@@ -1,4 +1,4 @@
-namespace InvoiceApp.Helpers
+namespace InvoiceApp.Shared.Helpers
 {
     /// <summary>
     /// Utility class for calculating invoice amounts.

@@ -6,7 +6,7 @@ using InvoiceApp.Domain;
 using InvoiceApp.Infrastructure.Repositories;
 using Serilog;
 
-namespace InvoiceApp.Services
+namespace InvoiceApp.Application.Services
 {
     public abstract class BaseService<T> where T : Base
     {

@@ -1,4 +1,4 @@
-namespace InvoiceApp.Services
+namespace InvoiceApp.Application.Services
 {
     /// <summary>
     /// Provides application-wide status messages for the UI.

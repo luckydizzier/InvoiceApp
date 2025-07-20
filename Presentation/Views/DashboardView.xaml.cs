@@ -1,10 +1,10 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using InvoiceApp.ViewModels;
+using InvoiceApp.Presentation.ViewModels;
 using Serilog;
 
-namespace InvoiceApp.Views
+namespace InvoiceApp.Presentation.Views
 {
     public partial class DashboardView : UserControl
     {

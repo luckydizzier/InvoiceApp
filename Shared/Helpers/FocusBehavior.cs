@@ -1,7 +1,7 @@
 using System.Windows;
 using System.Windows.Input;
 
-namespace InvoiceApp.Helpers
+namespace InvoiceApp.Shared.Helpers
 {
     public static class FocusBehavior
     {

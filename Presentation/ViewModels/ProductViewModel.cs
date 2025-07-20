@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Linq;
 using InvoiceApp.Domain;
-using InvoiceApp.Services;
+using InvoiceApp.Application.Services;
 using InvoiceApp;
 using InvoiceApp.Resources;
 using Serilog;
 
-namespace InvoiceApp.ViewModels
+namespace InvoiceApp.Presentation.ViewModels
 {
     public class ProductViewModel : MasterDataViewModel<Product>, IHasChanges
     {

@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using InvoiceApp.Domain;
 using InvoiceApp.Infrastructure.Data;
 
-namespace InvoiceApp.Services
+namespace InvoiceApp.Application.Services
 {
     public interface IChangeLogService
     {

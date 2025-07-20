@@ -1,5 +1,5 @@
 using System;
-using InvoiceApp.Views;
+using InvoiceApp.Presentation.Views;
 
 namespace InvoiceApp.Shared
 {

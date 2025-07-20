@@ -4,7 +4,7 @@ using InvoiceApp.Infrastructure.Repositories;
 using InvoiceApp.Infrastructure.Data;
 using Serilog;
 
-namespace InvoiceApp.Services
+namespace InvoiceApp.Application.Services
 {
     public class ChangeLogService : IChangeLogService
     {

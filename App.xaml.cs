@@ -1,6 +1,6 @@
 using System;
 using System.Windows;
-using InvoiceApp.ViewModels;
+using InvoiceApp.Presentation.ViewModels;
 using InvoiceApp.Resources;
 
 namespace InvoiceApp

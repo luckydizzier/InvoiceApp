@@ -1,9 +1,9 @@
 using System;
 using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
-using InvoiceApp.Services;
+using InvoiceApp.Application.Services;
 
-namespace InvoiceApp.ViewModels
+namespace InvoiceApp.Presentation.ViewModels
 {
     /// <summary>
     /// Resolves view models from the application's service provider.

@@ -5,11 +5,11 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
-namespace InvoiceApp.DTOs
+namespace InvoiceApp.Application.DTOs
 {
     public class InvoiceDisplayDto : INotifyPropertyChanged, INotifyDataErrorInfo
     {
-        private readonly InvoiceApp.Validators.InvoiceDtoValidator _validator = new();
+        private readonly InvoiceApp.Application.Validators.InvoiceDtoValidator _validator = new();
         private readonly Dictionary<string, List<string>> _errors = new();
 
         private int _id;

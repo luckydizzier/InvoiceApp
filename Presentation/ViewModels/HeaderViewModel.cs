@@ -2,7 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using InvoiceApp.Domain;
 
-namespace InvoiceApp.ViewModels
+namespace InvoiceApp.Presentation.ViewModels
 {
     /// <summary>
     /// View model for editing invoice header information.

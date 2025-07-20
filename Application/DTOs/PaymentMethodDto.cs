@@ -1,6 +1,6 @@
 using System;
 
-namespace InvoiceApp.DTOs
+namespace InvoiceApp.Application.DTOs
 {
     public class PaymentMethodDto
     {

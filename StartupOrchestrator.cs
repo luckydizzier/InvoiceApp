@@ -11,14 +11,14 @@ using Microsoft.Data.Sqlite;
 using InvoiceApp.Infrastructure.Data;
 using InvoiceApp.Domain;
 using InvoiceApp.Infrastructure.Repositories;
-using InvoiceApp.Services;
+using InvoiceApp.Application.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 using Microsoft.Extensions.DependencyInjection;
 using FluentValidation;
-using InvoiceApp.DTOs;
-using InvoiceApp.Validators;
+using InvoiceApp.Application.DTOs;
+using InvoiceApp.Application.Validators;
 using Serilog;
 
 namespace InvoiceApp

@@ -24,3 +24,18 @@ Logging, helpers and other utilities that are reused across layers.
 4. Results are returned back through the Application layer to the UI.
 
 This layered approach keeps dependencies flowing inward: Presentation → Application → Domain while Infrastructure implements Application contracts.
+
+### Workflow Examples
+
+**Creating an Invoice**
+1. `InvoiceViewModel` collects user input and calls the `CreateInvoice` use case.
+2. `CreateInvoice` validates the `Invoice` entity via `InvoiceService`.
+3. `InvoiceService` persists the entity through `IInvoiceRepository`.
+4. `EfInvoiceRepository` saves to SQLite via `InvoiceContext`.
+5. The ViewModel refreshes its view using the returned DTO.
+
+**Listing Products**
+1. `DashboardViewModel` requests product data via the `ListProducts` use case.
+2. `ListProducts` retrieves `Product` entities from `IProductRepository`.
+3. The data is mapped to DTOs and presented in the UI.
+
