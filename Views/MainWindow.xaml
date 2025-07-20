@@ -153,6 +153,7 @@
         <KeyBinding Key="F6" Command="{Binding ShowSuppliersCommand}"/>
         <KeyBinding Key="F7" Command="{Binding ShowTaxRatesCommand}"/>
         <KeyBinding Key="F8" Command="{Binding ShowPaymentMethodsCommand}"/>
+        <KeyBinding Key="F9" Command="{Binding ShowUnitsCommand}"/>
     </Window.InputBindings>
     <DockPanel>
         <TextBlock DockPanel.Dock="Top"
