@@ -17,6 +17,10 @@ namespace InvoiceApp.Models
         /// </summary>
         Dashboard,
         /// <summary>
+        /// Invoice management window.
+        /// </summary>
+        Invoices,
+        /// <summary>
         /// Invoice header information step.
         /// </summary>
         Header,
@@ -75,6 +79,7 @@ namespace InvoiceApp.Models
         {
             AppState.MainWindow => typeof(MainWindow),
             AppState.Dashboard => typeof(DashboardView),
+            AppState.Invoices => typeof(InvoiceWindow),
             AppState.Header => typeof(InvoiceHeaderView),
             AppState.ItemList => typeof(InvoiceItemDataGrid),
             AppState.Summary => typeof(InvoiceSummaryPanel),
@@ -98,6 +103,7 @@ namespace InvoiceApp.Models
         {
             AppState.MainWindow => "F\u0151ablak",
             AppState.Dashboard => "Vez\u00e9rl\u0151pult",
+            AppState.Invoices => "Sz\u00e1ml\u00e1k",
             AppState.Header => "Fejl\u00e9c",
             AppState.ItemList => "T\u00e9telek",
             AppState.Summary => "\u00d6sszes\u00edt\u0151",
