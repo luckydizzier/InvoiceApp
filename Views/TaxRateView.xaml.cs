@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Input;
 using InvoiceApp.Helpers;
 using InvoiceApp.ViewModels;
+using Serilog;
 
 namespace InvoiceApp.Views
 {
@@ -15,6 +16,7 @@ namespace InvoiceApp.Views
             InitializeComponent();
             Loaded += async (s, e) =>
             {
+                Log.Information("TaxRateView loaded");
                 if (DataContext is TaxRateViewModel vm)
                 {
                     await vm.LoadAsync();

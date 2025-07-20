@@ -1,5 +1,6 @@
 using System.Windows;
 using InvoiceApp.ViewModels;
+using Serilog;
 
 namespace InvoiceApp.Views
 {
@@ -10,6 +11,7 @@ namespace InvoiceApp.Views
         public ConfirmDialog()
         {
             InitializeComponent();
+            Log.Information("ConfirmDialog initialized");
             ViewModel = new ConfirmDialogViewModel(string.Empty, SetResult);
             DataContext = ViewModel;
         }
