@@ -1,6 +1,7 @@
 using System;
 using System.Windows;
 using InvoiceApp.ViewModels;
+using InvoiceApp.Resources;
 
 namespace InvoiceApp
 {
@@ -19,7 +20,8 @@ namespace InvoiceApp
 
             this.DispatcherUnhandledException += (s, args) =>
             {
-                MessageBox.Show($"Váratlan hiba: {args.Exception.Message}", "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
+                var message = string.Format(Resources.Strings.UnexpectedErrorFormat, args.Exception.Message);
+                MessageBox.Show(message, Resources.Strings.ErrorTitle, MessageBoxButton.OK, MessageBoxImage.Error);
                 args.Handled = true;
             };
 

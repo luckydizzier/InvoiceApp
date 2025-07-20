@@ -5,6 +5,7 @@ using System.Windows;
 using InvoiceApp.Models;
 using InvoiceApp.Services;
 using InvoiceApp;
+using InvoiceApp.Resources;
 using Serilog;
 
 namespace InvoiceApp.ViewModels
@@ -51,7 +52,7 @@ namespace InvoiceApp.ViewModels
             catch (Exception ex)
             {
                 Log.Error(ex, "Failed to load units");
-                DialogHelper.ShowError("Hiba történt a mértékegységek betöltésekor.");
+                DialogHelper.ShowError(Resources.Strings.UnitLoadError);
             }
             finally
             {
