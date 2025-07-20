@@ -29,17 +29,6 @@ namespace InvoiceApp.Repositories
             return await ctx.Invoices
                 .Include(i => i.Supplier)
                 .Include(i => i.PaymentMethod)
-                .Include(i => i.Items)
-                    .ThenInclude(it => it.Product)
-                        .ThenInclude(p => p.Unit)
-                .Include(i => i.Items)
-                    .ThenInclude(it => it.Product)
-                        .ThenInclude(p => p.ProductGroup)
-                .Include(i => i.Items)
-                    .ThenInclude(it => it.Product)
-                        .ThenInclude(p => p.TaxRate)
-                .Include(i => i.Items)
-                    .ThenInclude(it => it.TaxRate)
                 .FirstOrDefaultAsync(i => i.Id == id);
         }
 
@@ -51,17 +40,6 @@ namespace InvoiceApp.Repositories
                 var invoices = await ctx.Invoices
                     .Include(i => i.Supplier)
                     .Include(i => i.PaymentMethod)
-                    .Include(i => i.Items)
-                        .ThenInclude(it => it.Product)
-                            .ThenInclude(p => p.Unit)
-                    .Include(i => i.Items)
-                        .ThenInclude(it => it.Product)
-                            .ThenInclude(p => p.ProductGroup)
-                    .Include(i => i.Items)
-                        .ThenInclude(it => it.Product)
-                            .ThenInclude(p => p.TaxRate)
-                    .Include(i => i.Items)
-                        .ThenInclude(it => it.TaxRate)
                     .ToListAsync();
 
                 Serilog.Log.Debug("Loaded {Count} invoices with navigation properties", invoices.Count);
@@ -80,25 +58,11 @@ namespace InvoiceApp.Repositories
             var invoice = await ctx.Invoices
                 .Include(i => i.Supplier)
                 .Include(i => i.PaymentMethod)
-                .Include(i => i.Items)
-                    .ThenInclude(it => it.Product)
-                        .ThenInclude(p => p.Unit)
-                .Include(i => i.Items)
-                    .ThenInclude(it => it.Product)
-                        .ThenInclude(p => p.ProductGroup)
-                .Include(i => i.Items)
-                    .ThenInclude(it => it.Product)
-                        .ThenInclude(p => p.TaxRate)
-                .Include(i => i.Items)
-                    .ThenInclude(it => it.TaxRate)
                 .FirstOrDefaultAsync(i => i.Id == id);
 
             if (invoice != null)
             {
-                Serilog.Log.Debug(
-                    "Loaded invoice {Id} with {Items} items and navigation properties",
-                    invoice.Id,
-                    invoice.Items?.Count ?? 0);
+                Serilog.Log.Debug("Loaded invoice {Id}", invoice.Id);
             }
             else
             {

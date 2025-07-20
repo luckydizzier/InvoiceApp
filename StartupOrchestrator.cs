@@ -52,7 +52,9 @@ namespace InvoiceApp
             var connection = config["ConnectionString"] ?? $"Data Source={Path.Combine(AppContext.BaseDirectory, "invoice.db")}";
 
             var services = new ServiceCollection();
-            services.AddDbContextFactory<InvoiceContext>(o => o.UseSqlite(connection));
+            services.AddDbContextFactory<InvoiceContext>(o =>
+                o.UseLazyLoadingProxies()
+                 .UseSqlite(connection));
             services.AddSingleton<IInvoiceRepository, EfInvoiceRepository>();
             services.AddSingleton<IChangeLogRepository, EfChangeLogRepository>();
             services.AddSingleton<IInvoiceItemRepository, EfInvoiceItemRepository>();
