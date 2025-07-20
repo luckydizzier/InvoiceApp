@@ -5,7 +5,8 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Appium.WebDriver" Version="5.0.0" />
+    <PackageReference Include="FlaUI.Core" Version="5.1.0" />
+    <PackageReference Include="FlaUI.UIA3" Version="5.1.0" />
     <PackageReference Include="MSTest.TestAdapter" Version="3.4.0" />
     <PackageReference Include="MSTest.TestFramework" Version="3.4.0" />
   </ItemGroup>
