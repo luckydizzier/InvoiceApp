@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using InvoiceApp.Domain;
-using InvoiceApp.Services;
+using InvoiceApp.Application.Services;
 
-namespace InvoiceApp.ViewModels
+namespace InvoiceApp.Presentation.ViewModels
 {
     /// <summary>
     /// View model for managing invoice item list and totals.

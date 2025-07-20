@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using InvoiceApp.Domain;
 using InvoiceApp.Infrastructure.Repositories;
-using InvoiceApp.DTOs;
-using InvoiceApp.Mappers;
+using InvoiceApp.Application.DTOs;
+using InvoiceApp.Application.Mappers;
 using Microsoft.EntityFrameworkCore;
 using InvoiceApp.Infrastructure.Data;
 using FluentValidation;
 using Serilog;
 
-namespace InvoiceApp.Services
+namespace InvoiceApp.Application.Services
 {
     public class TaxRateService : BaseService<TaxRate>, ITaxRateService
     {

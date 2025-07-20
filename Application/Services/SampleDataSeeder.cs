@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 using Bogus;
 using InvoiceApp.Domain;
 using InvoiceApp.Infrastructure.Repositories;
-using InvoiceApp.Services;
-using InvoiceApp.Helpers;
+using InvoiceApp.Application.Services;
+using InvoiceApp.Shared.Helpers;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace InvoiceApp.Services
+namespace InvoiceApp.Application.Services
 {
     public static class SampleDataSeeder
     {

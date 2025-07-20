@@ -2,8 +2,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using InvoiceApp.Domain;
-using InvoiceApp.Services;
-using InvoiceApp.ViewModels;
+using InvoiceApp.Application.Services;
+using InvoiceApp.Presentation.ViewModels;
 
 namespace InvoiceApp.Tests
 {
@@ -60,7 +60,7 @@ namespace InvoiceApp.Tests
                     decimal vat = 0m;
                     foreach (var item in g)
                     {
-                        var amounts = InvoiceApp.Helpers.AmountCalculator.Calculate(
+                        var amounts = InvoiceApp.Shared.Helpers.AmountCalculator.Calculate(
                             item.Quantity,
                             item.UnitPrice,
                             g.Key,

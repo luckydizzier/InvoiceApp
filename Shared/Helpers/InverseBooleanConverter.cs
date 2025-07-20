@@ -2,7 +2,7 @@ using System;
 using System.Globalization;
 using System.Windows.Data;
 
-namespace InvoiceApp.Helpers
+namespace InvoiceApp.Shared.Helpers
 {
     public class InverseBooleanConverter : IValueConverter
     {

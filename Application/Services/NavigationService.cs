@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using InvoiceApp.Shared;
 
-namespace InvoiceApp.Services
+namespace InvoiceApp.Application.Services
 {
     /// <summary>
     /// Default implementation of <see cref="INavigationService"/>.

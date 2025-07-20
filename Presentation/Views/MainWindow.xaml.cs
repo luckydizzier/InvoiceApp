@@ -1,11 +1,11 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using InvoiceApp.ViewModels;
+using InvoiceApp.Presentation.ViewModels;
 using InvoiceApp.Shared;
 using Serilog;
 
-namespace InvoiceApp.Views
+namespace InvoiceApp.Presentation.Views
 {
     public partial class MainWindow : Window
     {

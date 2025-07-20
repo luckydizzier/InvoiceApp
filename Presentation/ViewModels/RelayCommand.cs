@@ -1,7 +1,7 @@
 using System;
 using System.Windows.Input;
 
-namespace InvoiceApp.ViewModels
+namespace InvoiceApp.Presentation.ViewModels
 {
     public class RelayCommand : ICommand
     {

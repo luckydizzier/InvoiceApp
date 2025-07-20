@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using InvoiceApp.Domain;
 using InvoiceApp.Infrastructure.Repositories;
-using InvoiceApp.DTOs;
-using InvoiceApp.Mappers;
+using InvoiceApp.Application.DTOs;
+using InvoiceApp.Application.Mappers;
 using FluentValidation;
 using System.Linq;
 using Serilog;
@@ -13,7 +13,7 @@ using InvoiceApp.Infrastructure.Data;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace InvoiceApp.Services
+namespace InvoiceApp.Application.Services
 {
     public class InvoiceService : BaseService<Invoice>, IInvoiceService
     {

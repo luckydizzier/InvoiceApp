@@ -1,7 +1,7 @@
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
-namespace InvoiceApp.ViewModels
+namespace InvoiceApp.Presentation.ViewModels
 {
     public abstract class EntityCollectionViewModel<T> : ViewModelBase where T : class
     {

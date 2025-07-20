@@ -1,6 +1,6 @@
-using InvoiceApp.ViewModels;
+using InvoiceApp.Presentation.ViewModels;
 
-namespace InvoiceApp.Services
+namespace InvoiceApp.Application.Services
 {
     /// <summary>
     /// Default implementation of <see cref="IStatusService"/>.

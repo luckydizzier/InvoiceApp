@@ -1,7 +1,7 @@
 using System;
 using InvoiceApp.Shared;
 
-namespace InvoiceApp.Services
+namespace InvoiceApp.Application.Services
 {
     /// <summary>
     /// Provides navigation between logical screens of the application.

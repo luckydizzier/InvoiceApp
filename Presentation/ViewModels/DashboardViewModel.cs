@@ -2,11 +2,11 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using InvoiceApp.Services;
+using InvoiceApp.Application.Services;
 using InvoiceApp.Resources;
 using Serilog;
 
-namespace InvoiceApp.ViewModels
+namespace InvoiceApp.Presentation.ViewModels
 {
     public class DashboardViewModel : ViewModelBase
     {

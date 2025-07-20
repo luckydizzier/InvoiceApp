@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace InvoiceApp.ViewModels
+namespace InvoiceApp.Presentation.ViewModels
 {
     public abstract class ViewModelBase : INotifyPropertyChanged
     {

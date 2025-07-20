@@ -2,7 +2,7 @@ using System.Windows;
 using InvoiceApp.Domain;
 using Serilog;
 
-namespace InvoiceApp.Views
+namespace InvoiceApp.Presentation.Views
 {
     public partial class SampleDataDialog : Window
     {

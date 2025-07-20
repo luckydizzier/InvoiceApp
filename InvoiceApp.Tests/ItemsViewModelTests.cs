@@ -1,6 +1,6 @@
 using System.Collections.ObjectModel;
 using InvoiceApp.Domain;
-using InvoiceApp.ViewModels;
+using InvoiceApp.Presentation.ViewModels;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace InvoiceApp.Tests

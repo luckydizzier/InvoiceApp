@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using InvoiceApp.Shared;
 
-namespace InvoiceApp.Helpers
+namespace InvoiceApp.Shared.Helpers
 {
     /// <summary>
     /// Selects a DataTemplate based on <see cref="AppState"/> enumeration values.

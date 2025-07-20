@@ -1,4 +1,4 @@
-namespace InvoiceApp.ViewModels
+namespace InvoiceApp.Presentation.ViewModels
 {
     /// <summary>
     /// Interface for view models that track unsaved modifications.

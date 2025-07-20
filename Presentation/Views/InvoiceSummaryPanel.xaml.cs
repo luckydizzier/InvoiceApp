@@ -1,6 +1,6 @@
 using System.Windows.Controls;
 
-namespace InvoiceApp.Views
+namespace InvoiceApp.Presentation.Views
 {
     public partial class InvoiceSummaryPanel : UserControl
     {

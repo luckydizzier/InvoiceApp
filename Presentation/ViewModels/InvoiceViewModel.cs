@@ -6,15 +6,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.ComponentModel;
 using InvoiceApp.Domain;
-using InvoiceApp.Services;
-using InvoiceApp.DTOs;
-using InvoiceApp.Mappers;
+using InvoiceApp.Application.Services;
+using InvoiceApp.Application.DTOs;
+using InvoiceApp.Application.Mappers;
 using InvoiceApp.Shared;
 using InvoiceApp;
 using InvoiceApp.Resources;
 using Serilog;
 
-namespace InvoiceApp.ViewModels
+namespace InvoiceApp.Presentation.ViewModels
 {
     public class InvoiceViewModel : ViewModelBase
     {

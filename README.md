@@ -24,7 +24,6 @@ See [Docs/Architecture.md](Docs/Architecture.md) for a description of each layer
 - **Sample Data Options** – Configure invoice item quantity range when generating sample data.
 - **XAML-Only Views** – Clean separation of UI from logic, using XAML for design.
 - **POCO Models** – Simple data models inheriting from a base class for consistency.
-- **Mock Repositories** – For testing purposes, allowing easy unit tests without database dependencies.
 - **EF Core Repositories** – For production use, providing robust data access.
 - **ViewModels** – Implementing INotifyPropertyChanged for UI updates.
 - **Commands** – Implementing ICommand for user interactions.
@@ -100,7 +99,6 @@ We plan to enhance the application with the following features:
 - **Dependency Injection Issues** – If you encounter issues with dependency injection, ensure that all services and repositories are registered correctly in the `StartupOrchestrator`.
 - **Unit Tests** – Some unit tests may fail due to environment-specific configurations. Ensure that your test environment matches the expected setup.
 - **EF Core Migrations** – If you make changes to the database schema, ensure that EF Core migrations are applied correctly. Use the Package Manager Console or CLI to update the database.
-- **Mock Repositories** – When using mock repositories, ensure that the mock data is set up correctly for tests to pass. If tests fail, check the mock data initialization.
 - **XAML Binding Issues** – If you encounter binding errors in XAML, ensure that the ViewModels implement `INotifyPropertyChanged` correctly and that the bindings are set up properly in the XAML files.
 
 ## Troubleshooting

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using InvoiceApp.Domain;
-using InvoiceApp.Services;
+using InvoiceApp.Application.Services;
 
 namespace InvoiceApp.Application.UseCases
 {

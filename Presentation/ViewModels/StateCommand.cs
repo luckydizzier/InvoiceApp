@@ -2,10 +2,10 @@ using System;
 using System.Windows.Input;
 using Microsoft.Extensions.DependencyInjection;
 using InvoiceApp.Domain;
-using InvoiceApp.Services;
+using InvoiceApp.Application.Services;
 using InvoiceApp.Shared;
 
-namespace InvoiceApp.ViewModels
+namespace InvoiceApp.Presentation.ViewModels
 {
     /// <summary>
     /// Command that dispatches the Insert key to the appropriate "add" command

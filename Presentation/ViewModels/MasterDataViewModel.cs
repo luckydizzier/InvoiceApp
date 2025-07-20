@@ -1,6 +1,6 @@
 using System;
 
-namespace InvoiceApp.ViewModels
+namespace InvoiceApp.Presentation.ViewModels
 {
     public abstract class MasterDataViewModel<T> : EntityCollectionViewModel<T> where T : class
     {

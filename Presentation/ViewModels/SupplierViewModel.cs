@@ -3,12 +3,12 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows;
 using InvoiceApp.Domain;
-using InvoiceApp.Services;
+using InvoiceApp.Application.Services;
 using InvoiceApp;
 using InvoiceApp.Resources;
 using Serilog;
 
-namespace InvoiceApp.ViewModels
+namespace InvoiceApp.Presentation.ViewModels
 {
     public class SupplierViewModel : MasterDataViewModel<Supplier>, IHasChanges
     {
