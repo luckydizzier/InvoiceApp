@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="MSTest.TestAdapter" Version="3.3.2" />
+    <PackageReference Include="MSTest.TestFramework" Version="3.3.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\InvoiceApp.csproj" />
+  </ItemGroup>
+</Project>
