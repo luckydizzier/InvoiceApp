@@ -1,5 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium.Appium;
+using OpenQA.Selenium.Appium.Interfaces;
 using OpenQA.Selenium.Appium.Windows;
 using System;
 using System.Diagnostics;
@@ -20,7 +21,7 @@ namespace AppiumTests
         [TestInitialize]
         public void Setup()
         {
-            var exePath = Path.Combine(TestContext.DeploymentDirectory, HarnessExe);
+            var exePath = Path.Combine(TestContext!.DeploymentDirectory, HarnessExe);
             _process = Process.Start(exePath, "dialog");
             var options = new AppiumOptions();
             options.AddAdditionalCapability("app", exePath);
@@ -31,7 +32,8 @@ namespace AppiumTests
         [TestMethod]
         public void SampleDataDialogHasOkButton()
         {
-            var ok = _session!.FindElement(OpenQA.Selenium.Appium.AppiumBy.AccessibilityId("OkButton"));
+            // Use the built-in accessibility selector provided by the Appium Windows driver
+            var ok = _session!.FindElementByAccessibilityId("OkButton");
             Assert.IsNotNull(ok);
         }
 
