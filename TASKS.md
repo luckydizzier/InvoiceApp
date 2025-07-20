@@ -52,6 +52,7 @@ This document outlines tasks to align the repository with the MVP requirements d
   depends_on: []
   constraints: []
   external: false
+
 - id: task-UI01-add-automation-names
   goal: Add x:Name or AutomationProperties.Name to key XAML controls.
   input: [Views]
