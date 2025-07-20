@@ -87,7 +87,7 @@ namespace InvoiceApp.Services
             if (invoice.Items == null) return Enumerable.Empty<VatSummary>();
 
             var groups = invoice.Items
-                .GroupBy(i => i.TaxRate!.Percentage)
+                .GroupBy(i => i.TaxRate?.Percentage ?? 0m)
                 .Select(g =>
                 {
                     decimal net = 0m;
