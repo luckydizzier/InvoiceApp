@@ -65,6 +65,16 @@ namespace InvoiceApp.Repositories
                         ctx.Attach(item.Product.Unit);
                     }
                 }
+                if (item.Product.ProductGroup != null)
+                {
+                    var existingGroup = ctx.ProductGroups.Local
+                        .FirstOrDefault(g => g.Id == item.Product.ProductGroup.Id);
+                    item.Product.ProductGroup = existingGroup ?? item.Product.ProductGroup;
+                    if (existingGroup == null)
+                    {
+                        ctx.Attach(item.Product.ProductGroup);
+                    }
+                }
                 ctx.Attach(item.Product);
             }
             if (item.TaxRate != null)
@@ -96,6 +106,16 @@ namespace InvoiceApp.Repositories
                     if (existingUnit == null)
                     {
                         ctx.Attach(item.Product.Unit);
+                    }
+                }
+                if (item.Product.ProductGroup != null)
+                {
+                    var existingGroup = ctx.ProductGroups.Local
+                        .FirstOrDefault(g => g.Id == item.Product.ProductGroup.Id);
+                    item.Product.ProductGroup = existingGroup ?? item.Product.ProductGroup;
+                    if (existingGroup == null)
+                    {
+                        ctx.Attach(item.Product.ProductGroup);
                     }
                 }
                 ctx.Attach(item.Product);
