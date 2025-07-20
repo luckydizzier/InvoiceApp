@@ -16,14 +16,20 @@ namespace InvoiceApp.Repositories
 
         public override async Task<IEnumerable<Unit>> GetAllAsync()
         {
+            Log.Debug("EfUnitRepository.GetAllAsync called");
             using var ctx = ContextFactory.CreateDbContext();
-            return await ctx.Units.ToListAsync();
+            var list = await ctx.Units.ToListAsync();
+            Log.Debug("EfUnitRepository.GetAllAsync returning {Count} items", list.Count);
+            return list;
         }
 
-        public override Task<Unit?> GetByIdAsync(int id)
+        public override async Task<Unit?> GetByIdAsync(int id)
         {
+            Log.Debug("EfUnitRepository.GetByIdAsync called with {Id}", id);
             using var ctx = ContextFactory.CreateDbContext();
-            return ctx.Units.FindAsync(id).AsTask();
+            var entity = await ctx.Units.FindAsync(id).AsTask();
+            Log.Debug(entity != null ? "EfUnitRepository.GetByIdAsync found {Id}" : "EfUnitRepository.GetByIdAsync no entity for {Id}", entity?.Id ?? id);
+            return entity;
         }
 
     }
