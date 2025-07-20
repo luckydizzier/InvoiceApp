@@ -4,12 +4,13 @@ This document outlines how to perform automated UI tests for **InvoiceApp**.
 
 ## Environment Requirements
 
-- **FlaUI** – Reference the `FlaUI.Core` and `FlaUI.UIA3` NuGet packages in the test project.
-- A Windows 10 or later workstation.
+- **WinAppDriver** – Install the latest stable release from Microsoft to enable Windows application automation.
+- **Appium.WebDriver** – Reference the `Appium.WebDriver` NuGet package in the test project for Appium-based interaction.
+- A Windows 10 or later workstation with Developer Mode enabled.
 
 ## Launching the Test Harness
 
-UI tests run against a separate test harness executable. Launch `UITestHarness.exe` to host either the main window or individual dialogs under test. FlaUI attaches directly to the process so no external driver is required.
+UI tests run against a separate test harness executable. Launch `InvoiceApp.TestHarness.exe` to host either the main window or individual dialogs under test. This allows WinAppDriver to attach without interfering with the production build.
 
 ## Example Test Cases
 
@@ -19,5 +20,4 @@ UI tests run against a separate test harness executable. Launch `UITestHarness.e
 
 ## Running Tests and Reporting
 
-Tankó Ferenc runs the test suite locally with the harness executable. After execution, he records any failures and provides feedback in the issue tracker so the team can address defects.
-The test sources reside in the `FlaUITests` project and rely on `UITestHarness.exe` as the target application.
+Tankó Ferenc runs the test suite locally using WinAppDriver with the harness executable. After execution, he records any failures and provides feedback in the issue tracker so the team can address defects.

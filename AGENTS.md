@@ -35,7 +35,7 @@ This document defines a modular, agent-based execution framework for the Invoice
 ## Validation
 - Every workflow must include at least one validation step: automated (e.g., diff check, syntax pass) or external (e.g., manual review).
 - Fallback mechanisms should be included when runtime validation is blocked (e.g., Codex container limitations).
-- UI automation tests run on Tankó Ferenc’s workstation using FlaUI. Agents must await his feedback for validation.
+- UI automation tests run on Tankó Ferenc’s workstation using WinAppDriver. Agents must await his feedback for validation.
 
 ---
 

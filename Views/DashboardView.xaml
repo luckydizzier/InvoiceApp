@@ -26,9 +26,7 @@
                     <GridViewColumn Header="Nézet" Width="200">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <Button Content="{Binding Description}"
-                                        Command="{Binding Command}"
-                                        AutomationProperties.Name="{Binding Description}"/>
+                                <Button Content="{Binding Description}" Command="{Binding Command}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>

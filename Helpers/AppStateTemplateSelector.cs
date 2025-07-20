@@ -10,7 +10,7 @@ namespace InvoiceApp.Helpers
     /// </summary>
     public class AppStateTemplateSelector : DataTemplateSelector
     {
-        public DataTemplate? InvoiceTemplate { get; set; }
+        public DataTemplate? MainWindowTemplate { get; set; }
         public DataTemplate? PaymentMethodsTemplate { get; set; }
         public DataTemplate? SuppliersTemplate { get; set; }
         public DataTemplate? ProductGroupsTemplate { get; set; }
@@ -18,6 +18,9 @@ namespace InvoiceApp.Helpers
         public DataTemplate? UnitsTemplate { get; set; }
         public DataTemplate? ProductsTemplate { get; set; }
         public DataTemplate? DashboardTemplate { get; set; }
+        public DataTemplate? HeaderTemplate { get; set; }
+        public DataTemplate? ItemListTemplate { get; set; }
+        public DataTemplate? SummaryTemplate { get; set; }
         public DataTemplate? ConfirmDialogTemplate { get; set; }
 
         public override DataTemplate? SelectTemplate(object item, DependencyObject container)
@@ -34,12 +37,11 @@ namespace InvoiceApp.Helpers
                 AppState.Units => UnitsTemplate,
                 AppState.Products => ProductsTemplate,
                 AppState.Dashboard => DashboardTemplate,
-                AppState.Invoices => InvoiceTemplate,
-                AppState.Header => InvoiceTemplate,
-                AppState.ItemList => InvoiceTemplate,
-                AppState.Summary => InvoiceTemplate,
+                AppState.Header => MainWindowTemplate,
+                AppState.ItemList => MainWindowTemplate,
+                AppState.Summary => MainWindowTemplate,
                 AppState.ConfirmDialog => ConfirmDialogTemplate,
-                _ => InvoiceTemplate
+                _ => MainWindowTemplate
             };
         }
     }
