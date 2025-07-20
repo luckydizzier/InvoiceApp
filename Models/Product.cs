@@ -49,7 +49,7 @@ namespace InvoiceApp.Models
             set { if (_unitId != value) { _unitId = value; OnPropertyChanged(); } }
         }
 
-        public Unit? Unit
+        public virtual Unit? Unit
         {
             get => _unit;
             set { if (_unit != value) { _unit = value; OnPropertyChanged(); } }
@@ -61,7 +61,7 @@ namespace InvoiceApp.Models
             set { if (_productGroupId != value) { _productGroupId = value; OnPropertyChanged(); } }
         }
 
-        public ProductGroup? ProductGroup
+        public virtual ProductGroup? ProductGroup
         {
             get => _productGroup;
             set { if (_productGroup != value) { _productGroup = value; OnPropertyChanged(); } }
@@ -73,7 +73,7 @@ namespace InvoiceApp.Models
             set { if (_taxRateId != value) { _taxRateId = value; OnPropertyChanged(); } }
         }
 
-        public TaxRate? TaxRate
+        public virtual TaxRate? TaxRate
         {
             get => _taxRate;
             set { if (_taxRate != value) { _taxRate = value; OnPropertyChanged(); } }

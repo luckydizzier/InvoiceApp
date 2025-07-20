@@ -55,7 +55,7 @@ namespace InvoiceApp.Models
             set { if (_supplierId != value) { _supplierId = value; OnPropertyChanged(); } }
         }
 
-        public Supplier? Supplier
+        public virtual Supplier? Supplier
         {
             get => _supplier;
             set { if (_supplier != value) { _supplier = value; OnPropertyChanged(); } }
@@ -67,7 +67,7 @@ namespace InvoiceApp.Models
             set { if (_paymentMethodId != value) { _paymentMethodId = value; OnPropertyChanged(); } }
         }
 
-        public PaymentMethod? PaymentMethod
+        public virtual PaymentMethod? PaymentMethod
         {
             get => _paymentMethod;
             set { if (_paymentMethod != value) { _paymentMethod = value; OnPropertyChanged(); } }
@@ -79,7 +79,7 @@ namespace InvoiceApp.Models
             set { if (_isGross != value) { _isGross = value; OnPropertyChanged(); } }
         }
 
-        public List<InvoiceItem> Items { get; set; } = new();
+        public virtual List<InvoiceItem> Items { get; set; } = new();
 
         public event PropertyChangedEventHandler? PropertyChanged;
         public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;

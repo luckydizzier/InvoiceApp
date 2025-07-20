@@ -9,12 +9,12 @@ namespace InvoiceApp.Models
         public decimal UnitPrice { get; set; }
 
         public int InvoiceId { get; set; }
-        public Invoice? Invoice { get; set; }
+        public virtual Invoice? Invoice { get; set; }
 
         public int ProductId { get; set; }
-        public Product? Product { get; set; }
+        public virtual Product? Product { get; set; }
 
         public int TaxRateId { get; set; }
-        public TaxRate? TaxRate { get; set; }
+        public virtual TaxRate? TaxRate { get; set; }
     }
 }
