@@ -72,7 +72,6 @@ This document outlines tasks to align the repository with the MVP requirements d
 - id: task-UI03-flaui-tests
   goal: Implement FlaUI-based UI tests.
   input: [UITestHarness, Views]
-  output: [AppiumTests]
   output: [FlaUITests]
   depends_on: [task-UI02-ui-test-harness]
   constraints: []
