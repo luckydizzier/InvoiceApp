@@ -76,7 +76,7 @@
             <DataGridTemplateColumn Header="">
                 <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
-                        <Button Content="💾 Mentés"
+                        <Button x:Name="SaveItemButton" Content="💾 Mentés"
                                 Command="{Binding DataContext.SaveItemCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                 CommandParameter="{Binding}"
                                 ToolTip="Tétel mentése"/>

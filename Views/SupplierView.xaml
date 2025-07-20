@@ -40,9 +40,9 @@
                    Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"
                    Grid.RowSpan="2" Padding="10" />
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
-            <Button Content="Hozzáadás" Command="{Binding AddCommand}" Margin="4" />
-            <Button Content="Törlés" Command="{Binding DeleteCommand}" Margin="4" />
-            <Button Content="Mentés" Command="{Binding SaveCommand}" Margin="4" />
+            <Button x:Name="AddSupplierButton" Content="Hozzáadás" Command="{Binding AddCommand}" Margin="4" />
+            <Button x:Name="DeleteSupplierButton" Content="Törlés" Command="{Binding DeleteCommand}" Margin="4" />
+            <Button x:Name="SaveSupplierButton" Content="Mentés" Command="{Binding SaveCommand}" Margin="4" />
         </StackPanel>
     </Grid>
 </UserControl>
