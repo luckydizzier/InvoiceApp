@@ -9,7 +9,7 @@
              MinHeight="300" MinWidth="500">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
-        <helpers:InverseBooleanConverter x:Key="InverseBoolConverter" />
+        <helpers:InverseBooleanConverter x:Key="InverseBooleanConverter" />
     </UserControl.Resources>
     <UserControl.InputBindings>
         <KeyBinding Key="Delete" Command="{Binding DeleteCommand}"/>
@@ -37,7 +37,7 @@
         <DataGrid x:Name="DataGrid"
                   Grid.Row="1"
                   ItemsSource="{Binding ProductsView}"
-                  IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolConverter}}"
+                  IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBooleanConverter}}"
                   SelectedItem="{Binding SelectedProduct}"
                   AutoGenerateColumns="False"
                   CanUserAddRows="False"

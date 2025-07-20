@@ -5,7 +5,7 @@
              xmlns:helpers="clr-namespace:InvoiceApp.Helpers">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
-        <helpers:InverseBooleanConverter x:Key="InverseBoolConverter" />
+        <helpers:InverseBooleanConverter x:Key="InverseBooleanConverter" />
     </UserControl.Resources>
     <StackPanel Margin="20">
         <TextBlock Text="Vezérlőpult" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,10"/>
@@ -19,7 +19,7 @@
         </StackPanel>
         <ListView x:Name="MenuList" ItemsSource="{Binding MenuItems}" HorizontalAlignment="Center" Width="300"
                   helpers:FocusBehavior.IsFocused="True"
-                  IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolConverter}}">
+                  IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBooleanConverter}}">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Funkció" DisplayMemberBinding="{Binding Key}" Width="70"/>
