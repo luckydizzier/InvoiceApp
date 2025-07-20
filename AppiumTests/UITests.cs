@@ -1,6 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium.Appium;
-using OpenQA.Selenium.Appium.Windows;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -14,7 +13,7 @@ namespace AppiumTests
     {
         private const string WinAppDriverUrl = "http://127.0.0.1:4723";
         private const string HarnessExe = "UITestHarness.exe";
-        private WindowsDriver<WindowsElement>? _session;
+        private WindowsDriver? _session;
         private Process? _process;
 
         [TestInitialize]
@@ -25,7 +24,7 @@ namespace AppiumTests
             var options = new AppiumOptions();
             options.AddAdditionalCapability("app", exePath);
             options.AddAdditionalCapability("deviceName", "WindowsPC");
-            _session = new WindowsDriver<WindowsElement>(new Uri(WinAppDriverUrl), options);
+            _session = new WindowsDriver(new Uri(WinAppDriverUrl), options);
         }
 
         [TestMethod]
