@@ -1,6 +1,7 @@
 # AGENTS.md – Wrecept Modular Agent System
 
 ## Purpose
+This repository is organised into Domain, Application, Infrastructure, Presentation and Shared layers. Agents must respect these boundaries when declaring inputs and outputs.
 This document defines a modular, agent-based execution framework for the InvoiceApp standalone desktop application. Agent definitions are **not predefined**. Instead, they are **instantiated dynamically** per task based on contextual inference by the orchestrator.
 
 ---
