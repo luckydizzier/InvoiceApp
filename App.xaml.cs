@@ -47,7 +47,7 @@ namespace InvoiceApp
                 await StartupOrchestrator.InitializeDatabaseAsync(Services);
             }
 
-            var locator = new ViewModels.ViewModelLocator();
+            var locator = new ViewModelLocator();
             await locator.PaymentMethodViewModel.LoadAsync();
             await locator.SupplierViewModel.LoadAsync();
             await locator.UnitViewModel.LoadAsync();
