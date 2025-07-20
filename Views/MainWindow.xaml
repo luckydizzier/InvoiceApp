@@ -12,7 +12,8 @@
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <DataTemplate x:Key="MainWindowTemplate">
-            <Grid helpers:FocusBehavior.IsFocused="{Binding InvoiceViewModel.IsInvoiceListFocused}">
+            <Grid DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window}}"
+                  helpers:FocusBehavior.IsFocused="{Binding InvoiceViewModel.IsInvoiceListFocused}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
