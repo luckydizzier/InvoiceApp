@@ -37,7 +37,7 @@ namespace InvoiceApp.ViewModels
             MenuItems = new ObservableCollection<DashboardMenuItem>
             {
                 new DashboardMenuItem("F1", "Vezérlőpult", main.ShowDashboardCommand),
-                new DashboardMenuItem("F2", "Főablak", main.ShowMainWindowCommand),
+                new DashboardMenuItem("F2", "Számlák", main.ShowInvoicesCommand),
                 new DashboardMenuItem("F4", "Termékek", main.ShowProductsCommand),
                 new DashboardMenuItem("F5", "Termékcsoportok", main.ShowProductGroupsCommand),
                 new DashboardMenuItem("F6", "Szállítók", main.ShowSuppliersCommand),
