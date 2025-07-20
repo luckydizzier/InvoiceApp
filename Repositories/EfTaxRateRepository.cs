@@ -27,7 +27,8 @@ namespace InvoiceApp.Repositories
         {
             Log.Debug("EfTaxRateRepository.GetByIdAsync called with {Id}", id);
             using var ctx = ContextFactory.CreateDbContext();
-            var entity = await ctx.TaxRates.FindAsync(id).AsTask();
+            var entity = await ctx.TaxRates.FindAsync(id);
+
             Log.Debug(entity != null ? "EfTaxRateRepository.GetByIdAsync found {Id}" : "EfTaxRateRepository.GetByIdAsync no entity for {Id}", entity?.Id ?? id);
             return entity;
         }
