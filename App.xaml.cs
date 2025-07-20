@@ -2,10 +2,11 @@ using System;
 using System.Windows;
 using InvoiceApp.Presentation.ViewModels;
 using InvoiceApp.Resources;
+using Views = InvoiceApp.Presentation.Views;
 
 namespace InvoiceApp
 {
-    public partial class App : Application
+    public partial class App : System.Windows.Application
     {
         public IServiceProvider Services { get; private set; } = null!;
 
