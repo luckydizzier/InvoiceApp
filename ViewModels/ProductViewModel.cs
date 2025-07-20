@@ -294,7 +294,7 @@ namespace InvoiceApp.ViewModels
                 product.Gross = Math.Round(product.Net * (1 + (rate.Percentage / 100m)), 2);
             }
             await _service.SaveAsync(product);
-            DialogHelper.ShowInfo("Mentés kész.");
+            _statusService.Show("Mentés kész.");
         }
 
         public void SelectPreviousProduct()

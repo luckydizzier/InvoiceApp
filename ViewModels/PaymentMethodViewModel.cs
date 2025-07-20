@@ -73,7 +73,7 @@ namespace InvoiceApp.ViewModels
         protected override async Task SaveItemAsync(PaymentMethod method)
         {
             await _service.SaveAsync(method);
-            DialogHelper.ShowInfo("Mentés kész.");
+            _statusService.Show("Mentés kész.");
         }
 
         protected override bool CanSaveItem(PaymentMethod? method) => method != null && !string.IsNullOrWhiteSpace(method.Name);
