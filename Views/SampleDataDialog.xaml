@@ -20,24 +20,24 @@
             <ColumnDefinition Width="60"/>
         </Grid.ColumnDefinitions>
         <TextBlock Grid.Row="0" Grid.Column="0" Margin="0,0,5,5" VerticalAlignment="Center" Text="Szállítók"/>
-        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding SupplierCount}"/>
+        <TextBox x:Name="SupplierCountBox" Grid.Row="0" Grid.Column="1" Text="{Binding SupplierCount}"/>
         <TextBlock Grid.Row="1" Grid.Column="0" Margin="0,0,5,5" VerticalAlignment="Center" Text="Termékcsoportok"/>
-        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding ProductGroupCount}"/>
+        <TextBox x:Name="ProductGroupCountBox" Grid.Row="1" Grid.Column="1" Text="{Binding ProductGroupCount}"/>
         <TextBlock Grid.Row="2" Grid.Column="0" Margin="0,0,5,5" VerticalAlignment="Center" Text="Termékek"/>
-        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding ProductCount}"/>
+        <TextBox x:Name="ProductCountBox" Grid.Row="2" Grid.Column="1" Text="{Binding ProductCount}"/>
         <TextBlock Grid.Row="3" Grid.Column="0" Margin="0,0,5,5" VerticalAlignment="Center" Text="Számlák"/>
-        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding InvoiceCount}"/>
+        <TextBox x:Name="InvoiceCountBox" Grid.Row="3" Grid.Column="1" Text="{Binding InvoiceCount}"/>
         <TextBlock Grid.Row="4" Grid.Column="0" Margin="0,0,5,5" VerticalAlignment="Center" Text="Tételek (min)"/>
-        <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding ItemsPerInvoiceMin}"/>
+        <TextBox x:Name="ItemsPerInvoiceMinBox" Grid.Row="4" Grid.Column="1" Text="{Binding ItemsPerInvoiceMin}"/>
         <TextBlock Grid.Row="5" Grid.Column="0" Margin="0,0,5,5" VerticalAlignment="Center" Text="Tételek (max)"/>
-        <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding ItemsPerInvoiceMax}"/>
+        <TextBox x:Name="ItemsPerInvoiceMaxBox" Grid.Row="5" Grid.Column="1" Text="{Binding ItemsPerInvoiceMax}"/>
         <TextBlock Grid.Row="6" Grid.Column="0" Margin="0,0,5,5" VerticalAlignment="Center" Text="Mennyiség (min)"/>
-        <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding ItemQuantityMin}"/>
+        <TextBox x:Name="ItemQuantityMinBox" Grid.Row="6" Grid.Column="1" Text="{Binding ItemQuantityMin}"/>
         <TextBlock Grid.Row="7" Grid.Column="0" Margin="0,0,5,10" VerticalAlignment="Center" Text="Mennyiség (max)"/>
-        <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding ItemQuantityMax}"/>
+        <TextBox x:Name="ItemQuantityMaxBox" Grid.Row="7" Grid.Column="1" Text="{Binding ItemQuantityMax}"/>
         <StackPanel Grid.Row="8" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Content="Rendben" Width="75" Margin="5" Click="Ok_Click" IsDefault="True"/>
-            <Button Content="Mégse" Width="75" Margin="5" Click="Cancel_Click" IsCancel="True"/>
+            <Button x:Name="OkButton" Content="Rendben" Width="75" Margin="5" Click="Ok_Click" IsDefault="True"/>
+            <Button x:Name="CancelButton" Content="Mégse" Width="75" Margin="5" Click="Cancel_Click" IsCancel="True"/>
         </StackPanel>
     </Grid>
 </Window>

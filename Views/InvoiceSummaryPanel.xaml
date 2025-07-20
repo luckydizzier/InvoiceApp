@@ -20,7 +20,7 @@
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="0">
                 <TextBlock Text="ÁFA bontás kulcsonként" Margin="0,0,0,4"/>
-                <DataGrid ItemsSource="{Binding VatBreakdown}" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" Margin="0,0,8,0">
+                <DataGrid x:Name="VatBreakdownGrid" ItemsSource="{Binding VatBreakdown}" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" Margin="0,0,8,0">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="ÁFA %"
                                             Binding="{Binding Rate, StringFormat={}{0:F2}}"

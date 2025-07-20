@@ -33,7 +33,7 @@
                     </MenuItem>
                 </Menu>
                 <StackPanel Grid.Row="1" Grid.Column="0" Margin="4">
-                    <Button Content="🆕 Új számla"
+                    <Button x:Name="NewInvoiceButton" Content="🆕 Új számla"
                             Command="{Binding InvoiceViewModel.NewInvoiceCommand}"
                             Margin="0,0,0,4"
                             ToolTip="Új számla létrehozása"/>
@@ -62,7 +62,7 @@
                     <Border Grid.Row="0" Margin="0,0,0,4" Style="{StaticResource HeaderBorderStyle}">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
                             <views:InvoiceHeaderView />
-                            <Button Content="➕ Szállító"
+                            <Button x:Name="AddSupplierButton" Content="➕ Szállító"
                                     Command="{Binding InvoiceViewModel.AddSupplierCommand}"
                                     Margin="8,0,0,0"
                                     ToolTip="Szállító hozzáadása" />
@@ -72,16 +72,16 @@
                         <views:InvoiceItemDataGrid x:Name="ItemsGrid" />
                     </Border>
                     <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
-                        <Button Content="➕ Tétel hozzáadása"
+                        <Button x:Name="AddItemButton" Content="➕ Tétel hozzáadása"
                                 Command="{Binding InvoiceViewModel.ItemsView.AddItemCommand}"
                                 ToolTip="Tétel hozzáadása"/>
-                        <Button Content="🗑️ Tétel törlése"
+                        <Button x:Name="RemoveItemButton" Content="🗑️ Tétel törlése"
                                 Command="{Binding InvoiceViewModel.ItemsView.RemoveItemCommand}"
                                 ToolTip="Tétel törlése"/>
-                        <Button Content="💾 Mentés"
+                        <Button x:Name="SaveInvoiceButton" Content="💾 Mentés"
                                 Command="{Binding InvoiceViewModel.SaveCommand}"
                                 ToolTip="Számla mentése"/>
-                        <Button Content="💾➕ Mentés és új"
+                        <Button x:Name="SaveAndNewInvoiceButton" Content="💾➕ Mentés és új"
                                 Command="{Binding InvoiceViewModel.SaveAndNewCommand}"
                                 ToolTip="Mentés és új számla"/>
                     </StackPanel>
