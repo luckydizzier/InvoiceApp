@@ -20,8 +20,13 @@ namespace InvoiceApp.Repositories
         {
             Log.Debug("EfChangeLogRepository.AddAsync called for {Entity}", log.Entity);
             using var ctx = _contextFactory.CreateDbContext();
-            await ctx.ChangeLogs.AddAsync(log);
-            await ctx.SaveChangesAsync();
+            await AddAsync(log, ctx);
+        }
+
+        public async Task AddAsync(ChangeLog log, InvoiceContext context)
+        {
+            await context.ChangeLogs.AddAsync(log);
+            await context.SaveChangesAsync();
             Log.Information("ChangeLog entry added for {Entity}", log.Entity);
         }
 

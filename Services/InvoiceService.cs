@@ -255,7 +255,6 @@ namespace InvoiceApp.Services
                 var supplierOp = invoice.Supplier != null ? (invoice.Supplier.Id == 0 ? "Add" : "Update") : string.Empty;
 
                 await ctx.SaveChangesAsync();
-                await trx.CommitAsync();
 
                 var options = new System.Text.Json.JsonSerializerOptions { ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve };
                 if (invoice.Supplier != null)
@@ -268,7 +267,7 @@ namespace InvoiceApp.Services
                         DateCreated = DateTime.Now,
                         DateUpdated = DateTime.Now,
                         Active = true
-                    });
+                    }, ctx);
                 }
 
                 await _logService.AddAsync(new ChangeLog
@@ -279,7 +278,7 @@ namespace InvoiceApp.Services
                     DateCreated = DateTime.Now,
                     DateUpdated = DateTime.Now,
                     Active = true
-                });
+                }, ctx);
 
                 foreach (var (it, op) in itemOps)
                 {
@@ -291,8 +290,10 @@ namespace InvoiceApp.Services
                         DateCreated = DateTime.Now,
                         DateUpdated = DateTime.Now,
                         Active = true
-                    });
+                    }, ctx);
                 }
+
+                await trx.CommitAsync();
             }
             catch
             {
