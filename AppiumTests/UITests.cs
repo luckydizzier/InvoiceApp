@@ -31,7 +31,7 @@ namespace AppiumTests
         [TestMethod]
         public void SampleDataDialogHasOkButton()
         {
-            var ok = _session!.FindElementByAccessibilityId("OkButton");
+            var ok = _session!.FindElement(OpenQA.Selenium.Appium.AppiumBy.AccessibilityId("OkButton"));
             Assert.IsNotNull(ok);
         }
 
