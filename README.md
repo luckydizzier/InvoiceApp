@@ -10,7 +10,7 @@ A small WPF application demonstrating an MRS (Model–Repository–Service) and 
 - **Shared** – Helpers and crosscutting utilities.
 The source tree mirrors these layers with top-level folders such as `Application`, `Infrastructure`, `Presentation` and `Shared`.
 
-See [Docs/Architecture.md](Docs/Architecture.md) for details.
+See [Docs/Architecture.md](Docs/Architecture.md) for a description of each layer and an example workflow.
 
 `StartupOrchestrator` configures dependency injection and Serilog logging. It also ensures a local SQLite database is present. Missing configuration or database files are created automatically. On first launch, users can choose to populate the database with sample data.
 ## Features
