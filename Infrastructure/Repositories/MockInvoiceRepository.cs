@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using InvoiceApp.Models;
+using InvoiceApp.Domain;
 
-namespace InvoiceApp.Repositories
+namespace InvoiceApp.Infrastructure.Repositories
 {
     public class MockInvoiceRepository : IInvoiceRepository
     {

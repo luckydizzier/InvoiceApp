@@ -1,8 +1,9 @@
 using System;
 using System.Windows.Input;
 using Microsoft.Extensions.DependencyInjection;
-using InvoiceApp.Models;
+using InvoiceApp.Domain;
 using InvoiceApp.Services;
+using InvoiceApp.Shared;
 
 namespace InvoiceApp.ViewModels
 {

@@ -2,11 +2,11 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using InvoiceApp.Models;
-using InvoiceApp.Data;
+using InvoiceApp.Domain;
+using InvoiceApp.Infrastructure.Data;
 using Serilog;
 
-namespace InvoiceApp.Repositories
+namespace InvoiceApp.Infrastructure.Repositories
 {
     public class EfInvoiceItemRepository : BaseRepository<InvoiceItem>, IInvoiceItemRepository
     {

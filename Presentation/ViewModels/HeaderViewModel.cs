@@ -1,6 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
-using InvoiceApp.Models;
+using InvoiceApp.Domain;
 
 namespace InvoiceApp.ViewModels
 {

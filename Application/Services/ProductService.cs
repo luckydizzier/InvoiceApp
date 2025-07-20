@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using InvoiceApp.Models;
-using InvoiceApp.Repositories;
+using InvoiceApp.Domain;
+using InvoiceApp.Infrastructure.Repositories;
 using InvoiceApp.DTOs;
 using InvoiceApp.Mappers;
 using Microsoft.EntityFrameworkCore;
-using InvoiceApp.Data;
+using InvoiceApp.Infrastructure.Data;
 using FluentValidation;
 using Serilog;
 

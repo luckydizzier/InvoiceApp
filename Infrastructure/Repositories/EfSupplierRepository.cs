@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using InvoiceApp.Models;
-using InvoiceApp.Data;
+using InvoiceApp.Domain;
+using InvoiceApp.Infrastructure.Data;
 using Serilog;
 
-namespace InvoiceApp.Repositories
+namespace InvoiceApp.Infrastructure.Repositories
 {
     public class EfSupplierRepository : BaseRepository<Supplier>, ISupplierRepository
     {

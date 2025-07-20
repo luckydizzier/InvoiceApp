@@ -2,6 +2,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using InvoiceApp.ViewModels;
+using InvoiceApp.Shared;
 using Serilog;
 
 namespace InvoiceApp.Views
@@ -34,7 +35,7 @@ namespace InvoiceApp.Views
 
             // Only allow list navigation when the main window list is active and
             // no row details panel is open
-            if (ViewModel.CurrentState != Models.AppState.MainWindow ||
+            if (ViewModel.CurrentState != Shared.AppState.MainWindow ||
                 ViewModel.InvoiceViewModel.IsRowDetailsVisible)
             {
                 return;

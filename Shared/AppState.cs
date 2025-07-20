@@ -1,7 +1,7 @@
 using System;
 using InvoiceApp.Views;
 
-namespace InvoiceApp.Models
+namespace InvoiceApp.Shared
 {
     /// <summary>
     /// Logical screens of the application for navigation purposes.

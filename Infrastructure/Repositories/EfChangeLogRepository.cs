@@ -1,11 +1,11 @@
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using InvoiceApp.Data;
-using InvoiceApp.Models;
+using InvoiceApp.Infrastructure.Data;
+using InvoiceApp.Domain;
 using Serilog;
 
-namespace InvoiceApp.Repositories
+namespace InvoiceApp.Infrastructure.Repositories
 {
     public class EfChangeLogRepository : IChangeLogRepository
     {
