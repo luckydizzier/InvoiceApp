@@ -1,5 +1,6 @@
 using System.Windows;
 using InvoiceApp.Models;
+using Serilog;
 
 namespace InvoiceApp.Views
 {
@@ -10,6 +11,7 @@ namespace InvoiceApp.Views
         public SampleDataDialog()
         {
             InitializeComponent();
+            Log.Information("SampleDataDialog initialized");
             Options = new SampleDataOptions
             {
                 SupplierCount = 3,

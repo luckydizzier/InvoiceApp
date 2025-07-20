@@ -25,14 +25,27 @@ namespace InvoiceApp.Repositories
 
         public virtual async Task<IEnumerable<T>> GetAllAsync()
         {
+            Log.Debug("{Repo}.GetAllAsync called", GetType().Name);
             using var ctx = _contextFactory.CreateDbContext();
-            return await QueryWithIncludes(ctx).ToListAsync();
+            var list = await QueryWithIncludes(ctx).ToListAsync();
+            Log.Debug("{Repo}.GetAllAsync returning {Count} items", GetType().Name, list.Count);
+            return list;
         }
 
         public virtual async Task<T?> GetByIdAsync(int id)
         {
+            Log.Debug("{Repo}.GetByIdAsync called with {Id}", GetType().Name, id);
             using var ctx = _contextFactory.CreateDbContext();
-            return await QueryWithIncludes(ctx).FirstOrDefaultAsync(e => e.Id == id);
+            var entity = await QueryWithIncludes(ctx).FirstOrDefaultAsync(e => e.Id == id);
+            if (entity != null)
+            {
+                Log.Debug("{Repo}.GetByIdAsync found {Id}", GetType().Name, entity.Id);
+            }
+            else
+            {
+                Log.Debug("{Repo}.GetByIdAsync no entity for {Id}", GetType().Name, id);
+            }
+            return entity;
         }
 
         public virtual async Task AddAsync(T entity)

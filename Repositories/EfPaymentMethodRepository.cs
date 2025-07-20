@@ -16,14 +16,20 @@ namespace InvoiceApp.Repositories
 
         public override async Task<IEnumerable<PaymentMethod>> GetAllAsync()
         {
+            Log.Debug("EfPaymentMethodRepository.GetAllAsync called");
             using var ctx = ContextFactory.CreateDbContext();
-            return await ctx.PaymentMethods.ToListAsync();
+            var list = await ctx.PaymentMethods.ToListAsync();
+            Log.Debug("EfPaymentMethodRepository.GetAllAsync returning {Count} items", list.Count);
+            return list;
         }
 
-        public override Task<PaymentMethod?> GetByIdAsync(int id)
+        public override async Task<PaymentMethod?> GetByIdAsync(int id)
         {
+            Log.Debug("EfPaymentMethodRepository.GetByIdAsync called with {Id}", id);
             using var ctx = ContextFactory.CreateDbContext();
-            return ctx.PaymentMethods.FindAsync(id).AsTask();
+            var entity = await ctx.PaymentMethods.FindAsync(id);
+            Log.Debug(entity != null ? "EfPaymentMethodRepository.GetByIdAsync found {Id}" : "EfPaymentMethodRepository.GetByIdAsync no entity for {Id}", entity?.Id ?? id);
+            return entity;
         }
 
     }

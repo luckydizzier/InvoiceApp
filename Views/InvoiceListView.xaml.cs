@@ -2,6 +2,7 @@ using System.Windows.Controls;
 using System.Windows;
 using System.Windows.Input;
 using InvoiceApp.ViewModels;
+using Serilog;
 
 namespace InvoiceApp.Views
 {
@@ -14,6 +15,7 @@ namespace InvoiceApp.Views
             InitializeComponent();
             Loaded += async (s, e) =>
             {
+                Log.Information("InvoiceListView loaded");
                 if (DataContext is InvoiceViewModel vm)
                 {
                     await vm.LoadAsync();
