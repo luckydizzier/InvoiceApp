@@ -41,9 +41,14 @@
                     </DataTemplate>
                 </DataGridTemplateColumn.CellEditingTemplate>
             </DataGridTemplateColumn>
-            <DataGridTextColumn Header="Mennyiség"
-                               Binding="{Binding Quantity, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:F2}}"
-                               ElementStyle="{StaticResource RightAlignedCellStyle}"/>
+            <DataGridTextColumn Header="Mennyiség" ElementStyle="{StaticResource RightAlignedCellStyle}">
+                <DataGridTextColumn.Binding>
+                    <Binding Path="Quantity"
+                             Mode="TwoWay"
+                             UpdateSourceTrigger="PropertyChanged"
+                             StringFormat="{}{0:F2}"/>
+                </DataGridTextColumn.Binding>
+            </DataGridTextColumn>
             <DataGridTextColumn Header="Egység"
                                Binding="{Binding Item.Product.Unit.Code}"/>
             <DataGridTextColumn Header="Ár"
