@@ -10,7 +10,7 @@ This document outlines how to perform automated UI tests for **InvoiceApp**.
 
 ## Launching the Test Harness
 
-UI tests run against a separate test harness executable. Launch `InvoiceApp.TestHarness.exe` to host either the main window or individual dialogs under test. This allows WinAppDriver to attach without interfering with the production build.
+UI tests run against a separate test harness executable. Launch `UITestHarness.exe` to host either the main window or individual dialogs under test. This allows WinAppDriver to attach without interfering with the production build.
 
 ## Example Test Cases
 
@@ -21,3 +21,4 @@ UI tests run against a separate test harness executable. Launch `InvoiceApp.Test
 ## Running Tests and Reporting
 
 Tankó Ferenc runs the test suite locally using WinAppDriver with the harness executable. After execution, he records any failures and provides feedback in the issue tracker so the team can address defects.
+The test sources reside in the `AppiumTests` project and rely on `UITestHarness.exe` as the target application.
