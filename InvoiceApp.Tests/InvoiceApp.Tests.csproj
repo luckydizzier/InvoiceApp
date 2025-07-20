@@ -4,6 +4,7 @@
     <IsPackable>false</IsPackable>
     <UseWPF>true</UseWPF>
     <Nullable>enable</Nullable>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="MSTest.TestAdapter" Version="3.4.0" />
