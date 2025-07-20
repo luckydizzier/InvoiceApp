@@ -16,22 +16,28 @@ namespace InvoiceApp.Repositories
 
         public override async Task<IEnumerable<Product>> GetAllAsync()
         {
+            Log.Debug("EfProductRepository.GetAllAsync called");
             using var ctx = ContextFactory.CreateDbContext();
-            return await ctx.Products
+            var list = await ctx.Products
                 .Include(p => p.Unit)
                 .Include(p => p.ProductGroup)
                 .Include(p => p.TaxRate)
                 .ToListAsync();
+            Log.Debug("EfProductRepository.GetAllAsync returning {Count} items", list.Count);
+            return list;
         }
 
-        public override Task<Product?> GetByIdAsync(int id)
+        public override async Task<Product?> GetByIdAsync(int id)
         {
+            Log.Debug("EfProductRepository.GetByIdAsync called with {Id}", id);
             using var ctx = ContextFactory.CreateDbContext();
-            return ctx.Products
+            var entity = await ctx.Products
                 .Include(p => p.Unit)
                 .Include(p => p.ProductGroup)
                 .Include(p => p.TaxRate)
                 .FirstOrDefaultAsync(p => p.Id == id);
+            Log.Debug(entity != null ? "EfProductRepository.GetByIdAsync found {Id}" : "EfProductRepository.GetByIdAsync no entity for {Id}", entity?.Id ?? id);
+            return entity;
         }
 
     }

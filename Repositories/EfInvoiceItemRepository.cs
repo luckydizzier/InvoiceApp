@@ -16,8 +16,9 @@ namespace InvoiceApp.Repositories
 
         public override async Task<IEnumerable<InvoiceItem>> GetAllAsync()
         {
+            Log.Debug("EfInvoiceItemRepository.GetAllAsync called");
             using var ctx = ContextFactory.CreateDbContext();
-            return await ctx.InvoiceItems
+            var list = await ctx.InvoiceItems
                 .Include(i => i.Product!)
                     .ThenInclude(p => p!.Unit)
                 .Include(i => i.Product!)
@@ -26,12 +27,15 @@ namespace InvoiceApp.Repositories
                     .ThenInclude(p => p!.TaxRate)
                 .Include(i => i.TaxRate)
                 .ToListAsync();
+            Log.Debug("EfInvoiceItemRepository.GetAllAsync returning {Count} items", list.Count);
+            return list;
         }
 
-        public override Task<InvoiceItem?> GetByIdAsync(int id)
+        public override async Task<InvoiceItem?> GetByIdAsync(int id)
         {
+            Log.Debug("EfInvoiceItemRepository.GetByIdAsync called with {Id}", id);
             using var ctx = ContextFactory.CreateDbContext();
-            return ctx.InvoiceItems
+            var entity = await ctx.InvoiceItems
                 .Include(i => i.Product!)
                     .ThenInclude(p => p!.Unit)
                 .Include(i => i.Product!)
@@ -40,6 +44,8 @@ namespace InvoiceApp.Repositories
                     .ThenInclude(p => p!.TaxRate)
                 .Include(i => i.TaxRate)
                 .FirstOrDefaultAsync(i => i.Id == id);
+            Log.Debug(entity != null ? "EfInvoiceItemRepository.GetByIdAsync found {Id}" : "EfInvoiceItemRepository.GetByIdAsync no entity for {Id}", entity?.Id ?? id);
+            return entity;
         }
 
         public override async Task AddAsync(InvoiceItem item)

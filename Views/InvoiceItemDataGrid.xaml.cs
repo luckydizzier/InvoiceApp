@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using InvoiceApp.Helpers;
 using InvoiceApp.ViewModels;
+using Serilog;
 
 namespace InvoiceApp.Views
 {
@@ -11,6 +12,7 @@ namespace InvoiceApp.Views
         public InvoiceItemDataGrid()
         {
             InitializeComponent();
+            Log.Information("InvoiceItemDataGrid initialized");
         }
 
         public DataGrid DataGrid => InnerGrid;

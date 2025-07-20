@@ -16,14 +16,20 @@ namespace InvoiceApp.Repositories
 
         public override async Task<IEnumerable<Supplier>> GetAllAsync()
         {
+            Log.Debug("EfSupplierRepository.GetAllAsync called");
             using var ctx = ContextFactory.CreateDbContext();
-            return await ctx.Suppliers.ToListAsync();
+            var list = await ctx.Suppliers.ToListAsync();
+            Log.Debug("EfSupplierRepository.GetAllAsync returning {Count} items", list.Count);
+            return list;
         }
 
-        public override Task<Supplier?> GetByIdAsync(int id)
+        public override async Task<Supplier?> GetByIdAsync(int id)
         {
+            Log.Debug("EfSupplierRepository.GetByIdAsync called with {Id}", id);
             using var ctx = ContextFactory.CreateDbContext();
-            return ctx.Suppliers.FindAsync(id).AsTask();
+            var entity = await ctx.Suppliers.FindAsync(id).AsTask();
+            Log.Debug(entity != null ? "EfSupplierRepository.GetByIdAsync found {Id}" : "EfSupplierRepository.GetByIdAsync no entity for {Id}", entity?.Id ?? id);
+            return entity;
         }
 
     }
