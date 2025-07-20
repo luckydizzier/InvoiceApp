@@ -69,10 +69,11 @@ This document outlines tasks to align the repository with the MVP requirements d
   constraints: []
   external: false
 
-- id: task-UI03-appium-tests
-  goal: Implement Appium/WebDriver tests.
+- id: task-UI03-flaui-tests
+  goal: Implement FlaUI-based UI tests.
   input: [UITestHarness, Views]
   output: [AppiumTests]
+  output: [FlaUITests]
   depends_on: [task-UI02-ui-test-harness]
   constraints: []
   external: true
