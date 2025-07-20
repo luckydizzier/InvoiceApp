@@ -245,8 +245,8 @@ namespace InvoiceApp.Services
                 await ctx.Products.AddRangeAsync(newProducts);
                 ctx.Products.UpdateRange(updateProducts);
 
-                await ctx.TaxRates.AddRangeAsync(newTaxRates);
-                ctx.TaxRates.UpdateRange(updateTaxRates);
+                await ctx.TaxRates.AddRangeAsync(newTaxRates.DistinctBy(t => t.Id));
+                ctx.TaxRates.UpdateRange(updateTaxRates.DistinctBy(t => t.Id));
 
                 await ctx.InvoiceItems.AddRangeAsync(newItems);
                 ctx.InvoiceItems.UpdateRange(updateItems);

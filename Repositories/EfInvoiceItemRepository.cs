@@ -69,7 +69,13 @@ namespace InvoiceApp.Repositories
             }
             if (item.TaxRate != null)
             {
-                ctx.Attach(item.TaxRate);
+                var existingRate = ctx.TaxRates.Local
+                    .FirstOrDefault(t => t.Id == item.TaxRate.Id);
+                item.TaxRate = existingRate ?? item.TaxRate;
+                if (existingRate == null)
+                {
+                    ctx.Attach(item.TaxRate);
+                }
             }
             await ctx.InvoiceItems.AddAsync(item);
             await ctx.SaveChangesAsync();
@@ -96,7 +102,13 @@ namespace InvoiceApp.Repositories
             }
             if (item.TaxRate != null)
             {
-                ctx.Attach(item.TaxRate);
+                var existingRate = ctx.TaxRates.Local
+                    .FirstOrDefault(t => t.Id == item.TaxRate.Id);
+                item.TaxRate = existingRate ?? item.TaxRate;
+                if (existingRate == null)
+                {
+                    ctx.Attach(item.TaxRate);
+                }
             }
             ctx.InvoiceItems.Update(item);
             await ctx.SaveChangesAsync();
