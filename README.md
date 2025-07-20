@@ -8,6 +8,7 @@ A small WPF application demonstrating an MRS (Model–Repository–Service) and 
 - **Infrastructure** – Data access and integrations.
 - **Presentation** – WPF UI (ViewModels and Views).
 - **Shared** – Helpers and crosscutting utilities.
+The source tree mirrors these layers with top-level folders such as `Application`, `Infrastructure`, `Presentation` and `Shared`.
 
 See [Docs/Architecture.md](Docs/Architecture.md) for details.
 
