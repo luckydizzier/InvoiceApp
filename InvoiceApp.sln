@@ -7,8 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InvoiceApp", "InvoiceApp.cs
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UITestHarness", "UITestHarness\UITestHarness.csproj", "{4A4A2D06-7BFA-4AE4-95FE-E1CA492F64D5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppiumTests", "AppiumTests\AppiumTests.csproj", "{6DF0792B-1142-45FD-83E7-7E0C71994B0C}"
-EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlaUITests", "FlaUITests\FlaUITests.csproj", "{6DF0792B-1142-45FD-83E7-7E0C71994B0C}"EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InvoiceApp.Tests", "InvoiceApp.Tests\InvoiceApp.Tests.csproj", "{9F184CCF-620B-48CA-9692-D7B9A1068F9F}"
 EndProject
 Global
