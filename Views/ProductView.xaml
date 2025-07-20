@@ -3,13 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:viewModels="clr-namespace:InvoiceApp.ViewModels;assembly=InvoiceApp"
-             xmlns:helpers="clr-namespace:InvoiceApp.Helpers;assembly=InvoiceApp"
+             xmlns:viewModels="clr-namespace:InvoiceApp.ViewModels"
+             xmlns:helpers="clr-namespace:InvoiceApp.Helpers"
              mc:Ignorable="d"
              MinHeight="300" MinWidth="500">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
-        <helpers:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+        <helpers:InverseBooleanConverter x:Key="InverseBoolConverter" />
     </UserControl.Resources>
     <UserControl.InputBindings>
         <KeyBinding Key="Delete" Command="{Binding DeleteCommand}"/>
@@ -37,7 +37,7 @@
         <DataGrid x:Name="DataGrid"
                   Grid.Row="1"
                   ItemsSource="{Binding ProductsView}"
-                  IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBooleanConverter}}"
+                  IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolConverter}}"
                   SelectedItem="{Binding SelectedProduct}"
                   AutoGenerateColumns="False"
                   CanUserAddRows="False"

@@ -22,7 +22,7 @@ namespace InvoiceApp.Services
 
         public NavigationService()
         {
-            _history.Push(AppState.Invoices);
+            _history.Push(AppState.MainWindow);
         }
 
         public void Push(AppState state)

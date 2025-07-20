@@ -75,7 +75,6 @@ namespace InvoiceApp.ViewModels
         public RelayCommand ShowTaxRatesCommand { get; }
         public RelayCommand ShowUnitsCommand { get; }
         public RelayCommand ShowProductsCommand { get; }
-        public RelayCommand ShowInvoicesCommand { get; }
         public RelayCommand ShowMainWindowCommand { get; }
         public RelayCommand ShowDashboardCommand { get; }
         public RelayCommand SwitchPaymentMethodsCommand { get; }
@@ -84,7 +83,6 @@ namespace InvoiceApp.ViewModels
         public RelayCommand SwitchTaxRatesCommand { get; }
         public RelayCommand SwitchUnitsCommand { get; }
         public RelayCommand SwitchProductsCommand { get; }
-        public RelayCommand SwitchInvoicesCommand { get; }
         public ICommand StateAddCommand { get; }
 
         public MainViewModel(INavigationService navigation,
@@ -172,7 +170,6 @@ namespace InvoiceApp.ViewModels
             ShowTaxRatesCommand = new RelayCommand(_ => _navigation.Push(AppState.TaxRates));
             ShowUnitsCommand = new RelayCommand(_ => _navigation.Push(AppState.Units));
             ShowProductsCommand = new RelayCommand(_ => _navigation.Push(AppState.Products));
-            ShowInvoicesCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.Invoices));
             ShowMainWindowCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.MainWindow));
             ShowDashboardCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.Dashboard));
             SwitchPaymentMethodsCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.PaymentMethods));
@@ -181,7 +178,6 @@ namespace InvoiceApp.ViewModels
             SwitchTaxRatesCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.TaxRates));
             SwitchUnitsCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.Units));
             SwitchProductsCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.Products));
-            SwitchInvoicesCommand = new RelayCommand(_ => _navigation.SwitchRoot(AppState.Invoices));
         }
 
         private void OnStateChanged(object? sender, AppState state)
@@ -206,7 +202,6 @@ namespace InvoiceApp.ViewModels
                     break;
                 case AppState.Dashboard:
                 case AppState.MainWindow:
-                case AppState.Invoices:
                     _statusService.Show(string.Empty);
                     break;
             }
@@ -236,10 +231,6 @@ namespace InvoiceApp.ViewModels
                 AppState.TaxRates => provider.GetRequiredService<TaxRateViewModel>(),
                 AppState.Units => provider.GetRequiredService<UnitViewModel>(),
                 AppState.Products => provider.GetRequiredService<ProductViewModel>(),
-                AppState.Invoices => InvoiceViewModel,
-                AppState.Header => InvoiceViewModel,
-                AppState.ItemList => InvoiceViewModel,
-                AppState.Summary => InvoiceViewModel,
                 _ => null
             };
         }

@@ -134,16 +134,10 @@ namespace InvoiceApp
 
         private static void BackupDatabase(string dbPath)
         {
-            if (string.IsNullOrEmpty(dbPath) || !File.Exists(dbPath))
+            if (!File.Exists(dbPath))
                 return;
 
-            var directoryName = Path.GetDirectoryName(dbPath);
-            if (string.IsNullOrEmpty(directoryName))
-            {
-                return;
-            }
-
-            var backupDir = Path.Combine(directoryName, "backups");
+            var backupDir = Path.Combine(Path.GetDirectoryName(dbPath)!, "backups");
             Directory.CreateDirectory(backupDir);
             var backupFile = Path.Combine(backupDir, $"invoice_{DateTime.Now:yyyyMMddHHmmss}.db");
             File.Copy(dbPath, backupFile, true);

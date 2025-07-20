@@ -6,7 +6,6 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <ImplicitUsings>enable</ImplicitUsings>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,14 +13,6 @@
     <EmbeddedResource Remove="InvoiceApp.Tests\**" />
     <None Remove="InvoiceApp.Tests\**" />
     <Page Remove="InvoiceApp.Tests\**" />
-    <Compile Remove="FlaUITests\**" />
-    <EmbeddedResource Remove="FlaUITests\**" />
-    <None Remove="FlaUITests\**" />
-    <Page Remove="FlaUITests\**" />
-    <Compile Remove="UITestHarness\**" />
-    <EmbeddedResource Remove="UITestHarness\**" />
-    <None Remove="UITestHarness\**" />
-    <Page Remove="UITestHarness\**" />
   </ItemGroup>
 
   <ItemGroup>

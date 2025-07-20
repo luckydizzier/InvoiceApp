@@ -10,28 +10,17 @@ namespace InvoiceApp.ViewModels
     /// </summary>
     public class ViewModelLocator
     {
-        private static IServiceProvider? ServiceProvider =>
-            (Application.Current as App)?.Services;
+        private static IServiceProvider ServiceProvider => ((App)Application.Current).Services;
 
-        public MainViewModel? MainViewModel =>
-            ServiceProvider?.GetService<MainViewModel>();
-        public DashboardViewModel? DashboardViewModel =>
-            ServiceProvider?.GetService<DashboardViewModel>();
-        public InvoiceViewModel? InvoiceViewModel =>
-            ServiceProvider?.GetService<InvoiceViewModel>();
-        public ProductViewModel? ProductViewModel =>
-            ServiceProvider?.GetService<ProductViewModel>();
-        public PaymentMethodViewModel? PaymentMethodViewModel =>
-            ServiceProvider?.GetService<PaymentMethodViewModel>();
-        public SupplierViewModel? SupplierViewModel =>
-            ServiceProvider?.GetService<SupplierViewModel>();
-        public UnitViewModel? UnitViewModel =>
-            ServiceProvider?.GetService<UnitViewModel>();
-        public ProductGroupViewModel? ProductGroupViewModel =>
-            ServiceProvider?.GetService<ProductGroupViewModel>();
-        public TaxRateViewModel? TaxRateViewModel =>
-            ServiceProvider?.GetService<TaxRateViewModel>();
-        public IStatusService? StatusService =>
-            ServiceProvider?.GetService<IStatusService>();
+        public MainViewModel MainViewModel => ServiceProvider.GetRequiredService<MainViewModel>();
+        public DashboardViewModel DashboardViewModel => ServiceProvider.GetRequiredService<DashboardViewModel>();
+        public InvoiceViewModel InvoiceViewModel => ServiceProvider.GetRequiredService<InvoiceViewModel>();
+        public ProductViewModel ProductViewModel => ServiceProvider.GetRequiredService<ProductViewModel>();
+        public PaymentMethodViewModel PaymentMethodViewModel => ServiceProvider.GetRequiredService<PaymentMethodViewModel>();
+        public SupplierViewModel SupplierViewModel => ServiceProvider.GetRequiredService<SupplierViewModel>();
+        public UnitViewModel UnitViewModel => ServiceProvider.GetRequiredService<UnitViewModel>();
+        public ProductGroupViewModel ProductGroupViewModel => ServiceProvider.GetRequiredService<ProductGroupViewModel>();
+        public TaxRateViewModel TaxRateViewModel => ServiceProvider.GetRequiredService<TaxRateViewModel>();
+        public IStatusService StatusService => ServiceProvider.GetRequiredService<IStatusService>();
     }
 }

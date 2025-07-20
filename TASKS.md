@@ -52,7 +52,6 @@ This document outlines tasks to align the repository with the MVP requirements d
   depends_on: []
   constraints: []
   external: false
-
 - id: task-UI01-add-automation-names
   goal: Add x:Name or AutomationProperties.Name to key XAML controls.
   input: [Views]
@@ -69,66 +68,13 @@ This document outlines tasks to align the repository with the MVP requirements d
   constraints: []
   external: false
 
-- id: task-UI03-flaui-tests
-  goal: Implement FlaUI-based UI tests.
+- id: task-UI03-appium-tests
+  goal: Implement Appium/WebDriver tests.
   input: [UITestHarness, Views]
-  output: [FlaUITests]
+  output: [AppiumTests]
   depends_on: [task-UI02-ui-test-harness]
   constraints: []
   external: true
-
-```
-
-## Test Tasks
-
-```yaml
-- id: task-test-helpers
-  goal: Add unit tests for helper utilities such as `AmountCalculator` and `DialogHelper`.
-  input: [Helpers, InvoiceApp.Tests]
-  output: [InvoiceApp.Tests]
-  depends_on: []
-  constraints: []
-  external: false
-
-- id: task-test-mappers
-  goal: Add unit tests covering `EntityToDtoMapper` conversion methods.
-  input: [Mappers, DTOs, Models, InvoiceApp.Tests]
-  output: [InvoiceApp.Tests]
-  depends_on: []
-  constraints: []
-  external: false
-
-- id: task-test-validators
-  goal: Add unit tests for DTO validators in `Validators`.
-  input: [Validators, DTOs, InvoiceApp.Tests]
-  output: [InvoiceApp.Tests]
-  depends_on: []
-  constraints: []
-  external: false
-
-- id: task-test-repositories
-  goal: Add unit tests for repository logic using an in-memory database or mocks.
-  input: [Repositories, Data, InvoiceApp.Tests]
-  output: [InvoiceApp.Tests]
-  depends_on: []
-  constraints: []
-  external: false
-
-- id: task-test-services
-  goal: Add unit tests for service layer methods, e.g. `InvoiceService.GetNextNumberAsync`.
-  input: [Services, Repositories, DTOs, Models, InvoiceApp.Tests]
-  output: [InvoiceApp.Tests]
-  depends_on: [task-test-repositories]
-  constraints: []
-  external: false
-
-- id: task-test-viewmodels
-  goal: Expand view-model tests (e.g., `InvoiceViewModel`, `ItemsViewModel`) without touching XAML views.
-  input: [ViewModels, Services, InvoiceApp.Tests]
-  output: [InvoiceApp.Tests]
-  depends_on: [task-test-services]
-  constraints: []
-  external: false
 
 ```
 
