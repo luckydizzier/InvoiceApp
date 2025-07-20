@@ -28,6 +28,7 @@ namespace InvoiceApp.Repositories
             Log.Debug("EfSupplierRepository.GetByIdAsync called with {Id}", id);
             using var ctx = ContextFactory.CreateDbContext();
             var entity = await ctx.Suppliers.FindAsync(id);
+
             Log.Debug(entity != null ? "EfSupplierRepository.GetByIdAsync found {Id}" : "EfSupplierRepository.GetByIdAsync no entity for {Id}", entity?.Id ?? id);
             return entity;
         }
