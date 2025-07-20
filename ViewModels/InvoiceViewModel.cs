@@ -139,7 +139,7 @@ namespace InvoiceApp.ViewModels
                 _selectedInvoice.ErrorsChanged += Invoice_ErrorsChanged;
             }
 
-            Header.SelectedInvoice = _selectedInvoice;
+            Header.SelectedInvoice = _selectedInvoiceEntity;
             Items = _selectedInvoiceEntity != null
                 ? new ObservableCollection<InvoiceItemViewModel>(
                     _selectedInvoiceEntity.Items.Select(i => new InvoiceItemViewModel(i)))
@@ -563,7 +563,7 @@ namespace InvoiceApp.ViewModels
                 return;
             }
 
-            SelectedInvoice.Items = Items.Select(vm => vm.Item).ToList();
+            SelectedInvoice.Items = Items.Select(vm => vm.Item.ToDto()).ToList();
 
             foreach (var vm in Items)
             {

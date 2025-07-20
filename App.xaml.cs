@@ -20,8 +20,8 @@ namespace InvoiceApp
 
             this.DispatcherUnhandledException += (s, args) =>
             {
-                var message = string.Format(Resources.Strings.UnexpectedErrorFormat, args.Exception.Message);
-                MessageBox.Show(message, Resources.Strings.ErrorTitle, MessageBoxButton.OK, MessageBoxImage.Error);
+                var message = string.Format(Strings.UnexpectedErrorFormat, args.Exception.Message);
+                MessageBox.Show(message, Strings.ErrorTitle, MessageBoxButton.OK, MessageBoxImage.Error);
                 args.Handled = true;
             };
 
