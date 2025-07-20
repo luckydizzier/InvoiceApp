@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using InvoiceApp.Models;
 using InvoiceApp.Data;
@@ -54,6 +55,16 @@ namespace InvoiceApp.Repositories
             using var ctx = ContextFactory.CreateDbContext();
             if (item.Product != null)
             {
+                if (item.Product.Unit != null)
+                {
+                    var existingUnit = ctx.Units.Local
+                        .FirstOrDefault(u => u.Id == item.Product.Unit.Id);
+                    item.Product.Unit = existingUnit ?? item.Product.Unit;
+                    if (existingUnit == null)
+                    {
+                        ctx.Attach(item.Product.Unit);
+                    }
+                }
                 ctx.Attach(item.Product);
             }
             if (item.TaxRate != null)
@@ -71,6 +82,16 @@ namespace InvoiceApp.Repositories
             using var ctx = ContextFactory.CreateDbContext();
             if (item.Product != null)
             {
+                if (item.Product.Unit != null)
+                {
+                    var existingUnit = ctx.Units.Local
+                        .FirstOrDefault(u => u.Id == item.Product.Unit.Id);
+                    item.Product.Unit = existingUnit ?? item.Product.Unit;
+                    if (existingUnit == null)
+                    {
+                        ctx.Attach(item.Product.Unit);
+                    }
+                }
                 ctx.Attach(item.Product);
             }
             if (item.TaxRate != null)
