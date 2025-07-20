@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:viewModels="clr-namespace:InvoiceApp.ViewModels"
              xmlns:views="clr-namespace:InvoiceApp.Views"
-             xmlns:helpers="clr-namespace:InvoiceApp.Helpers"
+             xmlns:helpers="clr-namespace:InvoiceApp.Helpers;assembly=InvoiceApp"
              MinHeight="300" MinWidth="500">
     <UserControl.InputBindings>
         <KeyBinding Key="Delete" Command="{Binding DataContext.DeleteInvoiceCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
