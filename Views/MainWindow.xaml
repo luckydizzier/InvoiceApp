@@ -3,9 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:views="clr-namespace:InvoiceApp.Views"
-        xmlns:viewModels="clr-namespace:InvoiceApp.ViewModels"
-        xmlns:helpers="clr-namespace:InvoiceApp.Helpers"
+        xmlns:views="clr-namespace:InvoiceApp.Views;assembly=InvoiceApp"
+        xmlns:viewModels="clr-namespace:InvoiceApp.ViewModels;assembly=InvoiceApp"
+        xmlns:helpers="clr-namespace:InvoiceApp.Helpers;assembly=InvoiceApp"
         mc:Ignorable="d"
         Title="Számlakezelő" MinHeight="600" MinWidth="1000"
         PreviewKeyDown="Window_PreviewKeyDown">
