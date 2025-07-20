@@ -62,7 +62,7 @@
                     </Grid.RowDefinitions>
                     <Border Grid.Row="0" Margin="0,0,0,4" Style="{StaticResource HeaderBorderStyle}">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
-                            <views:InvoiceHeaderView />
+                            <views:InvoiceHeaderView DataContext="{Binding InvoiceViewModel.Header}" />
                             <Button x:Name="AddSupplierButton" Content="➕ Szállító"
                                     Command="{Binding InvoiceViewModel.AddSupplierCommand}"
                                     Margin="8,0,0,0"
@@ -70,7 +70,7 @@
                         </StackPanel>
                     </Border>
                     <Border Grid.Row="1" Margin="0,0,0,4" Style="{StaticResource ItemListBorderStyle}">
-                        <views:InvoiceItemDataGrid x:Name="ItemsGrid" />
+                        <views:InvoiceItemDataGrid x:Name="ItemsGrid" DataContext="{Binding InvoiceViewModel.ItemsView}" />
                     </Border>
                     <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
                         <Button x:Name="AddItemButton" Content="➕ Tétel hozzáadása"
@@ -87,7 +87,7 @@
                                 ToolTip="Mentés és új számla"/>
                     </StackPanel>
                     <Border Grid.Row="3" Style="{StaticResource SummaryBorderStyle}">
-                        <views:InvoiceSummaryPanel />
+                        <views:InvoiceSummaryPanel DataContext="{Binding InvoiceViewModel.ItemsView}" />
                     </Border>
                 </Grid>
             </Grid>
@@ -114,13 +114,13 @@
             <views:DashboardView />
         </DataTemplate>
         <DataTemplate x:Key="HeaderTemplate">
-            <views:InvoiceHeaderView />
+            <views:InvoiceHeaderView DataContext="{Binding InvoiceViewModel.Header}" />
         </DataTemplate>
         <DataTemplate x:Key="ItemListTemplate">
-            <views:InvoiceItemDataGrid />
+            <views:InvoiceItemDataGrid DataContext="{Binding InvoiceViewModel.ItemsView}" />
         </DataTemplate>
         <DataTemplate x:Key="SummaryTemplate">
-            <views:InvoiceSummaryPanel />
+            <views:InvoiceSummaryPanel DataContext="{Binding InvoiceViewModel.ItemsView}" />
         </DataTemplate>
         <DataTemplate x:Key="ConfirmDialogTemplate">
             <views:ConfirmDialog />
