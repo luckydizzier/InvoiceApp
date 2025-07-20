@@ -4,7 +4,8 @@ using OpenQA.Selenium.Appium.Windows;
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Threading;
+
+#nullable enable
 
 namespace AppiumTests
 {
