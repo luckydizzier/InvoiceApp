@@ -1,4 +1,4 @@
-# AGENTS.md � Wrecept Modular Agent System
+# AGENTS.md – Wrecept Modular Agent System
 
 ## Purpose
 This document defines a modular, agent-based execution framework for the InvoiceApp standalone desktop application. Agent definitions are **not predefined**. Instead, they are **instantiated dynamically** per task based on contextual inference by the orchestrator.
@@ -35,12 +35,13 @@ This document defines a modular, agent-based execution framework for the Invoice
 ## Validation
 - Every workflow must include at least one validation step: automated (e.g., diff check, syntax pass) or external (e.g., manual review).
 - Fallback mechanisms should be included when runtime validation is blocked (e.g., Codex container limitations).
+- UI automation tests run on Tankó Ferenc’s workstation using WinAppDriver. Agents must await his feedback for validation.
 
 ---
 
 ## Final Step
 - A concluding agent (e.g., `aggregator`, `synthesizer`) must merge, summarize, or present the composite result of the workflow.
-- It must not generate new artifacts�only consolidate.
+- It must not generate new artifacts—only consolidate.
 
 ---
 
