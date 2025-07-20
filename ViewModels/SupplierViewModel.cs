@@ -97,7 +97,7 @@ namespace InvoiceApp.ViewModels
         protected override async Task SaveItemAsync(Supplier supplier)
         {
             await _service.SaveAsync(supplier);
-            DialogHelper.ShowInfo("Mentés kész.");
+            _statusService.Show("Mentés kész.");
         }
 
         protected override bool CanSaveItem(Supplier? supplier) => supplier != null && !string.IsNullOrWhiteSpace(supplier.Name);

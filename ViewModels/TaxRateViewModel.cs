@@ -73,7 +73,7 @@ namespace InvoiceApp.ViewModels
         protected override async Task SaveItemAsync(TaxRate rate)
         {
             await _service.SaveAsync(rate);
-            DialogHelper.ShowInfo("Mentés kész.");
+            _statusService.Show("Mentés kész.");
         }
 
         protected override bool CanSaveItem(TaxRate? rate) => rate != null && !string.IsNullOrWhiteSpace(rate.Name);

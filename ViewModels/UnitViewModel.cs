@@ -73,7 +73,7 @@ namespace InvoiceApp.ViewModels
         protected override async Task SaveItemAsync(Unit unit)
         {
             await _service.SaveAsync(unit);
-            DialogHelper.ShowInfo("Mentés kész.");
+            _statusService.Show("Mentés kész.");
         }
 
         protected override bool CanSaveItem(Unit? unit) => unit != null && !string.IsNullOrWhiteSpace(unit.Name);

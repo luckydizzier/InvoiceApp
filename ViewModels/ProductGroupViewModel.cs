@@ -73,7 +73,7 @@ namespace InvoiceApp.ViewModels
         protected override async Task SaveItemAsync(ProductGroup group)
         {
             await _service.SaveAsync(group);
-            DialogHelper.ShowInfo("Mentés kész.");
+            _statusService.Show("Mentés kész.");
         }
 
         protected override bool CanSaveItem(ProductGroup? group) => group != null && !string.IsNullOrWhiteSpace(group.Name);
