@@ -97,6 +97,7 @@ namespace InvoiceApp.Presentation.ViewModels
             {
                 SelectedItem = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(SelectedProductLocked));
 
                 if (SelectedItem != null)
                 {
@@ -104,6 +105,11 @@ namespace InvoiceApp.Presentation.ViewModels
                 }
             }
         }
+
+        /// <summary>
+        /// True when the currently selected product cannot be edited.
+        /// </summary>
+        public bool SelectedProductLocked => SelectedProduct?.IsLocked ?? false;
 
 
         public ProductViewModel(IProductService service,

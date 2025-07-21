@@ -6,6 +6,14 @@
              xmlns:helpers="clr-namespace:InvoiceApp.Shared.Helpers"
              mc:Ignorable="d"
              d:DesignHeight="120" d:DesignWidth="400">
+    <UserControl.Resources>
+        <ControlTemplate x:Key="RequiredTemplate">
+            <DockPanel>
+                <AdornedElementPlaceholder />
+                <TextBlock Foreground="Red" Text="*" Margin="2,0,0,0"/>
+            </DockPanel>
+        </ControlTemplate>
+    </UserControl.Resources>
     <UserControl.InputBindings>
         <KeyBinding Key="Escape" Command="{Binding HeaderEscapeCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
         <KeyBinding Key="Up" Command="{Binding HeaderUpCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
@@ -33,6 +41,8 @@
                   IsEditable="True"
                   IsTextSearchEnabled="True"
                   LostFocus="SupplierBox_LostFocus"
+                  Validation.ErrorTemplate="{StaticResource RequiredTemplate}"
+                  ToolTip="Kötelező mező"
                   helpers:FocusBehavior.IsFocused="True"
                   helpers:FocusBehavior.AdvanceOnEnter="True"/>
         <Label Grid.Row="0" Grid.Column="2" Content="_2 Számlaszám" Target="{Binding ElementName=NumberBox}" VerticalAlignment="Center" Margin="2"/>
@@ -60,6 +70,8 @@
                   ItemsSource="{Binding PaymentMethods}"
                   SelectedItem="{Binding SelectedInvoice.PaymentMethod, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}"
                   DisplayMemberPath="Name"
+                  Validation.ErrorTemplate="{StaticResource RequiredTemplate}"
+                  ToolTip="Kötelező mező"
                   helpers:FocusBehavior.AdvanceOnEnter="True"/>
 
         <!-- Row 3 -->

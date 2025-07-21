@@ -11,5 +11,10 @@ namespace InvoiceApp.Application.DTOs
         public int UnitId { get; set; }
         public int ProductGroupId { get; set; }
         public int TaxRateId { get; set; }
+
+        /// <summary>
+        /// True when the product is referenced by invoices.
+        /// </summary>
+        public bool IsLocked { get; set; }
     }
 }

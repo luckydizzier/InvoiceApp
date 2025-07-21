@@ -44,7 +44,25 @@
                   Margin="5"
                     PreviewKeyDown="DataGrid_PreviewKeyDown"
                   CellEditEnding="DataGrid_CellEditEnding">
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsLocked}" Value="True">
+                            <Setter Property="IsEnabled" Value="False" />
+                            <Setter Property="Background" Value="#FFEFEFEF" />
+                            <Setter Property="ToolTip" Value="Termék lezárt" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
             <DataGrid.Columns>
+                <DataGridTemplateColumn Header="" Width="30">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="🔒" Visibility="{Binding IsLocked, Converter={StaticResource BoolToVisibilityConverter}}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
                 <DataGridTextColumn Header="Név" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}" />
                 <DataGridTextColumn Header="Nettó"
                                     Binding="{Binding Net, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:F2}, ValidatesOnNotifyDataErrors=True}"
