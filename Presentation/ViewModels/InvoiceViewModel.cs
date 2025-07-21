@@ -591,6 +591,13 @@ namespace InvoiceApp.Presentation.ViewModels
             if (_selectedInvoiceEntity != null)
             {
                 await _service.SaveAsync(_selectedInvoiceEntity);
+
+                foreach (var vm in Items)
+                {
+                    vm.Item.InvoiceId = _selectedInvoiceEntity.Id;
+                    await _itemService.SaveAsync(vm.Item);
+                }
+
                 SelectedInvoice = _selectedInvoiceEntity.ToDisplayDto();
             }
 
