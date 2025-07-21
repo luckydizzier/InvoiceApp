@@ -183,7 +183,7 @@ namespace InvoiceApp.Application.Services
                 inv.Amount = items.Sum(it =>
                     AmountCalculator.Calculate(it.Quantity, it.UnitPrice, it.TaxRate!.Percentage, inv.IsGross).Gross);
 
-                await invoiceService.SaveInvoiceWithItemsAsync(inv, items);
+                await invoiceService.SaveAsync(inv);
             }
         }
     }
