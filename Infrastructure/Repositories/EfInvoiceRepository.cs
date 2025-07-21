@@ -15,6 +15,11 @@ namespace InvoiceApp.Infrastructure.Repositories
         {
         }
 
+        public InvoiceContext CreateContext()
+        {
+            return ContextFactory.CreateDbContext();
+        }
+
         public async Task<IEnumerable<Invoice>> GetHeadersAsync()
         {
             using var ctx = ContextFactory.CreateDbContext();
@@ -163,6 +168,45 @@ namespace InvoiceApp.Infrastructure.Repositories
             ctx.Invoices.Update(invoice);
             await ctx.SaveChangesAsync();
             Log.Information("Invoice {Id} updated in DB", invoice.Id);
+        }
+
+        public async Task SaveAsync(Invoice invoice, InvoiceContext context)
+        {
+            if (invoice.Supplier != null)
+            {
+                context.Attach(invoice.Supplier);
+            }
+            if (invoice.PaymentMethod != null)
+            {
+                context.Attach(invoice.PaymentMethod);
+            }
+            if (invoice.Items != null)
+            {
+                foreach (var item in invoice.Items)
+                {
+                    if (item.Product != null)
+                    {
+                        context.Attach(item.Product);
+                    }
+                    if (item.TaxRate != null)
+                    {
+                        context.Attach(item.TaxRate);
+                    }
+                    context.Entry(item).State = item.Id == 0 ? EntityState.Added : EntityState.Modified;
+                }
+            }
+
+            if (invoice.Id == 0)
+            {
+                await context.Invoices.AddAsync(invoice);
+            }
+            else
+            {
+                context.Invoices.Update(invoice);
+            }
+
+            await context.SaveChangesAsync();
+            Log.Information("Invoice {Id} saved", invoice.Id);
         }
 
     }
