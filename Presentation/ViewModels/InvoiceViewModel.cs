@@ -598,7 +598,7 @@ namespace InvoiceApp.Presentation.ViewModels
             _selectedInvoiceEntity = SelectedInvoice?.ToEntity();
             if (_selectedInvoiceEntity != null)
             {
-                await _service.SaveInvoiceWithItemsAsync(_selectedInvoiceEntity, Items.Select(i => i.Item));
+                await _service.SaveAsync(_selectedInvoiceEntity);
                 SelectedInvoice = _selectedInvoiceEntity.ToDisplayDto();
             }
 
