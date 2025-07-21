@@ -1,8 +1,10 @@
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using InvoiceApp.Domain;
+using InvoiceApp.Application.DTOs;
+using InvoiceApp.Application.Mappers;
 using InvoiceApp.Application.Services;
 using InvoiceApp;
 using InvoiceApp.Resources;
@@ -10,17 +12,17 @@ using Serilog;
 
 namespace InvoiceApp.Presentation.ViewModels
 {
-    public class UnitViewModel : MasterDataViewModel<Unit>, IHasChanges
+    public class UnitViewModel : MasterDataViewModel<UnitDto>, IHasChanges
     {
         private readonly IUnitService _service;
         private readonly IStatusService _statusService;
-        public ObservableCollection<Unit> Units
+        public ObservableCollection<UnitDto> Units
         {
             get => Items;
             set => Items = value;
         }
 
-        public Unit? SelectedUnit
+        public UnitDto? SelectedUnit
         {
             get => SelectedItem;
             set => SelectedItem = value;
@@ -47,7 +49,7 @@ namespace InvoiceApp.Presentation.ViewModels
             {
                 IsLoading = true;
                 var items = await _service.GetAllAsync();
-                Units = new ObservableCollection<Unit>(items);
+                Units = new ObservableCollection<UnitDto>(items.Select(u => u.ToDto()));
             }
             catch (Exception ex)
             {
@@ -60,9 +62,9 @@ namespace InvoiceApp.Presentation.ViewModels
             }
         }
 
-        protected override Unit CreateNewItem() => new Unit();
+        protected override UnitDto CreateNewItem() => new UnitDto();
 
-        protected override async Task<bool> DeleteItemAsync(Unit unit)
+        protected override async Task<bool> DeleteItemAsync(UnitDto unit)
         {
             if (!DialogHelper.ConfirmDeletion("mértékegységet"))
                 return false;
@@ -71,13 +73,13 @@ namespace InvoiceApp.Presentation.ViewModels
             return true;
         }
 
-        protected override async Task SaveItemAsync(Unit unit)
+        protected override async Task SaveItemAsync(UnitDto unit)
         {
-            await _service.SaveAsync(unit);
+            await _service.SaveAsync(unit.ToEntity());
             _statusService.Show("Mentés kész.");
         }
 
-        protected override bool CanSaveItem(Unit? unit) => unit != null && !string.IsNullOrWhiteSpace(unit.Name);
+        protected override bool CanSaveItem(UnitDto? unit) => unit != null && !string.IsNullOrWhiteSpace(unit.Name);
 
         public void SelectPreviousUnit()
         {
