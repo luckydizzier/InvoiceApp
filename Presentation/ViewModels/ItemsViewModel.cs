@@ -232,8 +232,9 @@ namespace InvoiceApp.Presentation.ViewModels
                 }
             }
 
-            await _itemService.SaveAsync(item.Item);
-            _statusService.Show($"Tétel mentve. ({DateTime.Now:g})");
+            // Only update the UI model here. Actual persistence happens when
+            // the invoice is saved from InvoiceViewModel.SaveAsync.
+            _statusService.Show($"Tétel frissítve. ({DateTime.Now:g})");
         }
 
         private void Items_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
