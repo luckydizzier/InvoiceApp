@@ -15,7 +15,6 @@ namespace InvoiceApp.Presentation.ViewModels
     /// </summary>
     public class ItemsViewModel : ViewModelBase
     {
-        private readonly IInvoiceItemService _itemService;
         private readonly IProductService _productService;
         private readonly ITaxRateService _taxRateService;
         private readonly IStatusService _statusService;
@@ -39,7 +38,7 @@ namespace InvoiceApp.Presentation.ViewModels
         public Invoice? CurrentInvoice => _currentInvoice();
         public bool IsGross => _isGrossFunc();
 
-        public ItemsViewModel(IInvoiceItemService itemService,
+        public ItemsViewModel(
             IProductService productService,
             ITaxRateService taxRateService,
             IInvoiceService invoiceService,
@@ -49,7 +48,6 @@ namespace InvoiceApp.Presentation.ViewModels
             Func<bool> isGrossFunc,
             Func<Invoice?> currentInvoice)
         {
-            _itemService = itemService;
             _productService = productService;
             _taxRateService = taxRateService;
             _invoiceService = invoiceService;
@@ -184,7 +182,7 @@ namespace InvoiceApp.Presentation.ViewModels
             _markDirty();
         }
 
-        private async Task SaveItemAsync(InvoiceItemViewModel item)
+        private Task SaveItemAsync(InvoiceItemViewModel item)
         {
             var rate = TaxRates.FirstOrDefault(r => r.Percentage == item.TaxRatePercentage);
             if (rate == null)
@@ -208,7 +206,6 @@ namespace InvoiceApp.Presentation.ViewModels
                         DateCreated = DateTime.Now,
                         DateUpdated = DateTime.Now
                     };
-                    await _taxRateService.SaveAsync(rate);
                     TaxRates.Add(rate);
                 }
             }
@@ -229,13 +226,13 @@ namespace InvoiceApp.Presentation.ViewModels
                 {
                     item.Item.Product.TaxRate = rate;
                     item.Item.Product.TaxRateId = rate.Id;
-                    await _productService.SaveAsync(item.Item.Product);
                 }
             }
 
             // Only update the UI model here. Actual persistence happens when
             // the invoice is saved from InvoiceViewModel.SaveAsync.
             _statusService.Show($"Tétel frissítve. ({DateTime.Now:g})");
+            return Task.CompletedTask;
         }
 
         private void Items_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
