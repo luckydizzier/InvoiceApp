@@ -29,6 +29,17 @@ namespace InvoiceApp.Infrastructure.Repositories
             return await ctx.Invoices
                 .Include(i => i.Supplier)
                 .Include(i => i.PaymentMethod)
+                .Include(i => i.Items)
+                    .ThenInclude(it => it.Product)
+                        .ThenInclude(p => p.Unit)
+                .Include(i => i.Items)
+                    .ThenInclude(it => it.Product)
+                        .ThenInclude(p => p.ProductGroup)
+                .Include(i => i.Items)
+                    .ThenInclude(it => it.Product)
+                        .ThenInclude(p => p.TaxRate)
+                .Include(i => i.Items)
+                    .ThenInclude(it => it.TaxRate)
                 .FirstOrDefaultAsync(i => i.Id == id);
         }
 
