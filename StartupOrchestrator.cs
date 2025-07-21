@@ -20,6 +20,7 @@ using FluentValidation;
 using InvoiceApp.Application.DTOs;
 using InvoiceApp.Application.Validators;
 using Serilog;
+using ViewModels = InvoiceApp.Presentation.ViewModels;
 
 namespace InvoiceApp
 {
@@ -40,7 +41,7 @@ namespace InvoiceApp
 
         public static bool IsNewDatabase { get; private set; }
 
-        public static async Task<IServiceProvider> Configure()
+        public static Task<IServiceProvider> Configure()
         {
             EnsureConfig();
 
@@ -101,7 +102,7 @@ namespace InvoiceApp
                 .CreateLogger();
 
             var provider = services.BuildServiceProvider();
-            return provider;
+            return Task.FromResult<IServiceProvider>(provider);
         }
 
         private static void EnsureConfig()

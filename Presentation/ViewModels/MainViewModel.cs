@@ -98,7 +98,7 @@ namespace InvoiceApp.Presentation.ViewModels
             UpdateBreadcrumb();
             _navigation.StateChanged += OnStateChanged;
 
-            StateAddCommand = new StateCommand(_navigation, ((App)Application.Current).Services);
+            StateAddCommand = new StateCommand(_navigation, ((App)System.Windows.Application.Current).Services);
 
             BackCommand = new RelayCommand(_ =>
             {
@@ -223,7 +223,7 @@ namespace InvoiceApp.Presentation.ViewModels
 
         private object? GetActiveViewModel()
         {
-            var provider = ((App)Application.Current).Services;
+            var provider = ((App)System.Windows.Application.Current).Services;
             return CurrentState switch
             {
                 AppState.PaymentMethods => provider.GetRequiredService<PaymentMethodViewModel>(),

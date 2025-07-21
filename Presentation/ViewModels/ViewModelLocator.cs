@@ -10,7 +10,7 @@ namespace InvoiceApp.Presentation.ViewModels
     /// </summary>
     public class ViewModelLocator
     {
-        private static IServiceProvider ServiceProvider => ((App)Application.Current).Services;
+        private static IServiceProvider ServiceProvider => ((App)System.Windows.Application.Current).Services;
 
         public MainViewModel MainViewModel => ServiceProvider.GetRequiredService<MainViewModel>();
         public DashboardViewModel DashboardViewModel => ServiceProvider.GetRequiredService<DashboardViewModel>();
