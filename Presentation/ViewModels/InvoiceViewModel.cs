@@ -19,7 +19,6 @@ namespace InvoiceApp.Presentation.ViewModels
     public class InvoiceViewModel : ViewModelBase
     {
         private readonly IInvoiceService _service;
-        private readonly IInvoiceItemService _itemService;
         private readonly IProductService _productService;
         private readonly ITaxRateService _taxRateService;
         private readonly ISupplierService _supplierService;
@@ -282,7 +281,6 @@ namespace InvoiceApp.Presentation.ViewModels
         public Func<InvoiceItemViewModel> NewItemCommand { get; }
 
         public InvoiceViewModel(IInvoiceService service,
-            IInvoiceItemService itemService,
             IProductService productService,
             ITaxRateService taxRateService,
             ISupplierService supplierService,
@@ -293,7 +291,6 @@ namespace InvoiceApp.Presentation.ViewModels
             IStatusService statusService)
         {
             _service = service;
-            _itemService = itemService;
             _productService = productService;
             _taxRateService = taxRateService;
             _supplierService = supplierService;
@@ -312,7 +309,6 @@ namespace InvoiceApp.Presentation.ViewModels
                 isGross => ItemsView!.UpdateGrossMode(isGross));
 
             ItemsView = new ItemsViewModel(
-                _itemService,
                 _productService,
                 _taxRateService,
                 _service,
@@ -486,7 +482,6 @@ namespace InvoiceApp.Presentation.ViewModels
                 }
             }
 
-            await _itemService.SaveAsync(item.Item);
             ShowStatus($"Tétel mentve. ({DateTime.Now:g})");
         }
 
@@ -591,14 +586,9 @@ namespace InvoiceApp.Presentation.ViewModels
             if (_selectedInvoiceEntity != null)
             {
                 await _service.SaveAsync(_selectedInvoiceEntity);
-
-                foreach (var vm in Items)
-                {
-                    vm.Item.InvoiceId = _selectedInvoiceEntity.Id;
-                    await _itemService.SaveAsync(vm.Item);
-                }
-
                 SelectedInvoice = _selectedInvoiceEntity.ToDisplayDto();
+                Items = new ObservableCollection<InvoiceItemViewModel>(
+                    _selectedInvoiceEntity.Items.Select(i => new InvoiceItemViewModel(i)));
             }
 
             ShowStatus($"Számla mentve. ({DateTime.Now:g})");
