@@ -110,29 +110,7 @@ namespace InvoiceApp.Infrastructure.Repositories
         {
             Log.Debug("EfInvoiceRepository.AddAsync called for {Id}", invoice.Id);
             using var ctx = ContextFactory.CreateDbContext();
-            if (invoice.Supplier != null)
-            {
-                ctx.Attach(invoice.Supplier);
-            }
-            if (invoice.PaymentMethod != null)
-            {
-                ctx.Attach(invoice.PaymentMethod);
-            }
-            if (invoice.Items != null)
-            {
-                foreach (var item in invoice.Items)
-                {
-                    if (item.Product != null)
-                    {
-                        ctx.Attach(item.Product);
-                    }
-                    if (item.TaxRate != null)
-                    {
-                        ctx.Attach(item.TaxRate);
-                    }
-                    ctx.Entry(item).State = item.Id == 0 ? EntityState.Added : EntityState.Modified;
-                }
-            }
+            AttachRelations(invoice, ctx);
             await ctx.Invoices.AddAsync(invoice);
             await ctx.SaveChangesAsync();
             Log.Information("Invoice {Id} inserted", invoice.Id);
@@ -142,29 +120,7 @@ namespace InvoiceApp.Infrastructure.Repositories
         {
             Log.Debug("EfInvoiceRepository.UpdateAsync called for {Id}", invoice.Id);
             using var ctx = ContextFactory.CreateDbContext();
-            if (invoice.Supplier != null)
-            {
-                ctx.Attach(invoice.Supplier);
-            }
-            if (invoice.PaymentMethod != null)
-            {
-                ctx.Attach(invoice.PaymentMethod);
-            }
-            if (invoice.Items != null)
-            {
-                foreach (var item in invoice.Items)
-                {
-                    if (item.Product != null)
-                    {
-                        ctx.Attach(item.Product);
-                    }
-                    if (item.TaxRate != null)
-                    {
-                        ctx.Attach(item.TaxRate);
-                    }
-                    ctx.Entry(item).State = item.Id == 0 ? EntityState.Added : EntityState.Modified;
-                }
-            }
+            AttachRelations(invoice, ctx);
             ctx.Invoices.Update(invoice);
             await ctx.SaveChangesAsync();
             Log.Information("Invoice {Id} updated in DB", invoice.Id);
@@ -172,29 +128,7 @@ namespace InvoiceApp.Infrastructure.Repositories
 
         public async Task SaveAsync(Invoice invoice, InvoiceContext context)
         {
-            if (invoice.Supplier != null)
-            {
-                context.Attach(invoice.Supplier);
-            }
-            if (invoice.PaymentMethod != null)
-            {
-                context.Attach(invoice.PaymentMethod);
-            }
-            if (invoice.Items != null)
-            {
-                foreach (var item in invoice.Items)
-                {
-                    if (item.Product != null)
-                    {
-                        context.Attach(item.Product);
-                    }
-                    if (item.TaxRate != null)
-                    {
-                        context.Attach(item.TaxRate);
-                    }
-                    context.Entry(item).State = item.Id == 0 ? EntityState.Added : EntityState.Modified;
-                }
-            }
+            AttachRelations(invoice, context);
 
             if (invoice.Id == 0)
             {
@@ -207,6 +141,33 @@ namespace InvoiceApp.Infrastructure.Repositories
 
             await context.SaveChangesAsync();
             Log.Information("Invoice {Id} saved", invoice.Id);
+        }
+
+        private static void AttachRelations(Invoice invoice, DbContext ctx)
+        {
+            if (invoice.Supplier != null)
+            {
+                ctx.Attach(invoice.Supplier);
+            }
+            if (invoice.PaymentMethod != null)
+            {
+                ctx.Attach(invoice.PaymentMethod);
+            }
+            if (invoice.Items != null)
+            {
+                foreach (var item in invoice.Items)
+                {
+                    if (item.Product != null)
+                    {
+                        ctx.Attach(item.Product);
+                    }
+                    if (item.TaxRate != null)
+                    {
+                        ctx.Attach(item.TaxRate);
+                    }
+                    ctx.Entry(item).State = item.Id == 0 ? EntityState.Added : EntityState.Modified;
+                }
+            }
         }
 
     }
