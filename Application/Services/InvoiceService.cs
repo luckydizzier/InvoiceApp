@@ -150,12 +150,6 @@ namespace InvoiceApp.Application.Services
             }
         }
 
-        protected override async Task ValidateAsync(Invoice entity)
-        {
-            using var ctx = _repository.CreateContext();
-            await ValidateAsync(entity, ctx);
-        }
-
         private async Task ValidateAsync(Invoice entity, InvoiceContext ctx)
         {
             await _validator.ValidateAndThrowAsync(entity.ToDto());
