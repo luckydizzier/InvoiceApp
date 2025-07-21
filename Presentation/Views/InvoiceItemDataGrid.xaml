@@ -8,13 +8,14 @@
              d:DesignHeight="200" d:DesignWidth="400">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <helpers:BoolToRowDetailsVisibilityConverter x:Key="BoolToRowDetailsVisibilityConverter" />
     </UserControl.Resources>
     <DataGrid x:Name="InnerGrid"
               ItemsSource="{Binding Items}"
               SelectedItem="{Binding SelectedItem}"
               AutoGenerateColumns="False"
              CanUserAddRows="True"
-              RowDetailsVisibilityMode="{Binding IsRowDetailsVisible, Converter={StaticResource BoolToVisibilityConverter}}"
+              RowDetailsVisibilityMode="{Binding IsRowDetailsVisible, Converter={StaticResource BoolToRowDetailsVisibilityConverter}}"
               PreviewKeyDown="DataGrid_PreviewKeyDown"
               InitializingNewItem="DataGrid_InitializingNewItem"
               LoadingRow="DataGrid_LoadingRow"

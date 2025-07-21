@@ -607,12 +607,6 @@ namespace InvoiceApp.Presentation.ViewModels
             ClearChanges();
         }
 
-        private void Items_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            ItemsView.Items.CollectionChanged -= Items_CollectionChanged;
-            ItemsView.Items.CollectionChanged += Items_CollectionChanged;
-        }
-
         private void Item_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             ItemsView.UpdateGrossMode(Header.IsGrossCalculation);
