@@ -229,9 +229,8 @@ namespace InvoiceApp.Presentation.ViewModels
                 }
             }
 
-            // Only update the UI model here. Actual persistence happens when
-            // the invoice is saved from InvoiceViewModel.SaveAsync.
-            _statusService.Show($"Tétel frissítve. ({DateTime.Now:g})");
+            // Only update the local state here. Persistence happens when the
+            // invoice is saved from InvoiceViewModel.SaveAsync.
             return Task.CompletedTask;
         }
 
