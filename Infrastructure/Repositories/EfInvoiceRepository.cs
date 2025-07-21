@@ -111,6 +111,7 @@ namespace InvoiceApp.Infrastructure.Repositories
             Log.Debug("EfInvoiceRepository.AddAsync called for {Id}", invoice.Id);
             using var ctx = ContextFactory.CreateDbContext();
             AttachRelations(invoice, ctx);
+            AttachItems(invoice, ctx);
             await ctx.Invoices.AddAsync(invoice);
             await ctx.SaveChangesAsync();
             Log.Information("Invoice {Id} inserted", invoice.Id);
@@ -121,6 +122,7 @@ namespace InvoiceApp.Infrastructure.Repositories
             Log.Debug("EfInvoiceRepository.UpdateAsync called for {Id}", invoice.Id);
             using var ctx = ContextFactory.CreateDbContext();
             AttachRelations(invoice, ctx);
+            AttachItems(invoice, ctx);
             ctx.Invoices.Update(invoice);
             await ctx.SaveChangesAsync();
             Log.Information("Invoice {Id} updated in DB", invoice.Id);
@@ -166,6 +168,19 @@ namespace InvoiceApp.Infrastructure.Repositories
                         ctx.Attach(item.TaxRate);
                     }
                     ctx.Entry(item).State = item.Id == 0 ? EntityState.Added : EntityState.Modified;
+                }
+            }
+        }
+
+        private static void AttachItems(Invoice invoice, DbContext ctx)
+        {
+            if (invoice.Items == null) return;
+
+            foreach (var item in invoice.Items)
+            {
+                if (ctx.Entry(item).State == EntityState.Detached)
+                {
+                    ctx.Attach(item);
                 }
             }
         }

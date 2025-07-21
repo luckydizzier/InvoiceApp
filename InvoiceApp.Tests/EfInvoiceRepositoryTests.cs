@@ -90,5 +90,27 @@ namespace InvoiceApp.Tests
             var saved = ctx.Invoices.Include(i => i.Items).First();
             Assert.AreEqual(2, saved.Items.Count);
         }
+
+        [TestMethod]
+        public async Task UpdateAsync_PersistsItems_FromDetachedInvoice()
+        {
+            var factory = CreateFactory();
+            var repo = new EfInvoiceRepository(factory);
+            var invoice = CreateInvoice();
+            await repo.AddAsync(invoice);
+
+            using (var ctx = factory.CreateDbContext())
+            {
+                var loaded = ctx.Invoices
+                    .Include(i => i.Items)
+                    .First();
+                loaded.Items[0].Quantity = 3;
+                await repo.UpdateAsync(loaded);
+            }
+
+            using var verify = factory.CreateDbContext();
+            var saved = verify.Invoices.Include(i => i.Items).First();
+            Assert.AreEqual(3, saved.Items.First().Quantity);
+        }
     }
 }
