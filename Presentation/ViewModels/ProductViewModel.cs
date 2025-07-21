@@ -9,6 +9,7 @@ using InvoiceApp.Domain;
 using InvoiceApp.Application.Services;
 using InvoiceApp;
 using InvoiceApp.Resources;
+using InvoiceApp.Shared.Helpers;
 using Serilog;
 
 namespace InvoiceApp.Presentation.ViewModels
@@ -209,17 +210,19 @@ namespace InvoiceApp.Presentation.ViewModels
         private void UpdateAmounts(Product product)
         {
             var percent = product.TaxRate?.Percentage ?? 0m;
+            var amounts = AmountCalculator.Calculate(1m,
+                IsGrossInput ? product.Gross : product.Net,
+                percent, IsGrossInput);
+
             if (IsGrossInput)
             {
-                var net = percent == 0m
-                    ? product.Gross
-                    : Math.Round(product.Gross / (1 + (percent / 100m)), 2);
+                var net = Math.Round(amounts.Net, 2);
                 if (product.Net != net)
                     product.Net = net;
             }
             else
             {
-                var gross = Math.Round(product.Net * (1 + (percent / 100m)), 2);
+                var gross = Math.Round(amounts.Gross, 2);
                 if (product.Gross != gross)
                     product.Gross = gross;
             }
@@ -236,17 +239,9 @@ namespace InvoiceApp.Presentation.ViewModels
                     "Megerősítés");
                 if (confirmAdd)
                 {
-                    rate = new TaxRate
-                    {
-                        Name = $"ÁFA {percent}%",
-                        Percentage = percent,
-                        EffectiveFrom = DateTime.Today,
-                        Active = true,
-                        DateCreated = DateTime.Now,
-                        DateUpdated = DateTime.Now
-                    };
-                    await _taxRateService.SaveAsync(rate);
-                    TaxRates.Add(rate);
+                    rate = await _taxRateService.EnsureTaxRateExistsAsync(percent);
+                    if (!TaxRates.Any(r => r.Id == rate.Id))
+                        TaxRates.Add(rate);
                 }
                 else
                 {
@@ -271,15 +266,17 @@ namespace InvoiceApp.Presentation.ViewModels
                 product.ProductGroupId = product.ProductGroup.Id;
             }
             decimal ratePercentage = rate?.Percentage ?? 0m;
+            var amounts = AmountCalculator.Calculate(1m,
+                IsGrossInput ? product.Gross : product.Net,
+                ratePercentage, IsGrossInput);
+
             if (IsGrossInput)
             {
-                product.Net = ratePercentage == 0m
-                    ? product.Gross
-                    : Math.Round(product.Gross / (1 + (ratePercentage / 100m)), 2);
+                product.Net = Math.Round(amounts.Net, 2);
             }
             else
             {
-                product.Gross = Math.Round(product.Net * (1 + (ratePercentage / 100m)), 2);
+                product.Gross = Math.Round(amounts.Gross, 2);
             }
             await _service.SaveAsync(product);
             _statusService.Show("Mentés kész.");

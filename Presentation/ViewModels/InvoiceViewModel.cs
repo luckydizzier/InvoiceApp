@@ -459,17 +459,9 @@ namespace InvoiceApp.Presentation.ViewModels
                 }
                 else
                 {
-                    rate = new TaxRate
-                    {
-                        Name = $"ÁFA {item.TaxRatePercentage}%",
-                        Percentage = item.TaxRatePercentage,
-                        EffectiveFrom = DateTime.Today,
-                        Active = true,
-                        DateCreated = DateTime.Now,
-                        DateUpdated = DateTime.Now
-                    };
-                    await _taxRateService.SaveAsync(rate);
-                    TaxRates.Add(rate);
+                    rate = await _taxRateService.EnsureTaxRateExistsAsync(item.TaxRatePercentage);
+                    if (!TaxRates.Any(r => r.Id == rate.Id))
+                        TaxRates.Add(rate);
                 }
             }
 
