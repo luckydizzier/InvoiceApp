@@ -57,6 +57,15 @@ namespace InvoiceApp.Presentation.Views
                     e.Handled = true;
                 }
             }
+            else if (e.Key == System.Windows.Input.Key.Escape &&
+                     ViewModel.CurrentState == AppState.Summary)
+            {
+                if (ViewModel.SummaryEscapeCommand.CanExecute(null))
+                {
+                    ViewModel.SummaryEscapeCommand.Execute(null);
+                    e.Handled = true;
+                }
+            }
         }
     }
 }
