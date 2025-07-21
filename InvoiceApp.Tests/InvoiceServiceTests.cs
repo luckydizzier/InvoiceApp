@@ -98,6 +98,32 @@ namespace InvoiceApp.Tests
             var saved = ctx.Invoices.Include(i => i.Items).First();
             Assert.AreEqual(expectedCount, saved.Items.Count);
         }
+
+        [TestMethod]
+        public async Task SaveAsync_PersistsAllItems()
+        {
+            var factory = CreateFactory();
+            var repo = new EfInvoiceRepository(factory);
+            var changeRepo = new EfChangeLogRepository(factory);
+            var logService = new ChangeLogService(changeRepo);
+            var validator = new InvoiceDtoValidator();
+            var service = new InvoiceService(repo, logService, validator);
+
+            var invoice = CreateInvoice("INV-3");
+            invoice.Items.Add(new InvoiceItem
+            {
+                Product = invoice.Items[0].Product,
+                TaxRate = invoice.Items[0].TaxRate,
+                Quantity = 5,
+                UnitPrice = 50m
+            });
+
+            await service.SaveAsync(invoice);
+
+            using var ctx = factory.CreateDbContext();
+            var saved = ctx.Invoices.Include(i => i.Items).First();
+            Assert.AreEqual(invoice.Items.Count, saved.Items.Count);
+        }
     }
 }
 

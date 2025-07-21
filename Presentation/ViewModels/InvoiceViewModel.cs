@@ -439,51 +439,6 @@ namespace InvoiceApp.Presentation.ViewModels
             Header.EnsureSupplierExists(text);
         }
 
-        private async Task SaveItemAsync(InvoiceItemViewModel item)
-        {
-            var rate = TaxRates.FirstOrDefault(r => r.Percentage == item.TaxRatePercentage);
-            if (rate == null)
-            {
-                var confirmAdd = DialogHelper.ShowConfirmation(
-                    $"Nincs {item.TaxRatePercentage}% áfakulcs. Új áfakulcsot szeretnél létrehozni?",
-                    "Megerősítés");
-                if (!confirmAdd)
-                {
-                    // revert to current product tax rate if user cancels
-                    rate = item.Item.Product?.TaxRate ?? rate;
-                    item.TaxRatePercentage = rate?.Percentage ?? item.TaxRatePercentage;
-                }
-                else
-                {
-                    rate = await _taxRateService.EnsureTaxRateExistsAsync(item.TaxRatePercentage);
-                    if (!TaxRates.Any(r => r.Id == rate.Id))
-                        TaxRates.Add(rate);
-                }
-            }
-
-            if (rate != null)
-            {
-                item.Item.TaxRate = rate;
-                item.Item.TaxRateId = rate.Id;
-                item.TaxRate = rate;
-            }
-
-            if (item.Item.Product != null && rate != null &&
-                item.Item.Product.TaxRateId != rate.Id)
-            {
-                var confirm = DialogHelper.ShowConfirmation(
-                    "Valóban módosítod az adott termék ÁFA-kulcsát?",
-                    "Megerősítés");
-                if (confirm)
-                {
-                    item.Item.Product.TaxRate = rate;
-                    item.Item.Product.TaxRateId = rate.Id;
-                    await _productService.SaveAsync(item.Item.Product);
-                }
-            }
-
-            ShowStatus($"Tétel mentve. ({DateTime.Now:g})");
-        }
 
         private async Task SuggestNextNumberAsync()
         {
