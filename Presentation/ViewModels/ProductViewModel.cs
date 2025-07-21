@@ -258,7 +258,10 @@ namespace InvoiceApp.Presentation.ViewModels
                 }
             }
             product.TaxRate = rate;
-            product.TaxRateId = rate.Id;
+            if (rate != null)
+            {
+                product.TaxRateId = rate.Id;
+            }
             if (product.Unit != null)
             {
                 product.UnitId = product.Unit.Id;
@@ -267,15 +270,16 @@ namespace InvoiceApp.Presentation.ViewModels
             {
                 product.ProductGroupId = product.ProductGroup.Id;
             }
+            decimal ratePercentage = rate?.Percentage ?? 0m;
             if (IsGrossInput)
             {
-                product.Net = rate.Percentage == 0m
+                product.Net = ratePercentage == 0m
                     ? product.Gross
-                    : Math.Round(product.Gross / (1 + (rate.Percentage / 100m)), 2);
+                    : Math.Round(product.Gross / (1 + (ratePercentage / 100m)), 2);
             }
             else
             {
-                product.Gross = Math.Round(product.Net * (1 + (rate.Percentage / 100m)), 2);
+                product.Gross = Math.Round(product.Net * (1 + (ratePercentage / 100m)), 2);
             }
             await _service.SaveAsync(product);
             _statusService.Show("Mentés kész.");

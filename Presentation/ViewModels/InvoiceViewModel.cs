@@ -33,8 +33,8 @@ namespace InvoiceApp.Presentation.ViewModels
         private Invoice? _selectedInvoiceEntity;
         private string _statusMessage = string.Empty;
         private readonly System.Windows.Threading.DispatcherTimer _statusTimer;
-        public HeaderViewModel Header { get; }
-        public ItemsViewModel ItemsView { get; }
+        public HeaderViewModel Header { get; } = null!;
+        public ItemsViewModel ItemsView { get; } = null!;
 
         public IEnumerable<string> ValidationErrors => SelectedInvoice?.GetErrors(null).OfType<string>() ?? Enumerable.Empty<string>();
 
@@ -275,7 +275,7 @@ namespace InvoiceApp.Presentation.ViewModels
         public ICommand RemoveItemCommand { get; }
         public ICommand RemoveInvoiceCommand { get; }
         public ICommand SaveItemCommand { get; }
-        public ICommand SaveCommand { get; }
+        public ICommand SaveCommand { get; } = null!;
         public ICommand SaveAndNewCommand { get; }
         public ICommand NewInvoiceCommand { get; }
         public ICommand AddSupplierCommand { get; }
@@ -307,9 +307,9 @@ namespace InvoiceApp.Presentation.ViewModels
                 _supplierViewModel,
                 _statusService.Show,
                 SuggestNextNumberAsync,
-                () => ((RelayCommand)SaveCommand).RaiseCanExecuteChanged(),
+                () => ((RelayCommand)SaveCommand!).RaiseCanExecuteChanged(),
                 MarkDirty,
-                isGross => ItemsView.UpdateGrossMode(isGross));
+                isGross => ItemsView!.UpdateGrossMode(isGross));
 
             ItemsView = new ItemsViewModel(
                 _itemService,
@@ -317,7 +317,7 @@ namespace InvoiceApp.Presentation.ViewModels
                 _taxRateService,
                 _service,
                 _statusService,
-                () => ((RelayCommand)SaveCommand).RaiseCanExecuteChanged(),
+                () => ((RelayCommand)SaveCommand!).RaiseCanExecuteChanged(),
                 MarkDirty,
                 () => Header.IsGrossCalculation,
                 () => _selectedInvoiceEntity);
@@ -564,7 +564,7 @@ namespace InvoiceApp.Presentation.ViewModels
                 return;
             }
 
-            SelectedInvoice.Items = Items.Select(vm => vm.Item.ToDto()).ToList();
+            SelectedInvoice!.Items = Items.Select(vm => vm.Item.ToDto()).ToList();
 
             foreach (var vm in Items)
             {
@@ -603,7 +603,7 @@ namespace InvoiceApp.Presentation.ViewModels
             }
 
             ShowStatus($"Számla mentve. ({DateTime.Now:g})");
-            Log.Information("Invoice {Id} saved", SelectedInvoice.Id);
+            Log.Information("Invoice {Id} saved", SelectedInvoice!.Id);
             ClearChanges();
         }
 

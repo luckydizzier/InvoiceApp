@@ -95,7 +95,7 @@ namespace InvoiceApp.Application.Services
                     decimal vat = 0m;
                     foreach (var item in g)
                     {
-                        var amounts = Helpers.AmountCalculator.Calculate(
+                        var amounts = AmountCalculator.Calculate(
                             item.Quantity,
                             item.UnitPrice,
                             g.Key,
