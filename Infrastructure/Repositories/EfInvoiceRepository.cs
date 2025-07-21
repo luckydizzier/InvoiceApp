@@ -113,6 +113,21 @@ namespace InvoiceApp.Infrastructure.Repositories
             {
                 ctx.Attach(invoice.PaymentMethod);
             }
+            if (invoice.Items != null)
+            {
+                foreach (var item in invoice.Items)
+                {
+                    if (item.Product != null)
+                    {
+                        ctx.Attach(item.Product);
+                    }
+                    if (item.TaxRate != null)
+                    {
+                        ctx.Attach(item.TaxRate);
+                    }
+                    ctx.Entry(item).State = item.Id == 0 ? EntityState.Added : EntityState.Modified;
+                }
+            }
             await ctx.Invoices.AddAsync(invoice);
             await ctx.SaveChangesAsync();
             Log.Information("Invoice {Id} inserted", invoice.Id);
@@ -129,6 +144,21 @@ namespace InvoiceApp.Infrastructure.Repositories
             if (invoice.PaymentMethod != null)
             {
                 ctx.Attach(invoice.PaymentMethod);
+            }
+            if (invoice.Items != null)
+            {
+                foreach (var item in invoice.Items)
+                {
+                    if (item.Product != null)
+                    {
+                        ctx.Attach(item.Product);
+                    }
+                    if (item.TaxRate != null)
+                    {
+                        ctx.Attach(item.TaxRate);
+                    }
+                    ctx.Entry(item).State = item.Id == 0 ? EntityState.Added : EntityState.Modified;
+                }
             }
             ctx.Invoices.Update(invoice);
             await ctx.SaveChangesAsync();
