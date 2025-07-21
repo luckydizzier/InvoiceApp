@@ -15,6 +15,8 @@ Users can interact with every view using only the keyboard.
 | `Left/Right` | Move the cursor within text fields. |
 
 A blank "New item" row is always available at the bottom of grids for quick entry.
+When the current row is the last item in a grid that allows adding rows, pressing `Enter`
+automatically inserts a new blank row and begins editing it.
 Invoice items are saved automatically when editing a row is committed.
 
 ## AppState Specific Navigation

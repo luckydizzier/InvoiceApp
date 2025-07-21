@@ -20,6 +20,15 @@ namespace InvoiceApp.Shared.Helpers
                 {
                     rowIndex++;
                 }
+                else if (grid.CanUserAddRows)
+                {
+                    var prop = grid.DataContext?.GetType().GetProperty("AddItemCommand");
+                    if (prop?.GetValue(grid.DataContext) is ICommand cmd && cmd.CanExecute(null))
+                    {
+                        cmd.Execute(null);
+                        rowIndex = grid.Items.Count - 1;
+                    }
+                }
             }
 
             if (rowIndex >= 0 && rowIndex < grid.Items.Count)
