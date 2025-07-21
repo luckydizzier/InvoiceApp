@@ -28,6 +28,27 @@ namespace InvoiceApp.Application.Services
             _contextFactory = contextFactory;
         }
 
+        public async Task<TaxRate> EnsureTaxRateExistsAsync(decimal percentage)
+        {
+            foreach (var rate in await Repository.GetAllAsync())
+            {
+                if (Math.Abs(rate.Percentage - percentage) < 0.0001m)
+                    return rate;
+            }
+
+            var newRate = new TaxRate
+            {
+                Name = $"ÁFA {percentage}%",
+                Percentage = percentage,
+                EffectiveFrom = DateTime.Today,
+                Active = true,
+                DateCreated = DateTime.Now,
+                DateUpdated = DateTime.Now
+            };
+            await SaveAsync(newRate);
+            return newRate;
+        }
+
         protected override async Task ValidateAsync(TaxRate entity)
         {
             await _validator.ValidateAndThrowAsync(entity.ToDto());

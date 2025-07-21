@@ -10,5 +10,10 @@ namespace InvoiceApp.Application.Services
         Task<TaxRate?> GetByIdAsync(int id);
         Task SaveAsync(TaxRate rate);
         Task DeleteAsync(int id);
+        /// <summary>
+        /// Returns an existing tax rate matching the percentage or creates a new one.
+        /// </summary>
+        /// <param name="percentage">Percentage value of the tax rate.</param>
+        Task<TaxRate> EnsureTaxRateExistsAsync(decimal percentage);
     }
 }
