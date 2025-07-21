@@ -19,7 +19,15 @@ namespace InvoiceApp.Infrastructure.Repositories
         {
             Log.Debug("EfInvoiceItemRepository.GetAllAsync called");
             using var ctx = ContextFactory.CreateDbContext();
-            var list = await ctx.InvoiceItems.ToListAsync();
+            var list = await ctx.InvoiceItems
+                .Include(i => i.Product)
+                    .ThenInclude(p => p.Unit)
+                .Include(i => i.Product)
+                    .ThenInclude(p => p.ProductGroup)
+                .Include(i => i.Product)
+                    .ThenInclude(p => p.TaxRate)
+                .Include(i => i.TaxRate)
+                .ToListAsync();
             Log.Debug("EfInvoiceItemRepository.GetAllAsync returning {Count} items", list.Count);
             return list;
         }
@@ -29,6 +37,13 @@ namespace InvoiceApp.Infrastructure.Repositories
             Log.Debug("EfInvoiceItemRepository.GetByIdAsync called with {Id}", id);
             using var ctx = ContextFactory.CreateDbContext();
             var entity = await ctx.InvoiceItems
+                .Include(i => i.Product)
+                    .ThenInclude(p => p.Unit)
+                .Include(i => i.Product)
+                    .ThenInclude(p => p.ProductGroup)
+                .Include(i => i.Product)
+                    .ThenInclude(p => p.TaxRate)
+                .Include(i => i.TaxRate)
                 .FirstOrDefaultAsync(i => i.Id == id);
             Log.Debug(entity != null ? "EfInvoiceItemRepository.GetByIdAsync found {Id}" : "EfInvoiceItemRepository.GetByIdAsync no entity for {Id}", entity?.Id ?? id);
             return entity;
