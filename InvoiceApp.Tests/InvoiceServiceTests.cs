@@ -124,6 +124,42 @@ namespace InvoiceApp.Tests
             var saved = ctx.Invoices.Include(i => i.Items).First();
             Assert.AreEqual(invoice.Items.Count, saved.Items.Count);
         }
+
+        [TestMethod]
+        public async Task SaveAsync_DoesNotDuplicateItemsAcrossSaves()
+        {
+            var factory = CreateFactory();
+            var repo = new EfInvoiceRepository(factory);
+            var changeRepo = new EfChangeLogRepository(factory);
+            var logService = new ChangeLogService(changeRepo);
+            var validator = new InvoiceDtoValidator();
+            var service = new InvoiceService(repo, logService, validator);
+
+            var invoice = CreateInvoice("INV-CTX");
+            invoice.Items.Add(new InvoiceItem
+            {
+                Product = invoice.Items[0].Product,
+                TaxRate = invoice.Items[0].TaxRate,
+                Quantity = 3,
+                UnitPrice = 30m
+            });
+
+            await service.SaveAsync(invoice);
+
+            var firstItemIds = invoice.Items.Select(i => i.Id).ToList();
+            Assert.IsTrue(firstItemIds.All(id => id > 0));
+
+            invoice.Number = "INV-CTX-2";
+            invoice.Items[0].Quantity = 2;
+
+            await service.SaveAsync(invoice);
+
+            using var ctx = factory.CreateDbContext();
+            var saved = ctx.Invoices.Include(i => i.Items).First();
+            var savedItemIds = saved.Items.Select(i => i.Id).ToList();
+
+            CollectionAssert.AreEquivalent(firstItemIds, savedItemIds);
+        }
     }
 }
 
