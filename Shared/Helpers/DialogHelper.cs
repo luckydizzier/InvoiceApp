@@ -23,7 +23,7 @@ namespace InvoiceApp
             {
                 return ConfirmationHandler(message, title);
             }
-            var owner = Application.Current?.Windows
+            var owner = System.Windows.Application.Current?.Windows
                 .OfType<Window>()
                 .FirstOrDefault(w => w.IsActive);
             var dialog = new ConfirmDialog(message)

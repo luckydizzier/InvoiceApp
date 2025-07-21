@@ -94,15 +94,11 @@ namespace InvoiceApp.Presentation.ViewModels
             get => SelectedItem;
             set
             {
-                if (SelectedItem != null)
-                    SelectedItem.PropertyChanged -= SelectedProduct_PropertyChanged;
-
                 SelectedItem = value;
                 OnPropertyChanged();
 
                 if (SelectedItem != null)
                 {
-                    SelectedItem.PropertyChanged += SelectedProduct_PropertyChanged;
                     UpdateAmounts(SelectedItem);
                 }
             }
@@ -208,19 +204,6 @@ namespace InvoiceApp.Presentation.ViewModels
             await _service.DeleteAsync(product.Id);
             _statusService.Show("Törlés sikeres.");
             return true;
-        }
-
-        private void SelectedProduct_PropertyChanged(object? sender, PropertyChangedEventArgs e)
-        {
-            if (sender is Product product)
-            {
-                if ((e.PropertyName == nameof(Product.Net) && !IsGrossInput) ||
-                    (e.PropertyName == nameof(Product.Gross) && IsGrossInput) ||
-                    e.PropertyName == nameof(Product.TaxRate))
-                {
-                    UpdateAmounts(product);
-                }
-            }
         }
 
         private void UpdateAmounts(Product product)
