@@ -14,7 +14,8 @@ Users can interact with every view using only the keyboard.
 | `Up/Down` | Move between list items or form fields. |
 | `Left/Right` | Move the cursor within text fields. |
 
-Press `Up` at the start of a list to quickly create a new entry.
+A blank "New item" row is always available at the bottom of grids for quick entry.
+Invoice items are saved automatically when editing a row is committed.
 
 ## AppState Specific Navigation
 

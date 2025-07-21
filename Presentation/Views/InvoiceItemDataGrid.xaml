@@ -17,14 +17,11 @@
              CanUserAddRows="True"
               RowDetailsVisibilityMode="{Binding IsRowDetailsVisible, Converter={StaticResource BoolToRowDetailsVisibilityConverter}}"
               PreviewKeyDown="DataGrid_PreviewKeyDown"
+              RowEditEnding="DataGrid_RowEditEnding"
               InitializingNewItem="DataGrid_InitializingNewItem"
               LoadingRow="DataGrid_LoadingRow"
               Margin="0,0,0,4">
         <DataGrid.InputBindings>
-            <KeyBinding Key="Enter" Command="{Binding ItemsEnterCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
-            <KeyBinding Key="Up" Command="{Binding ItemsUpCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
-            <KeyBinding Key="Down" Command="{Binding ItemsDownCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
-            <KeyBinding Key="Escape" Command="{Binding ItemsEscapeCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
             <KeyBinding Key="Delete" Command="{Binding RemoveItemCommand}" CommandParameter="{Binding SelectedItem}"/>
         </DataGrid.InputBindings>
         <DataGrid.Columns>

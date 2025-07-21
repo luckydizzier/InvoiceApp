@@ -19,7 +19,26 @@ namespace InvoiceApp.Presentation.Views
 
         private void DataGrid_PreviewKeyDown(object sender, KeyEventArgs e)
         {
+            if (e.Key == Key.Escape && DataContext is ItemsViewModel vm)
+            {
+                InnerGrid.CancelEdit();
+                vm.IsRowDetailsVisible = false;
+                e.Handled = true;
+                return;
+            }
+
             DataGridFocusBehavior.OnPreviewKeyDown(sender, e);
+        }
+
+        private void DataGrid_RowEditEnding(object? sender, DataGridRowEditEndingEventArgs e)
+        {
+            if (e.EditAction == DataGridEditAction.Commit &&
+                DataContext is ItemsViewModel vm &&
+                e.Row.Item is InvoiceItemViewModel item &&
+                vm.SaveItemCommand.CanExecute(item))
+            {
+                vm.SaveItemCommand.Execute(item);
+            }
         }
 
         private void DataGrid_InitializingNewItem(object sender, InitializingNewItemEventArgs e)

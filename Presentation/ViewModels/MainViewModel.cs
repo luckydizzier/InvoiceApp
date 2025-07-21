@@ -58,10 +58,6 @@ namespace InvoiceApp.Presentation.ViewModels
         public RelayCommand NavigateDownCommand { get; }
         public RelayCommand EnterCommand { get; }
         public RelayCommand DeleteInvoiceCommand { get; }
-        public RelayCommand ItemsEnterCommand { get; }
-        public RelayCommand ItemsUpCommand { get; }
-        public RelayCommand ItemsDownCommand { get; }
-        public RelayCommand ItemsEscapeCommand { get; }
         public RelayCommand HeaderEnterCommand { get; }
         public RelayCommand HeaderEscapeCommand { get; }
         public RelayCommand HeaderUpCommand { get; }
@@ -114,23 +110,6 @@ namespace InvoiceApp.Presentation.ViewModels
             NavigateDownCommand = new RelayCommand(_ => InvoiceViewModel.SelectNextInvoice());
             EnterCommand = new RelayCommand(_ => InvoiceViewModel.ToggleRowDetails());
             DeleteInvoiceCommand = new RelayCommand(_ => InvoiceViewModel.DeleteCurrentInvoice());
-            ItemsEnterCommand = new RelayCommand(_ =>
-            {
-                InvoiceViewModel.SaveCurrentItem();
-                _navigation.PushSubstate(AppState.Summary);
-            });
-            ItemsUpCommand = new RelayCommand(_ => InvoiceViewModel.SelectPreviousItem());
-            ItemsDownCommand = new RelayCommand(_ => InvoiceViewModel.SelectNextItem());
-            ItemsEscapeCommand = new RelayCommand(_ =>
-            {
-                if (InvoiceViewModel.HasChanges)
-                {
-                    if (!DialogHelper.ShowConfirmation("Mentés nélkül kilép?", "Megerősítés"))
-                        return;
-                }
-                InvoiceViewModel.CancelItemEdit();
-                _navigation.PopSubstate();
-            });
             HeaderEnterCommand = new RelayCommand(_ =>
             {
                 InvoiceViewModel.SaveCurrentInvoice();
