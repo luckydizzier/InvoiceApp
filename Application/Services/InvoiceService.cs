@@ -20,15 +20,13 @@ namespace InvoiceApp.Application.Services
     {
         private readonly IInvoiceRepository _repository;
         private readonly IValidator<InvoiceDto> _validator;
-        private readonly IDbContextFactory<InvoiceContext> _contextFactory;
         private readonly IChangeLogService _logService;
 
-        public InvoiceService(IInvoiceRepository repository, IChangeLogService logService, IValidator<InvoiceDto> validator, IDbContextFactory<InvoiceContext> contextFactory)
+        public InvoiceService(IInvoiceRepository repository, IChangeLogService logService, IValidator<InvoiceDto> validator)
             : base(repository, logService)
         {
             _repository = repository;
             _validator = validator;
-            _contextFactory = contextFactory;
             _logService = logService;
         }
 
@@ -109,11 +107,58 @@ namespace InvoiceApp.Application.Services
             return groups.ToList();
         }
 
+        public override async Task SaveAsync(Invoice entity)
+        {
+            if (entity == null) throw new ArgumentNullException(nameof(entity));
+
+            using var ctx = _repository.CreateContext();
+            await ValidateAsync(entity, ctx);
+
+            var options = new JsonSerializerOptions { ReferenceHandler = ReferenceHandler.Preserve };
+
+            if (entity.Id == 0)
+            {
+                entity.DateCreated = DateTime.Now;
+                entity.DateUpdated = entity.DateCreated;
+                entity.Active = true;
+                await _repository.SaveAsync(entity, ctx);
+                await _logService.AddAsync(new ChangeLog
+                {
+                    Entity = typeof(Invoice).Name,
+                    Operation = "Add",
+                    Data = JsonSerializer.Serialize(entity, options),
+                    DateCreated = DateTime.Now,
+                    DateUpdated = DateTime.Now,
+                    Active = true
+                }, ctx);
+                Log.Information("{Entity} {Id} created", typeof(Invoice).Name, entity.Id);
+            }
+            else
+            {
+                entity.DateUpdated = DateTime.Now;
+                await _repository.SaveAsync(entity, ctx);
+                await _logService.AddAsync(new ChangeLog
+                {
+                    Entity = typeof(Invoice).Name,
+                    Operation = "Update",
+                    Data = JsonSerializer.Serialize(entity, options),
+                    DateCreated = DateTime.Now,
+                    DateUpdated = DateTime.Now,
+                    Active = true
+                }, ctx);
+                Log.Information("{Entity} {Id} updated", typeof(Invoice).Name, entity.Id);
+            }
+        }
+
         protected override async Task ValidateAsync(Invoice entity)
         {
-            await _validator.ValidateAndThrowAsync(entity.ToDto());
+            using var ctx = _repository.CreateContext();
+            await ValidateAsync(entity, ctx);
+        }
 
-            using var ctx = _contextFactory.CreateDbContext();
+        private async Task ValidateAsync(Invoice entity, InvoiceContext ctx)
+        {
+            await _validator.ValidateAndThrowAsync(entity.ToDto());
 
             if (entity.Date > DateTime.Now)
             {
