@@ -35,6 +35,8 @@ Detailed navigation information can be found in
 [Docs/UIKeyboardNavigation.md](Docs/UIKeyboardNavigation.md).
 Core business rules are described in
 [Docs/BusinessRules.md](Docs/BusinessRules.md).
+[Docs/LazyLoading.md](Docs/LazyLoading.md) explains the `LazyLoadOnDisposedContextWarning`
+observed when navigation properties are accessed after the context is disposed.
 
 ## Getting Started
 1. Clone the repository.
