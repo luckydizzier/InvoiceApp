@@ -66,6 +66,38 @@ namespace InvoiceApp.Tests
             var duplicate = CreateInvoice("INV-1");
             await Assert.ThrowsExceptionAsync<BusinessRuleViolationException>(() => service.SaveAsync(duplicate));
         }
+
+        [TestMethod]
+        public async Task SaveAsync_PersistsItemsOnce()
+        {
+            var factory = CreateFactory();
+            var repo = new EfInvoiceRepository(factory);
+            var changeRepo = new EfChangeLogRepository(factory);
+            var logService = new ChangeLogService(changeRepo);
+            var validator = new InvoiceDtoValidator();
+            var service = new InvoiceService(repo, logService, validator);
+
+            var invoice = CreateInvoice("INV-2");
+            invoice.Items.Add(new InvoiceItem
+            {
+                Product = invoice.Items[0].Product,
+                TaxRate = invoice.Items[0].TaxRate,
+                Quantity = 2,
+                UnitPrice = 20m
+            });
+
+            var expectedCount = invoice.Items.Count;
+
+            await service.SaveAsync(invoice);
+
+            // Save again to update without adding new items
+            invoice.Number = "INV-2A";
+            await service.SaveAsync(invoice);
+
+            using var ctx = factory.CreateDbContext();
+            var saved = ctx.Invoices.Include(i => i.Items).First();
+            Assert.AreEqual(expectedCount, saved.Items.Count);
+        }
     }
 }
 
