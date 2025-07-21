@@ -160,6 +160,38 @@ namespace InvoiceApp.Tests
 
             CollectionAssert.AreEquivalent(firstItemIds, savedItemIds);
         }
+
+        [TestMethod]
+        public async Task SaveAsync_Throws_WhenDateInFuture()
+        {
+            var factory = CreateFactory();
+            var repo = new EfInvoiceRepository(factory);
+            var changeRepo = new EfChangeLogRepository(factory);
+            var logService = new ChangeLogService(changeRepo);
+            var validator = new InvoiceDtoValidator();
+            var service = new InvoiceService(repo, logService, validator);
+
+            var invoice = CreateInvoice("INV-FUT");
+            invoice.Date = DateTime.Today.AddDays(1);
+
+            await Assert.ThrowsExceptionAsync<BusinessRuleViolationException>(() => service.SaveAsync(invoice));
+        }
+
+        [TestMethod]
+        public async Task SaveAsync_Throws_WhenNoItems()
+        {
+            var factory = CreateFactory();
+            var repo = new EfInvoiceRepository(factory);
+            var changeRepo = new EfChangeLogRepository(factory);
+            var logService = new ChangeLogService(changeRepo);
+            var validator = new InvoiceDtoValidator();
+            var service = new InvoiceService(repo, logService, validator);
+
+            var invoice = CreateInvoice("INV-EMPTY");
+            invoice.Items.Clear();
+
+            await Assert.ThrowsExceptionAsync<BusinessRuleViolationException>(() => service.SaveAsync(invoice));
+        }
     }
 }
 
