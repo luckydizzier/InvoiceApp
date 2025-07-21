@@ -180,7 +180,8 @@ namespace InvoiceApp.Application.Mappers
                 Gross = entity.Gross,
                 UnitId = entity.UnitId,
                 ProductGroupId = entity.ProductGroupId,
-                TaxRateId = entity.TaxRateId
+                TaxRateId = entity.TaxRateId,
+                IsLocked = entity.IsLocked
             };
         }
 
@@ -196,7 +197,8 @@ namespace InvoiceApp.Application.Mappers
                 Gross = dto.Gross,
                 UnitId = dto.UnitId,
                 ProductGroupId = dto.ProductGroupId,
-                TaxRateId = dto.TaxRateId
+                TaxRateId = dto.TaxRateId,
+                IsLocked = dto.IsLocked
             };
         }
 

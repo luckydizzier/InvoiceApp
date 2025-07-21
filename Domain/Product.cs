@@ -16,5 +16,12 @@ namespace InvoiceApp.Domain
 
         public int TaxRateId { get; set; }
         public virtual TaxRate? TaxRate { get; set; }
+
+        /// <summary>
+        /// Indicates whether the product is referenced by any invoice items
+        /// and therefore cannot be modified or deleted.
+        /// </summary>
+        [System.ComponentModel.DataAnnotations.Schema.NotMapped]
+        public bool IsLocked { get; set; }
     }
 }

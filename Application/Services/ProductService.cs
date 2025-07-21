@@ -28,6 +28,21 @@ namespace InvoiceApp.Application.Services
             _contextFactory = contextFactory;
         }
 
+        public override async Task<IEnumerable<Product>> GetAllAsync()
+        {
+            var products = await base.GetAllAsync();
+            using var ctx = _contextFactory.CreateDbContext();
+            var lockedIds = await ctx.InvoiceItems
+                .Select(i => i.ProductId)
+                .Distinct()
+                .ToListAsync();
+            foreach (var product in products)
+            {
+                product.IsLocked = lockedIds.Contains(product.Id);
+            }
+            return products;
+        }
+
         protected override async Task ValidateAsync(Product entity)
         {
             await _validator.ValidateAndThrowAsync(entity.ToDto());
