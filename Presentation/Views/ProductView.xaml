@@ -26,9 +26,9 @@
                      Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
                      helpers:FocusBehavior.IsFocused="True" />
             <Button x:Name="ShowProductGroupsButton" Content="Csoportok" Margin="8,0,0,0"
-                    Command="{Binding DataContext.ShowProductGroupsCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
+                    Command="{Binding DataContext.ShowProductGroupsCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
             <Button x:Name="ShowUnitsButton" Content="Egységek" Margin="4,0,0,0"
-                    Command="{Binding DataContext.ShowUnitsCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
+                    Command="{Binding DataContext.ShowUnitsCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
             <CheckBox Content="Bruttó?" Margin="8,0,0,0"
                       IsChecked="{Binding IsGrossInput}"
                       ToolTip="Bejelölve a bruttó érték szerkeszthető, egyébként számított." />
@@ -62,7 +62,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
-                            <ComboBox ItemsSource="{Binding DataContext.TaxRates, RelativeSource={RelativeSource AncestorType=Window}}"
+                            <ComboBox ItemsSource="{Binding DataContext.TaxRates, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                       SelectedItem="{Binding TaxRate, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}"
                                       DisplayMemberPath="Percentage"
                                       IsEditable="True"
@@ -78,7 +78,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
-                            <ComboBox ItemsSource="{Binding DataContext.Units, RelativeSource={RelativeSource AncestorType=Window}}"
+                            <ComboBox ItemsSource="{Binding DataContext.Units, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                       SelectedItem="{Binding Unit, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}"
                                       DisplayMemberPath="Code" />
                         </DataTemplate>
@@ -92,7 +92,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
-                            <ComboBox ItemsSource="{Binding DataContext.Groups, RelativeSource={RelativeSource AncestorType=Window}}"
+                            <ComboBox ItemsSource="{Binding DataContext.Groups, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                       SelectedItem="{Binding ProductGroup, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}"
                                       DisplayMemberPath="Name" />
                         </DataTemplate>
