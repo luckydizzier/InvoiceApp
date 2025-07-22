@@ -27,6 +27,19 @@ namespace InvoiceApp.Presentation.Views
 
         private void Window_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
+            // Allow exiting the application with Escape when on the main view
+            if (e.Key == System.Windows.Input.Key.Escape &&
+                ViewModel.CurrentState == AppState.MainWindow &&
+                !ViewModel.InvoiceViewModel.IsRowDetailsVisible)
+            {
+                var result = MessageBox.Show("Do you really want to exit?", "Confirm", MessageBoxButton.YesNo);
+                if (result == MessageBoxResult.Yes)
+                {
+                    Application.Current.Shutdown();
+                }
+                return;
+            }
+
             // Ignore navigation keys when editing in text fields or combo boxes
             if (e.OriginalSource is TextBoxBase || e.OriginalSource is ComboBox)
             {

@@ -192,6 +192,32 @@ namespace InvoiceApp.Tests
 
             await Assert.ThrowsExceptionAsync<BusinessRuleViolationException>(() => service.SaveAsync(invoice));
         }
+
+        [TestMethod]
+        public void AggregateItems_GroupsSameProducts()
+        {
+            var factory = CreateFactory();
+            var repo = new EfInvoiceRepository(factory);
+            var changeRepo = new EfChangeLogRepository(factory);
+            var logService = new ChangeLogService(changeRepo);
+            var validator = new InvoiceDtoValidator();
+            var service = new InvoiceService(repo, logService, validator);
+
+            var tax = new TaxRate { Name = "A", Percentage = 27m };
+            var product = new Product { Name = "Widget", Unit = new Unit { Name = "pc" }, ProductGroup = new ProductGroup { Name = "General" }, TaxRate = tax };
+
+            var items = new List<InvoiceItem>
+            {
+                new InvoiceItem { Product = product, ProductId = 1, TaxRate = tax, TaxRateId = 1, Quantity = 1m, UnitPrice = 10m },
+                new InvoiceItem { Product = product, ProductId = 1, TaxRate = tax, TaxRateId = 1, Quantity = 2m, UnitPrice = 10m }
+            };
+
+            var result = service.AggregateItems(items, false).ToList();
+
+            Assert.AreEqual(1, result.Count);
+            Assert.AreEqual(3m, result[0].Quantity);
+            Assert.IsTrue(result[0].IsAggregated);
+        }
     }
 }
 
