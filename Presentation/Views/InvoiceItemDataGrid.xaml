@@ -55,7 +55,8 @@
             <DataGridTemplateColumn Header="ÁFA %">
                 <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding TaxRatePercentage}" />
+                        <TextBlock Text="{Binding TaxRatePercentage, StringFormat={}{0:F2}}"
+                                   HorizontalAlignment="Right" />
                     </DataTemplate>
                 </DataGridTemplateColumn.CellTemplate>
                 <DataGridTemplateColumn.CellEditingTemplate>
@@ -68,6 +69,10 @@
                     </DataTemplate>
                 </DataGridTemplateColumn.CellEditingTemplate>
             </DataGridTemplateColumn>
+            <DataGridTextColumn Header="ÁFA érték"
+                               Binding="{Binding VatAmount, StringFormat={}{0:F2}}"
+                               IsReadOnly="True"
+                               ElementStyle="{StaticResource RightAlignedCellStyle}"/>
             <DataGridTextColumn Header="Nettó érték"
                                Binding="{Binding NetAmount, StringFormat={}{0:F2}}"
                                IsReadOnly="True"

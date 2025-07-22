@@ -385,6 +385,10 @@ namespace InvoiceApp.Presentation.ViewModels
                 {
                     ShowStatus(Invoices.Count == 0 ? "Üres lista." : $"{Invoices.Count} számla betöltve.");
                 }
+                if (Invoices.Count > 0 && SelectedInvoice == null)
+                {
+                    SelectedInvoice = Invoices[0];
+                }
                 ClearChanges();
             }
             catch (Exception ex)

@@ -8,6 +8,12 @@ namespace InvoiceApp.Domain
         public decimal Quantity { get; set; }
         public decimal UnitPrice { get; set; }
 
+        /// <summary>
+        /// Indicates whether this item was aggregated from multiple entries.
+        /// Not persisted in the database.
+        /// </summary>
+        public bool IsAggregated { get; set; }
+
         public int InvoiceId { get; set; }
         public virtual Invoice? Invoice { get; set; }
 

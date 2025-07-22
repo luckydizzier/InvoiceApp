@@ -81,6 +81,37 @@ namespace InvoiceApp.Application.Services
             return _repository.GetLatestAsync();
         }
 
+        /// <summary>
+        /// Groups invoice items by product, unit price and tax rate.
+        /// Aggregated items have their quantity summed and flagged via <see cref="InvoiceItem.IsAggregated"/>.
+        /// </summary>
+        public IEnumerable<InvoiceItem> AggregateItems(IEnumerable<InvoiceItem> items, bool isGross)
+        {
+            var groups = items
+                .GroupBy(i => new { i.ProductId, i.UnitPrice, Rate = i.TaxRate?.Percentage ?? 0m });
+
+            foreach (var group in groups)
+            {
+                var first = group.First();
+                var qty = group.Sum(i => i.Quantity);
+                var amounts = AmountCalculator.Calculate(qty, first.UnitPrice, group.Key.Rate, isGross);
+
+                yield return new InvoiceItem
+                {
+                    Id = first.Id,
+                    Quantity = qty,
+                    UnitPrice = first.UnitPrice,
+                    InvoiceId = first.InvoiceId,
+                    Invoice = first.Invoice,
+                    ProductId = first.ProductId,
+                    Product = first.Product,
+                    TaxRateId = first.TaxRateId,
+                    TaxRate = first.TaxRate,
+                    IsAggregated = group.Count() > 1
+                };
+            }
+        }
+
         public IEnumerable<VatSummary> CalculateVatSummary(Invoice invoice)
         {
             if (invoice.Items == null) return Enumerable.Empty<VatSummary>();
